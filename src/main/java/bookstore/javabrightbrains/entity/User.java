@@ -1,11 +1,13 @@
 package bookstore.javabrightbrains.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 @Entity
 @Data
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
