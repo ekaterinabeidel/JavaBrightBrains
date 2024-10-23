@@ -1,11 +1,14 @@
 package bookstore.javabrightbrains.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Timestamp;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "carts")
 public class Cart {
     @Id
@@ -16,4 +19,17 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cart cart)) return false;
+
+        return getId().equals(cart.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }
