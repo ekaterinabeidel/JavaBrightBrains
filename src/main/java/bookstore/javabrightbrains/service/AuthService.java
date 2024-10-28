@@ -4,6 +4,7 @@ package bookstore.javabrightbrains.service;
 import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.enums.ROLES;
+import bookstore.javabrightbrains.exception.MessagesExceptions;
 import bookstore.javabrightbrains.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +48,7 @@ public class AuthService {
 
         User user = appUserRepository
                 .findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Ошибка"));
+                .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.userNotFound));
 
         String token = jwtSecurityService.generateToken(user);
         String refreshToken = jwtSecurityService.generateRefreshToken(new HashMap<>(), user);
