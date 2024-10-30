@@ -48,7 +48,7 @@ public class AuthService {
 
         User user = appUserRepository
                 .findByEmail(loginRequestDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.userNotFound));
+                .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
         String token = jwtSecurityService.generateToken(user);
         String refreshToken = jwtSecurityService.generateRefreshToken(new HashMap<>(), user);

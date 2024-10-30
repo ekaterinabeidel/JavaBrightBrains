@@ -4,11 +4,14 @@ import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.entity.User;
 
 
+import bookstore.javabrightbrains.exception.EmailDuplicateException;
 import bookstore.javabrightbrains.exception.MessagesExceptions;
 import bookstore.javabrightbrains.repository.AppUserRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,39 +30,72 @@ public class AppUserService {
     @Autowired
     private JwtSecurityService jwtSecurityService;
 
-    public UserDetailsService getDetailsService() {
 
+    public UserDetailsService getDetailsService() {
         UserDetailsService detailsService = new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                User user = appUserRepository.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.userNotFound));
-                return user;
+                return appUserRepository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.USER_NOT_FOUND));
             }
         };
 
         return detailsService;
     }
 
-    public UserDto updateUser(Long id, UserDto userDto, String token) throws UsernameNotFoundException {
+    public ResponseEntity<UserDto> updateUser(Long id, UserDto userDto) throws UsernameNotFoundException {
         User user = userRepository.updateUser(id, userDto);
         if (user == null) {
-            throw new UsernameNotFoundException(MessagesExceptions.userNotFound);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (!jwtSecurityService.validateToken(token, user)) {
-            return null;
+
+        if (!userDto.getEmail().equals(user.getEmail())) {
+            User duplicateUser = userRepository.getUserByEmail(userDto.getEmail()).orElseGet(null);
+            if (duplicateUser != null) {
+                throw new EmailDuplicateException(MessagesExceptions.DUPLICATED_EMAIL);
+            }
         }
 
         UserDto newUserDto = new UserDto();
 
         newUserDto.setEmail(user.getEmail());
         newUserDto.setSurname(user.getSurname());
-        newUserDto.setName(userDto.getName());
+        newUserDto.setName(user.getName());
         newUserDto.setPhone(user.getPhone());
 
-        return newUserDto;
+        return ResponseEntity.ok(newUserDto);
 
     }
 
+    public ResponseEntity<UserDto> getUserInfo(Long id) {
+        User user = userRepository.getUser(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        UserDto newUserDto = new UserDto();
+
+        newUserDto.setEmail(user.getEmail());
+        newUserDto.setSurname(user.getSurname());
+        newUserDto.setName(user.getName());
+        newUserDto.setPhone(user.getPhone());
+
+        return ResponseEntity.ok(newUserDto);
+    }
+
+    public ResponseEntity<String> deleteUser(Long id) {
+        User user = userRepository.getUser(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (userRepository.deleteUser(id)) {
+            return ResponseEntity.ok("Success");
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
 }
