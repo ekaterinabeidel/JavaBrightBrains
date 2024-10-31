@@ -5,13 +5,12 @@ import java.math.BigDecimal;
 
 @Data
 public class BookDto {
-    private Long id;
     private String title;
     private String author;
     private String description;
     private BigDecimal price;
     private int discount;
-    private CategoryDto category;
+    private Long categoryId;
     private int totalStock;
     private String imageLink;
 }

@@ -1,9 +1,6 @@
 package bookstore.javabrightbrains.handler;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -13,4 +10,5 @@ import org.springframework.http.HttpStatus;
 public class AppError {
     private HttpStatus statusCode;
     private String message;
+
 }

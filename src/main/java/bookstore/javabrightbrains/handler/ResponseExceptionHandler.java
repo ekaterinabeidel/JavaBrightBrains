@@ -16,6 +16,6 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(IdNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<AppError> handleIdNotFoundException(IdNotFoundException e) {
-        return new ResponseEntity<>(new AppError( HttpStatus.NOT_FOUND, e.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND, e.getMessage()), HttpStatus.NOT_FOUND);
     }
 }

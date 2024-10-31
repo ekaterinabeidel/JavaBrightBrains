@@ -15,7 +15,8 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public CategoryDto save(CategoryDto categoryDto) {
-        Category category = convertToEntity(categoryDto);
+        Category category = new Category();
+        category.setName(categoryDto.getName());
         Category savedCategory = categoryRepository.save(category);
         return convertToDto(savedCategory);
     }
@@ -30,23 +31,33 @@ public class CategoryService {
         return categories.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
+        category.setName(categoryDto.getName());
+        Category updatedCategory = categoryRepository.save(category);
+        return convertToDto(updatedCategory);
+    }
+
     public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new RuntimeException("Category not found with id: " + id);
+        }
         categoryRepository.deleteById(id);
     }
 
     public Category convertToEntity(CategoryDto categoryDto) {
         Category category = new Category();
-        category.setId(categoryDto.getId());
         category.setName(categoryDto.getName());
         return category;
     }
 
     public CategoryDto convertToDto(Category category) {
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
         categoryDto.setName(category.getName());
         return categoryDto;
     }
 }
+
+
 
 

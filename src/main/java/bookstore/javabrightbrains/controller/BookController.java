@@ -8,30 +8,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static bookstore.javabrightbrains.utils.Constants.ADMIN_BASE_URL;
+import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
+
 @RestController
-@RequestMapping("/api/admin/books")
+@RequestMapping("/api")
 public class BookController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping
+    @PostMapping("/admin/books")
     public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
         BookDto createdBookDto = bookService.save(bookDto);
         return ResponseEntity.status(201).body(createdBookDto);
     }
 
-    @PutMapping("/{bookId}")
+    @PutMapping("/admin/books/{bookId}")
     public ResponseEntity<BookDto> updateBook(@PathVariable Long bookId, @RequestBody BookDto bookDto) {
         BookDto updatedBookDto = bookService.update(bookId, bookDto);
         return ResponseEntity.ok(updatedBookDto);
     }
 
-    @GetMapping
-    public List<BookDto> getAllBooks() {
-        return bookService.findAll();
+    @GetMapping("/books")
+    public ResponseEntity<List<BookDto>> getAllBooks() {
+        List<BookDto> books = bookService.findAll();
+        return ResponseEntity.ok(books);
     }
 
-    @DeleteMapping("/{bookId}")
+    @DeleteMapping("/admin/books/{bookId}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
         bookService.delete(bookId);
         return ResponseEntity.ok().build();
