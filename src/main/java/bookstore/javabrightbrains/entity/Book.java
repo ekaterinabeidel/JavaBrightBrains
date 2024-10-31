@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
@@ -19,14 +20,14 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int discount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    private int total;
-    private String image;
+    private int totalStock;
+    private String imageLink;
 
 
     @Override
