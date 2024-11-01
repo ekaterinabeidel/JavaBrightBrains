@@ -1,10 +1,11 @@
-package bookstore.javabrightbrains.dto;
+package bookstore.javabrightbrains.dto.book;
 
 import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class BookDto {
+public class BookResponseDto {
+    private Long id;
     private String title;
     private String author;
     private String description;
@@ -13,4 +14,5 @@ public class BookDto {
     private Long categoryId;
     private int totalStock;
     private String imageLink;
+    private BigDecimal priceDiscount;
 }
