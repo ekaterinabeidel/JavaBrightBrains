@@ -23,8 +23,11 @@ public class BookService {
     private CategoryService categoryService;
 
     public BookResponseDto save(BookRequestDto bookDto) {
-        Book book = Utils.convertToBookEntity(bookDto, categoryService);
         Category category = categoryService.findEntityById(bookDto.getCategoryId());
+        if (category == null) {
+            throw new IdNotFoundException("Category not found with id: " + bookDto.getCategoryId());
+        }
+        Book book = Utils.convertToBookEntity(bookDto, categoryService);
         book.setCategory(category);
         Book savedBook = bookRepository.save(book);
         return Utils.convertToBookResponseDto(savedBook);
@@ -32,7 +35,12 @@ public class BookService {
 
     public BookResponseDto update(Long id, BookRequestDto bookDto) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Book not found with id: " + id));
+        Category category = categoryService.findEntityById(bookDto.getCategoryId());
+        if (category == null) {
+            throw new IdNotFoundException("Category not found with id: " + bookDto.getCategoryId());
+        }
         book = Utils.updateBookFromDto(book, bookDto, categoryService);
+        book.setCategory(category);
         Book updatedBook = bookRepository.save(book);
         return Utils.convertToBookResponseDto(updatedBook);
     }

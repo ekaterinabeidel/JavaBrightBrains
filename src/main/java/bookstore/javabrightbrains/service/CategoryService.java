@@ -1,7 +1,6 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.category.CategoryRequestDto;
-import bookstore.javabrightbrains.dto.category.CategoryResponseDto;
+import bookstore.javabrightbrains.dto.category.CategoryDto;
 import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.DuplicateCategoryException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
@@ -17,31 +16,31 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public CategoryResponseDto save(CategoryRequestDto categoryDto) {
+    public CategoryDto save(CategoryDto categoryDto) {
         if (categoryRepository.existsByName(categoryDto.getName())) {
             throw new DuplicateCategoryException("Category with name '" + categoryDto.getName() + "' already exists");
         }
         Category category = new Category();
         category.setName(categoryDto.getName());
         Category savedCategory = categoryRepository.save(category);
-        return convertToResponseDto(savedCategory);
+        return convertToDto(savedCategory);
     }
 
-    public CategoryResponseDto findById(Long id) {
+    public CategoryDto findById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Category not found"));
-        return convertToResponseDto(category);
+        return convertToDto(category);
     }
 
-    public List<CategoryResponseDto> findAll() {
+    public List<CategoryDto> findAll() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(this::convertToResponseDto).collect(Collectors.toList());
+        return categories.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CategoryResponseDto update(Long id, CategoryRequestDto categoryDto) {
+    public CategoryDto update(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Category not found with id: " + id));
         category.setName(categoryDto.getName());
         Category updatedCategory = categoryRepository.save(category);
-        return convertToResponseDto(updatedCategory);
+        return convertToDto(updatedCategory);
     }
 
     public void delete(Long id) {
@@ -51,20 +50,20 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    public Category convertToEntity(CategoryRequestDto categoryDto) {
+    public Category convertToEntity(CategoryDto categoryDto) {
         Category category = new Category();
         category.setName(categoryDto.getName());
         return category;
     }
 
-    public CategoryResponseDto convertToResponseDto(Category category) {
-        CategoryResponseDto categoryDto = new CategoryResponseDto();
+    public CategoryDto convertToDto(Category category) {
+        CategoryDto categoryDto = new CategoryDto();
         categoryDto.setId(category.getId());
         categoryDto.setName(category.getName());
         return categoryDto;
     }
 
     public Category findEntityById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Category not found"));
+        return categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Category not found with id: " + id));
     }
 }

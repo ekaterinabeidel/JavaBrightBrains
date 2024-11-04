@@ -17,7 +17,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping(USER_BASE_URL + "/books")
+    @GetMapping("/books")
     public ResponseEntity<List<BookShortResponseDto>> getAllBooks() {
         List<BookShortResponseDto> books = bookService.findAll();
         return ResponseEntity.ok(books);

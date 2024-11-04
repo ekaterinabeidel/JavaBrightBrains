@@ -8,6 +8,7 @@ import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.service.CategoryService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Utils {
 
@@ -45,7 +46,9 @@ public class Utils {
             bookDto.setCategoryId(category.getId());
         }
 
-        BigDecimal discountAmount = book.getPrice().multiply(BigDecimal.valueOf(book.getDiscount())).divide(BigDecimal.valueOf(100));
+        BigDecimal discountAmount = book.getPrice()
+                .multiply(BigDecimal.valueOf(book.getDiscount()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
         BigDecimal priceDiscount = book.getPrice().subtract(discountAmount);
         bookDto.setPriceDiscount(priceDiscount);
 
@@ -57,6 +60,16 @@ public class Utils {
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
+        bookDto.setPrice(book.getPrice());
+        bookDto.setDiscount(book.getDiscount());
+        bookDto.setTotalStock(book.getTotalStock());
+        bookDto.setImageLink(book.getImageLink());
+
+        Category category = book.getCategory();
+        if (category != null) {
+            bookDto.setCategoryId(category.getId());
+        }
+
         return bookDto;
     }
 
