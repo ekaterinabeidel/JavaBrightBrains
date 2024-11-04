@@ -23,7 +23,7 @@ VALUES (1, CURRENT_TIMESTAMP, 'Science Fiction'),
        (6, CURRENT_TIMESTAMP, 'Biography');
 
 -- Вставка книг
-INSERT INTO books (id, created_at, updated_at, title, author, description, price, discount, category_id, total, image)
+INSERT INTO books (id, created_at, updated_at, title, author, description, price, discount, category_id, total_stock, image_link)
 VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'The Hitchhiker''s Guide to the Galaxy', 'Douglas Adams', 'A comedic science fiction series.', 10.99, 0, 1, 100, 'hitchhikers_guide.jpg'),
        (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1984', 'George Orwell', 'A dystopian social science fiction novel and cautionary tale.', 8.99, 10, 2, 50, '1984.jpg'),
        (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Fahrenheit 451', 'Ray Bradbury', 'A novel about a future society where books are outlawed.', 12.50, 5, 3, 30, 'fahrenheit_451.jpg'),

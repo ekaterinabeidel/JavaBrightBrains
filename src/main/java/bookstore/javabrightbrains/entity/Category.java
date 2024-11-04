@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -17,11 +18,15 @@ public class Category {
     private Timestamp createdAt;
     private String name;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Category category)) return false;
-
         if (!getId().equals(category.getId())) return false;
         return getName().equals(category.getName());
     }

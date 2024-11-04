@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -19,15 +21,23 @@ public class Book {
     private String title;
     private String author;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int discount;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    private int total;
-    private String image;
+    private int totalStock;
+    private String imageLink;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+    }
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Timestamp.from(Instant.now());
+    }
 
     @Override
     public boolean equals(Object o) {
