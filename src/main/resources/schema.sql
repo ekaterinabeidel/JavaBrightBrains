@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS books (
                                      price DOUBLE,
                                      discount INT,
                                      category_id BIGINT,
-                                     total INT,
-                                     image VARCHAR(128),
+                                     total_stock INT,
+                                     image_link VARCHAR(128),
                                      FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
 
