@@ -7,6 +7,7 @@ import bookstore.javabrightbrains.entity.Favorite;
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
+import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
@@ -40,16 +41,16 @@ public class FavoriteServiceImpl implements FavoriteService {
     public BookShortResponseDto saveFavorite(FavoriteRequestDto favoriteRequestDto) {
         Favorite favorite = new Favorite();
         Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
-                () -> new IdNotFoundException("Book not found")
+                () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
         );
         User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
-                () -> new IdNotFoundException("User not found")
+                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
 
         Favorite favoriteDuplicate = favoriteRepository.findByUserAndBook(user, book);
 
         if (favoriteDuplicate != null) {
-            throw new DuplicateException("This book is already in favorite");
+            throw new DuplicateException(MessagesException.FAVORITE_DUPLICATED);
         }
 
         favorite.setBook(book);
@@ -62,17 +63,17 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     public void deleteFavorite(FavoriteRequestDto favoriteRequestDto) {
         Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
-                () -> new IdNotFoundException("Book not found")
+                () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
         );
 
         User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
-                () -> new IdNotFoundException("User not found")
+                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
 
         Favorite favorite = favoriteRepository.findByUserAndBook(user, book);
 
         if (favorite == null) {
-            throw new IdNotFoundException("Favorite not found");
+            throw new IdNotFoundException(MessagesException.FAVORITE_NOT_FOUND);
         }
         favoriteRepository.deleteById(favorite.getId());
     }
