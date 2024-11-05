@@ -2,7 +2,7 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.category.CategoryDto;
 import bookstore.javabrightbrains.entity.Category;
-import bookstore.javabrightbrains.exception.DuplicateCategoryException;
+import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +18,12 @@ public class CategoryService {
 
     public CategoryDto save(CategoryDto categoryDto) {
         if (categoryRepository.existsByName(categoryDto.getName())) {
-            throw new DuplicateCategoryException("Category with name '" + categoryDto.getName() + "' already exists");
+            throw new DuplicateException("Category with name '" + categoryDto.getName() + "' already exists");
         }
         Category category = new Category();
         category.setName(categoryDto.getName());
         Category savedCategory = categoryRepository.save(category);
         return convertToDto(savedCategory);
-    }
-
-    public CategoryDto findById(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Category not found"));
-        return convertToDto(category);
     }
 
     public List<CategoryDto> findAll() {

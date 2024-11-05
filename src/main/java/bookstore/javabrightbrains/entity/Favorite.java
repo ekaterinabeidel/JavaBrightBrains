@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -15,12 +16,19 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp createdAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +23,9 @@ public class User {
     private String email;
     private String phone;
     private String role;
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<Favorite> favorites;
 
     @Override
     public boolean equals(Object o) {
