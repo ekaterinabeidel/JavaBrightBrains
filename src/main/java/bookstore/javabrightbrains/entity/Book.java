@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +25,9 @@ public class Book {
     private BigDecimal price;
     private int discount;
 
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<Favorite> favorites;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -34,6 +38,7 @@ public class Book {
     protected void onCreate() {
         createdAt = Timestamp.from(Instant.now());
     }
+
     @PreUpdate
     protected void onUpdate() {
         updatedAt = Timestamp.from(Instant.now());
