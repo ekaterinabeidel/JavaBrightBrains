@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.CartItemDto;
+import bookstore.javabrightbrains.dto.cart.CartItemDto;
 import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
@@ -9,7 +9,6 @@ import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,11 +30,11 @@ public class CartService {
 
     @Transactional
     public void addToCart(CartItemDto cartItemDto) {
-        Cart cart = cartRepository.findById(cartItemDto.getCartId())
-                .orElseThrow(() -> new IdNotFoundException("Cart not found for user ID: " + cartItemDto.getCartId()));
+        Cart cart = cartRepository.findById(1L)
+                .orElseThrow(() -> new IdNotFoundException("Cart not found for user ID: " + 1L));
 
         Book book = bookRepository.findById(cartItemDto.getBookId())
-                .orElseThrow(() -> new IdNotFoundException("Book not found with ID: " + cartItemDto.getBookId()));
+                .orElseThrow(() -> new IdNotFoundException("Book not found with ID: " + 1L));
 
         CartItem cartItem = mappingUtils.toCartItem(cartItemDto, cart, book);
 

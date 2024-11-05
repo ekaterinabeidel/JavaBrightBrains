@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.controller;
 
-import bookstore.javabrightbrains.dto.CartItemDto;
+import bookstore.javabrightbrains.dto.cart.CartItemDto;
 import bookstore.javabrightbrains.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
