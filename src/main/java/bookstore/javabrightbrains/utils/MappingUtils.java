@@ -1,5 +1,6 @@
 package bookstore.javabrightbrains.utils;
 
+import bookstore.javabrightbrains.dto.cart.CartDto;
 import bookstore.javabrightbrains.dto.cart.CartItemDto;
 import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Cart;
@@ -21,10 +22,9 @@ public class MappingUtils {
         return cartItem;
     }
 
-    public CartItemDto toCartItemDto(CartItem cartItem) {
-        return new CartItemDto(
-                cartItem.getBook().getId(),
-                cartItem.getQuantity()
-        );
-    }
+    public CartDto toCartDto(Cart cart) {
+            return new CartDto(cart.getId(), cart.getUser().getId(), null);
+        }
+
+
 }

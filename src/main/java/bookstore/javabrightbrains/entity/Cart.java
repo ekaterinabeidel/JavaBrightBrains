@@ -14,6 +14,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
     @ManyToOne
