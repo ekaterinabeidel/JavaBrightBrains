@@ -32,6 +32,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     public List<BookShortResponseDto> getFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(userId);
 
+        userRepository.findById(userId).orElseThrow(
+                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
+        );
         return favorites.stream().map(favorite -> {
             Book book = favorite.getBook();
             return Utils.convertToBookShortResponseDto(book);
