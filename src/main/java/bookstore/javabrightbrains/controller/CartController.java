@@ -1,7 +1,8 @@
 package bookstore.javabrightbrains.controller;
 
-import bookstore.javabrightbrains.dto.cart.CartDto;
-import bookstore.javabrightbrains.dto.cart.CartItemDto;
+import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
+import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
+import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,9 +28,9 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "404", description = "Cart not found")
     })
-    public ResponseEntity<CartDto> getCart(@PathVariable Long userId) {
-        CartDto cartDto = cartService.getCart(userId);
-        return ResponseEntity.ok(cartDto);
+    public ResponseEntity<CartResponseDto> getCart(@PathVariable Long userId) {
+        CartResponseDto cartResponseDto = cartService.getCart(userId);
+        return ResponseEntity.ok(cartResponseDto);
     }
 
     @PostMapping("/items")
@@ -40,9 +41,9 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
-    public ResponseEntity<String> addToCart(@PathVariable Long userId, @Valid @RequestBody CartItemDto cartItemDto) {
-        cartService.addToCart(userId, cartItemDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> addToCart(@PathVariable Long userId, @Valid @RequestBody CartItemRequestDto cartItemRequestDto) {
+        cartService.addToCart(userId, cartItemRequestDto);
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/items/{cartItemId}")
@@ -55,9 +56,9 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Item does not belong to the user")
     })
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
-                                                 @Valid @RequestBody CartItemDto cartItemDto) {
-        cartService.updateCartItem(userId, cartItemId, cartItemDto);
-        return ResponseEntity.ok().build();
+                                                 @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
+        cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
+        return ResponseEntity.status(200).build();
     }
 
     @DeleteMapping("/items/{cartItemId}")
@@ -70,7 +71,7 @@ public class CartController {
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(userId, cartItemId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(204).build();
     }
 
 }

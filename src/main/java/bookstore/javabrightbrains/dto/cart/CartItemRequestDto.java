@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemDto {
+public class CartItemRequestDto {
     @NotNull(message = "Book ID is required")
     @Positive(message = "Book ID must be a positive number")
     private Long bookId;
