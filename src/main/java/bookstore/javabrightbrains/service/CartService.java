@@ -1,13 +1,15 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.cart.CartDto;
-import bookstore.javabrightbrains.dto.cart.CartItemDto;
+import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
+import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
+import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
+import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
@@ -16,6 +18,8 @@ import bookstore.javabrightbrains.utils.MappingUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CartService {
@@ -35,7 +39,7 @@ public class CartService {
     private MappingUtils mappingUtils;
 
     @Transactional
-    public void addToCart(Long userId, CartItemDto cartItemDto) {
+    public void addToCart(Long userId, CartItemRequestDto cartItemRequestDto) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
@@ -44,25 +48,26 @@ public class CartService {
                     newCart.setUser(user);
                     return cartRepository.save(newCart);
                 });
-        Book book = bookRepository.findById(cartItemDto.getBookId())
+        Book book = bookRepository.findById(cartItemRequestDto.getBookId())
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
 
-        CartItem cartItem = mappingUtils.toCartItem(cartItemDto, cart, book);
+        CartItem cartItem = mappingUtils.toCartItem(cartItemRequestDto, cart, book);
 
         cartItemRepository.save(cartItem);
     }
     @Transactional
-    public CartDto getCart(Long userId) {
+    public CartResponseDto getCart(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());
 
-        return mappingUtils.toCartDto(cart);
+        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+        return mappingUtils.toCartResponseDto(cart, cartItems);
     }
 
     @Transactional
-    public void updateCartItem(Long userId, Long cartItemId, CartItemDto cartItemDto) {
+    public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
 
@@ -70,7 +75,13 @@ public class CartService {
             throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
         }
 
-        cartItem.setQuantity(cartItemDto.getQuantity());
+        Book book = cartItem.getBook();
+        int availableQuantity = book.getTotalStock();
+        if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
+            throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
+        }
+
+        cartItem.setQuantity(cartItemUpdateRequestDto.getQuantity());
         cartItemRepository.save(cartItem);
     }
 
