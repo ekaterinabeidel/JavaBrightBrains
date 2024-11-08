@@ -1,12 +1,16 @@
 package bookstore.javabrightbrains.dto.book;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BookDto {
     private Long id;
