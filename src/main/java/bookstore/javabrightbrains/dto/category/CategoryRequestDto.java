@@ -1,9 +1,13 @@
 package bookstore.javabrightbrains.dto.category;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class CategoryRequestDto {
     @NotNull(message = "Name cannot be null")
