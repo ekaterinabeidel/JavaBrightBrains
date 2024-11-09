@@ -1,7 +1,9 @@
 package bookstore.javabrightbrains.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -10,6 +12,8 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "books")
@@ -43,6 +47,19 @@ public class Book {
     protected void onUpdate() {
         updatedAt = Timestamp.from(Instant.now());
     }
+
+    public Book(String title, String author, String description, BigDecimal price, int discount, Long categoryId, int totalStock, String imageLink) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.price = price;
+        this.discount = discount;
+        this.category = new Category();
+        this.category.setId(categoryId);
+        this.totalStock = totalStock;
+        this.imageLink = imageLink;
+    }
+
 
     @Override
     public boolean equals(Object o) {

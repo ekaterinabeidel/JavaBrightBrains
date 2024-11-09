@@ -1,7 +1,6 @@
 package bookstore.javabrightbrains.handler;
 
 import bookstore.javabrightbrains.exception.DuplicateException;
-
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +32,13 @@ public class ResponseExceptionHandler {
     public ResponseEntity<AppError> handleDuplicateException(DuplicateException e) {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * Handles validation errors for request bodies.
+     *
+     * @param ex The MethodArgumentNotValidException instance.
+     * @return ResponseEntity containing the error messages and status code.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -44,4 +50,11 @@ public class ResponseExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+//    Исключение MethodArgumentNotValidException выбрасывается автоматически, когда Spring обнаруживает,
+//    что переданный в запросе объект не проходит валидацию. Это происходит благодаря аннотации @Valid в вашем методе контроллера.
+//    Когда Spring обнаруживает, что аннотированный объект запроса невалиден, он автоматически создает и выбрасывает исключение
+//    MethodArgumentNotValidException.
+//
+//    Где выбрасывается исключение
+//    Контроллер: Метод контроллера с аннотацией @Valid на параметре запроса.
 }

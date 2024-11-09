@@ -1,15 +1,15 @@
--- Удаление таблиц в правильном порядке
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS carts;
-DROP TABLE IF EXISTS books_favorites; -- Удалите сначала зависимую таблицу
 DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
--- Таблица users
+
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
--- Таблица order_items
+
 CREATE TABLE IF NOT EXISTS order_items (
                                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -102,11 +102,4 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
     );
 
--- Таблица books_favorites
-CREATE TABLE IF NOT EXISTS books_favorites (
-                                               id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                                               book_id BIGINT NOT NULL,
-                                               favorites_id BIGINT NOT NULL,
-                                               FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
-    FOREIGN KEY (favorites_id) REFERENCES favorites(id) ON DELETE CASCADE
-    );
+

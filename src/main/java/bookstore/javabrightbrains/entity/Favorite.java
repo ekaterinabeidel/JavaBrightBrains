@@ -1,13 +1,17 @@
 package bookstore.javabrightbrains.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "favorites")
@@ -38,6 +42,11 @@ public class Favorite {
         return getId().equals(favorite.getId());
     }
 
+    public Favorite(User user, Book book) {
+        this.user = user;
+        this.book = book;
+    }
+    
     @Override
     public int hashCode() {
         return getId().hashCode();

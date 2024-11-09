@@ -33,9 +33,9 @@ public class CategoryService {
         return categories.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryRequestDto categoryRequestDto) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.CATEGORY_NOT_FOUND));
-        category.setName(categoryDto.getName());
+        category.setName(categoryRequestDto.getName());
         Category updatedCategory = categoryRepository.save(category);
         return convertToDto(updatedCategory);
     }

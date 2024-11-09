@@ -1,13 +1,17 @@
 package bookstore.javabrightbrains.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "users")
@@ -26,6 +30,10 @@ public class User {
 
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Favorite> favorites;
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {

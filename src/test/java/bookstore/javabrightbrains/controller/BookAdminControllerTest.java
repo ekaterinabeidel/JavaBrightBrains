@@ -2,8 +2,13 @@ package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
+import bookstore.javabrightbrains.entity.Book;
+import bookstore.javabrightbrains.entity.Favorite;
+import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
+import bookstore.javabrightbrains.repository.BookRepository;
+import bookstore.javabrightbrains.repository.FavoriteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,9 +21,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+
+
 import java.math.BigDecimal;
 
 import static bookstore.javabrightbrains.utils.Constants.ADMIN_BASE_URL;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,6 +39,12 @@ class BookAdminControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private FavoriteRepository favoriteRepository;
 
     @Test
     void addBookSuccess() throws Exception {
@@ -113,4 +127,33 @@ class BookAdminControllerTest {
         Assertions.assertEquals(404, result.getResponse().getStatus());
         Assertions.assertEquals(MessagesException.BOOK_NOT_FOUND, response.getMessage());
     }
+
+    @Test
+    void deleteBookCascadeSuccess() throws Exception {
+        Book book = bookRepository.save(new Book("Dune", "Frank Herbert", "Description", BigDecimal.valueOf(19.99), 10, 1L, 100, null));
+
+        Favorite favorite = favoriteRepository.save(new Favorite(new User(1L), book));
+
+        Assertions.assertNotNull(favoriteRepository.findByUserAndBook(new User(1L), book));
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete(ADMIN_BASE_URL + "/books/{bookId}", book.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assertions.assertNull(favoriteRepository.findByUserAndBook(new User(1L), book));
+        Assertions.assertEquals(200, result.getResponse().getStatus());
+    }
+    @Test
+    void deleteBookCascadeNotFound() throws Exception {
+        Long bookId = 999L;
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete(ADMIN_BASE_URL + "/books/{bookId}", bookId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        Assertions.assertEquals(404, result.getResponse().getStatus());
+    }
+
 }
