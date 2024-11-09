@@ -1,5 +1,6 @@
 package bookstore.javabrightbrains.service;
 
+import bookstore.javabrightbrains.dto.book.BookFilterDto;
 import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
@@ -8,6 +9,7 @@ import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
+import bookstore.javabrightbrains.repository.FilterBookRepository;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,8 +53,8 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public List<BookShortResponseDto> findAll() {
-        List<Book> books = bookRepository.findAll();
+    public List<BookShortResponseDto> findAll(BookFilterDto filter) {
+        List<Book> books = bookRepository.findByFilter(filter);
         return books.stream().map(Utils::convertToBookShortResponseDto).collect(Collectors.toList());
     }
 
@@ -61,7 +63,4 @@ public class BookService {
         return Utils.convertToBookResponseDto(book);
     }
 
-    public Book findEntityByIdWithoutConversion(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
-    }
 }

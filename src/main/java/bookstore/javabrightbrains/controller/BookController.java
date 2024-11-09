@@ -1,7 +1,9 @@
 package bookstore.javabrightbrains.controller;
 
+import bookstore.javabrightbrains.dto.book.BookFilterDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
+import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,16 @@ public class BookController {
 
     @GetMapping("/books")
     public ResponseEntity<List<BookShortResponseDto>> getAllBooks() {
-        List<BookShortResponseDto> books = bookService.findAll();
+        Category category =new Category();
+        category.setId(1l);
+        category.setName("Science Fiction");
+        BookFilterDto filter = new BookFilterDto(
+                category,
+                5,
+                14,
+                false
+        );
+        List<BookShortResponseDto> books = bookService.findAll(filter);
         return ResponseEntity.ok(books);
     }
 

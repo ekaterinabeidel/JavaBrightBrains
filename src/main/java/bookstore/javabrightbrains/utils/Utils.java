@@ -30,6 +30,12 @@ public class Utils {
         return book;
     }
 
+    public static BigDecimal getPriceWithDiscount(BigDecimal price, int discount) {
+        return price
+                .multiply(BigDecimal.valueOf(discount))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+    }
+
     public static BookResponseDto convertToBookResponseDto(Book book) {
         BookResponseDto bookDto = new BookResponseDto();
         bookDto.setId(book.getId());
@@ -46,9 +52,7 @@ public class Utils {
             bookDto.setCategoryId(category.getId());
         }
 
-        BigDecimal discountAmount = book.getPrice()
-                .multiply(BigDecimal.valueOf(book.getDiscount()))
-                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        BigDecimal discountAmount = getPriceWithDiscount(book.getPrice(), bookDto.getDiscount());
         BigDecimal priceDiscount = book.getPrice().subtract(discountAmount);
         bookDto.setPriceDiscount(priceDiscount);
 
