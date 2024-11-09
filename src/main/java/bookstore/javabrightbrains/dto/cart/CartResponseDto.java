@@ -11,6 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CartResponseDto {
     private Long cartId;
-    private Long userId;
     private List<CartItemResponseDto> items;
 }

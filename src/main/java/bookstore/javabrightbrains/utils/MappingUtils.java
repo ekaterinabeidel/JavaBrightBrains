@@ -1,5 +1,6 @@
 package bookstore.javabrightbrains.utils;
 
+import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
@@ -8,6 +9,7 @@ import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,13 +32,29 @@ public class MappingUtils {
                 .map(this::toCartItemResponseDto)
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getId(), cart.getUser().getId(), cartItemDtos);
+        return new CartResponseDto(cart.getId(), cartItemDtos);
     }
 
     private CartItemResponseDto toCartItemResponseDto(CartItem cartItem) {
+
+        BookShortResponseDto bookShortResponseDto = new BookShortResponseDto(
+                cartItem.getBook().getId(),
+                cartItem.getBook().getTitle(),
+                cartItem.getBook().getAuthor(),
+                cartItem.getBook().getPrice(),
+                cartItem.getBook().getDiscount(),
+                cartItem.getBook().getCategory().getId(),
+                cartItem.getBook().getTotalStock(),
+                cartItem.getBook().getImageLink(),
+                cartItem.getBook().getPrice()
+                        .subtract(cartItem.getBook().getPrice()
+                                .multiply(BigDecimal.valueOf(cartItem.getBook().getDiscount() / 100.0)))
+
+        );
+
         return new CartItemResponseDto(
                 cartItem.getId(),
-                cartItem.getBook().getId(),
+                bookShortResponseDto,
                 cartItem.getQuantity()
         );
     }

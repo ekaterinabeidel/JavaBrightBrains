@@ -10,10 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
-
+@Validated
 @RestController
 @RequestMapping( USER_BASE_URL + "/{userId}/cart")
 @RequiredArgsConstructor
@@ -58,7 +59,7 @@ public class CartController {
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(204).build();
     }
 
     @DeleteMapping("/items/{cartItemId}")

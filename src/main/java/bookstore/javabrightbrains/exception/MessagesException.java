@@ -10,6 +10,7 @@ public class MessagesException {
     public static String CATEGORY_DUPLICATED = "Such category already exists";
     public static String FAVORITE_DUPLICATED = "This book is already in favorite";
     public static String NOT_ENOUGH_BOOKS_IN_STOCK = "Not enough books available in stock";
+    public static final String QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE = "Quantity cannot be zero or negative";
 
 
 }

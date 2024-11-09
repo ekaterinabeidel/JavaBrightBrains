@@ -8,6 +8,7 @@ import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
+import bookstore.javabrightbrains.exception.InvalidQuantityException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
@@ -77,6 +78,12 @@ public class CartService {
 
         Book book = cartItem.getBook();
         int availableQuantity = book.getTotalStock();
+
+        int newQuantity = cartItemUpdateRequestDto.getQuantity();
+        if (newQuantity <= 0) {
+            throw new InvalidQuantityException(MessagesException.QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE);
+        }
+
         if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
             throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
         }

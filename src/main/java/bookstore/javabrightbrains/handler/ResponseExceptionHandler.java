@@ -3,6 +3,7 @@ package bookstore.javabrightbrains.handler;
 import bookstore.javabrightbrains.exception.DuplicateException;
 
 import bookstore.javabrightbrains.exception.IdNotFoundException;
+import bookstore.javabrightbrains.exception.InvalidQuantityException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,12 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(NotEnoughBooksInStockException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<AppError> handleNotEnoughBooksInStockException(NotEnoughBooksInStockException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidQuantityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<AppError> handleInvalidQuantityException(InvalidQuantityException e) {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
