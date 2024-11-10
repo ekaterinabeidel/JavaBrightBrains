@@ -1,20 +1,18 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.book.BookFilterDto;
-import bookstore.javabrightbrains.dto.book.BookRequestDto;
-import bookstore.javabrightbrains.dto.book.BookResponseDto;
-import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
+import bookstore.javabrightbrains.dto.book.*;
 import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.repository.FilterBookRepository;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,9 +51,40 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public List<BookShortResponseDto> findAll(BookFilterDto filter) {
-        List<Book> books = bookRepository.findByFilter(filter);
-        return books.stream().map(Utils::convertToBookShortResponseDto).collect(Collectors.toList());
+    public PageResponseDto<BookShortResponseDto> findAll(
+            int pageNum,
+            int pageSize,
+            Long categoryId,
+            int minPrice,
+            int maxPrice,
+            boolean isDiscount
+    ) {
+
+        Category category = null;
+        if (categoryId != null) {
+            category = categoryService.findEntityById(categoryId);
+
+            if (category == null) {
+                throw new IdNotFoundException(MessagesException.CATEGORY_NOT_FOUND);
+            }
+        }
+
+        BookFilterDto filter = new BookFilterDto(
+                category,
+                minPrice,
+                maxPrice,
+                isDiscount
+        );
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<Book> books = bookRepository.findByFilter(filter, pageable);
+
+        PageResponseDto<BookShortResponseDto> bookPageResponseDto = new PageResponseDto<>();
+        bookPageResponseDto.setContent(books.getContent().stream().map(Utils::convertToBookShortResponseDto).collect(Collectors.toList()));
+        bookPageResponseDto.setTotal(books.getTotalElements());
+        bookPageResponseDto.setPage(pageable.getPageNumber() + 1);
+
+        return bookPageResponseDto;
     }
 
     public BookResponseDto findById(Long id) {

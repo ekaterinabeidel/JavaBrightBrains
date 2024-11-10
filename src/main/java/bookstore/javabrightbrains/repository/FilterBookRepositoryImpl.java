@@ -3,12 +3,15 @@ package bookstore.javabrightbrains.repository;
 import bookstore.javabrightbrains.dto.book.BookFilterDto;
 import bookstore.javabrightbrains.entity.Book;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 
+
+import org.hibernate.Session;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,18 +31,15 @@ public class FilterBookRepositoryImpl implements FilterBookRepository {
 
     @Override
     public Page<Book> findByFilter(BookFilterDto filter, Pageable pageable) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Book> criteria = cb.createQuery(Book.class);
-//
-//        Metamodel m = entityManager.getMetamodel();
-//        EntityType<Book> Book_ = m.entity(Book.class);
+        HibernateCriteriaBuilder cb = entityManager.unwrap(Session.class).getCriteriaBuilder();
+        JpaCriteriaQuery<Book> criteria = cb.createQuery(Book.class);
 
         Root<Book> book = criteria.from(Book.class);
 
         List<Predicate> predicates = new ArrayList<>();
 
-        if(filter.isDiscount() ) {
-            predicates.add(cb.ge(book.get("discount"), 0));
+        if(filter.isDiscount()) {
+            predicates.add(cb.greaterThan(book.get("discount"), 0));
         }
 
         if(filter.getCategory() != null) {
@@ -52,23 +52,26 @@ public class FilterBookRepositoryImpl implements FilterBookRepository {
                     BigDecimal.valueOf(filter.getMaxPrice())));
         }
 
-        criteria.orderBy(cb.desc(book.get("name")));
+        criteria.orderBy(cb.desc(book.get("title")));
 
         // This query fetches the Books as per the Page Limit
-        List<Book> result = entityManager.createQuery(criteria).setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
+        List<Book> result = entityManager.createQuery(criteria.where(predicates.toArray(new Predicate[0])))
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
 
         // Create Count Query
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Book> booksRootCount = countQuery.from(Book.class);
-        countQuery.select(cb.count(booksRootCount)).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+        countQuery.select(cb.count(booksRootCount))
+                .where(cb.and(predicates
+                        .toArray(new Predicate[predicates.size()])));
 
         // Fetches the count of all Books as per given criteria
-        Long count = entityManager.createQuery(countQuery).getSingleResult();
+        Long count = entityManager.createQuery(criteria.createCountQuery()).getSingleResult();
 
         Page<Book> resultPage = new PageImpl<>(result, pageable, count);
         return resultPage;
-//
-//        criteria.where(predicates.toArray(Predicate[]::new));
-//        return entityManager.createQuery(criteria).getResultList();
     }
 }

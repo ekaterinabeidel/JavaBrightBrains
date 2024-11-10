@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS books (
                                      author VARCHAR(128),
                                      description TEXT,
                                      price DOUBLE,
+                                     price_discount DOUBLE,
                                      discount INT,
                                      category_id BIGINT,
                                      total_stock INT,
