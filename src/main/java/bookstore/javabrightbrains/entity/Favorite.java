@@ -42,11 +42,6 @@ public class Favorite {
         return getId().equals(favorite.getId());
     }
 
-    public Favorite(User user, Book book) {
-        this.user = user;
-        this.book = book;
-    }
-    
     @Override
     public int hashCode() {
         return getId().hashCode();

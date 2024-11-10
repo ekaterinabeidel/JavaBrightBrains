@@ -31,10 +31,6 @@ public class User {
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<Favorite> favorites;
 
-    public User(Long id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

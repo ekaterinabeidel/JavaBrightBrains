@@ -2,9 +2,6 @@ package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
-import bookstore.javabrightbrains.entity.Book;
-import bookstore.javabrightbrains.entity.Favorite;
-import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
@@ -20,7 +17,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 
 
 import java.math.BigDecimal;
@@ -130,20 +126,22 @@ class BookAdminControllerTest {
 
     @Test
     void deleteBookCascadeSuccess() throws Exception {
-        Book book = bookRepository.save(new Book("Dune", "Frank Herbert", "Description", BigDecimal.valueOf(19.99), 10, 1L, 100, null));
+        Long bookId = 1L;
 
-        Favorite favorite = favoriteRepository.save(new Favorite(new User(1L), book));
+        Assertions.assertTrue(bookRepository.existsById(bookId));
+        Assertions.assertTrue(favoriteRepository.findAll().stream()
+                .anyMatch(favorite -> favorite.getBook().getId().equals(bookId)));
 
-        Assertions.assertNotNull(favoriteRepository.findByUserAndBook(new User(1L), book));
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete(ADMIN_BASE_URL + "/books/{bookId}", book.getId())
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete(ADMIN_BASE_URL + "/books/{bookId}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertNull(favoriteRepository.findByUserAndBook(new User(1L), book));
         Assertions.assertEquals(200, result.getResponse().getStatus());
+        Assertions.assertFalse(bookRepository.existsById(bookId));
+        Assertions.assertTrue(favoriteRepository.findAll().stream()
+                .noneMatch(favorite -> favorite.getBook().getId().equals(bookId)));
     }
+
     @Test
     void deleteBookCascadeNotFound() throws Exception {
         Long bookId = 999L;

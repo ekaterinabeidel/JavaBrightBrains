@@ -48,19 +48,6 @@ public class Book {
         updatedAt = Timestamp.from(Instant.now());
     }
 
-    public Book(String title, String author, String description, BigDecimal price, int discount, Long categoryId, int totalStock, String imageLink) {
-        this.title = title;
-        this.author = author;
-        this.description = description;
-        this.price = price;
-        this.discount = discount;
-        this.category = new Category();
-        this.category.setId(categoryId);
-        this.totalStock = totalStock;
-        this.imageLink = imageLink;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
