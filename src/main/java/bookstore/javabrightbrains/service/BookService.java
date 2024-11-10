@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -57,7 +58,9 @@ public class BookService {
             Long categoryId,
             int minPrice,
             int maxPrice,
-            boolean isDiscount
+            boolean isDiscount,
+            String sortBy,
+            String sortDirect
     ) {
 
         Category category = null;
@@ -76,7 +79,15 @@ public class BookService {
                 isDiscount
         );
 
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Sort sort = null;
+
+        if (sortDirect.equals("asc")) {
+            sort = Sort.by(sortBy).ascending();
+        } else {
+            sort = Sort.by(sortBy).descending();
+        }
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
         Page<Book> books = bookRepository.findByFilter(filter, pageable);
 
         PageResponseDto<BookShortResponseDto> bookPageResponseDto = new PageResponseDto<>();

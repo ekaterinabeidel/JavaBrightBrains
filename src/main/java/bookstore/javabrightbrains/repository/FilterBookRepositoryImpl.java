@@ -16,6 +16,7 @@ import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 
@@ -52,7 +53,7 @@ public class FilterBookRepositoryImpl implements FilterBookRepository {
                     BigDecimal.valueOf(filter.getMaxPrice())));
         }
 
-        criteria.orderBy(cb.desc(book.get("title")));
+        criteria.orderBy(QueryUtils.toOrders(pageable.getSort(), book, cb));
 
         // This query fetches the Books as per the Page Limit
         List<Book> result = entityManager.createQuery(criteria.where(predicates.toArray(new Predicate[0])))

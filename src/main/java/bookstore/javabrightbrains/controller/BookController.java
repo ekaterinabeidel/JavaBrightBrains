@@ -19,8 +19,8 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}/" +
-            "categoryId/{categoryId}/minPrice/{minPrice}/" +
+    @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}/sortBy/{sortBy}/" +
+            "sortDirect/{sortDirect}/categoryId/{categoryId}/minPrice/{minPrice}/" +
             "maxPrice/{maxPrice}/isDiscount/{isDiscount}")
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
             @PathVariable @DefaultValue("0") int pageNum,
@@ -31,8 +31,9 @@ public class BookController {
             @PathVariable Integer minPrice,
             @Nullable
             @PathVariable Integer maxPrice,
-            @PathVariable @DefaultValue("false") boolean isDiscount
-
+            @PathVariable @DefaultValue("false") boolean isDiscount,
+            @PathVariable @DefaultValue("title") String sortBy,
+            @PathVariable @DefaultValue("asc") String sortDirect
     ) {
 
         PageResponseDto<BookShortResponseDto> books = bookService.findAll(
@@ -41,7 +42,9 @@ public class BookController {
                 categoryId,
                 minPrice,
                 maxPrice,
-                isDiscount);
+                isDiscount,
+                sortBy,
+                sortDirect);
         return ResponseEntity.ok(books);
     }
 
