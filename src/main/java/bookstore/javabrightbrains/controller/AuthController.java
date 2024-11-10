@@ -1,9 +1,8 @@
 package bookstore.javabrightbrains.controller;
 
-
-import bookstore.javabrightbrains.dto.auth.*;
+import bookstore.javabrightbrains.dto.SignUpRequest;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.service.AuthService;
+import bookstore.javabrightbrains.service.interf.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,23 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
-    private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequestDto registerRequestDto) {
-        return ResponseEntity.ok(authService.register(registerRequestDto));
-    }
+    private final AuthenticationService authenticationService;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity.ok(authService.login(loginRequestDto));
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponseDto> refresh(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-        return ResponseEntity.ok(authService.refresh(refreshTokenRequestDto));
+    @PostMapping("/signUp")
+    public ResponseEntity<User> signUp(@RequestBody SignUpRequest signUpRequest) {
+        return ResponseEntity.ok(authenticationService.signUp(signUpRequest));
     }
 }

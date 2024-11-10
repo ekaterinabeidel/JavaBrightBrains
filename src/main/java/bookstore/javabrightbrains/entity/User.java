@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.entity;
 
-import bookstore.javabrightbrains.enums.ROLES;
+import bookstore.javabrightbrains.enums.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,17 +17,35 @@ import java.util.List;
 @Setter
 @Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "created_at")
     private Timestamp createdAt;
+
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "surname")
     private String surname;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "phone")
     private String phone;
-    private ROLES role;
+
+    @Column(name = "role")
+    private Roles role;
 
     @Override
     public boolean equals(Object o) {
@@ -60,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return name;
     }
 
     @Override
@@ -83,5 +101,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-
-

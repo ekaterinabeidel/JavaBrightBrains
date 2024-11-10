@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.enums;
 
-public enum ROLES {
+public enum Roles {
     ADMIN,
     USER
 }

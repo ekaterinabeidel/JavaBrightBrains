@@ -9,5 +9,4 @@ public class JavaBrightBrainsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JavaBrightBrainsApplication.class, args);
 	}
-
 }

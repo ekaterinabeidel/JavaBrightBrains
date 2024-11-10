@@ -1,14 +1,16 @@
 package bookstore.javabrightbrains.configuration;
 
+import bookstore.javabrightbrains.service.interf.JWTService;
 
-import bookstore.javabrightbrains.service.AppUserService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
-import io.micrometer.common.util.StringUtils;
+import bookstore.javabrightbrains.service.interf.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,43 +24,43 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtSecurityService jwtSecurityService;
-    private final AppUserService appUserService;
+
+
+    @Qualifier("JWTServiceImpl")
+    private final JWTService jwtService;
+    private final UserService userService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
+        String jwtToken;
 
-        String header = request.getHeader("Authorization");
-        String prefix = "Bearer ";
+        String username;
 
-        if (StringUtils.isEmpty(header)
-                || !org.apache.commons.lang3.StringUtils.startsWith(header, prefix)) {
-            filterChain.doFilter(request, response);
+        if(StringUtils.isEmpty(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
+            filterChain.doFilter(request,response);
             return;
         }
 
-        String jwt = header.substring(prefix.length());
-        String email = jwtSecurityService.extractUsername(jwt);
+        jwtToken = authHeader.substring(7);
+        username = jwtService.getUserNameFromToken(jwtToken);
 
-        if (StringUtils.isNotEmpty(email)
-                && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = appUserService
-                    .getDetailsService()
-                    .loadUserByUsername(email);
+        if(StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
 
-            if (jwtSecurityService.validateToken(jwt, userDetails)) {
+            if (jwtService.isTokeValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
+
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 securityContext.setAuthentication(token);
                 SecurityContextHolder.setContext(securityContext);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
