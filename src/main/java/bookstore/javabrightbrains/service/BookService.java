@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +59,9 @@ public class BookService {
             int pageNum,
             int pageSize,
             Long categoryId,
-            int minPrice,
-            int maxPrice,
-            boolean isDiscount,
+            Integer minPrice,
+            Integer maxPrice,
+            Boolean isDiscount,
             String sortBy,
             String sortDirect
     ) {
@@ -72,6 +75,7 @@ public class BookService {
             }
         }
 
+
         BookFilterDto filter = new BookFilterDto(
                 category,
                 minPrice,
@@ -80,12 +84,15 @@ public class BookService {
         );
 
         Sort sort = null;
+        String sortByNew = sortBy != null ? sortBy : "title";
 
-        if (sortDirect.equals("asc")) {
-            sort = Sort.by(sortBy).ascending();
+
+        if (sortDirect != null && sortDirect.equals("desc")) {
+            sort = Sort.by(sortByNew).descending();
         } else {
-            sort = Sort.by(sortBy).descending();
+            sort = Sort.by(sortByNew).ascending();
         }
+
 
         Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
         Page<Book> books = bookRepository.findByFilter(filter, pageable);

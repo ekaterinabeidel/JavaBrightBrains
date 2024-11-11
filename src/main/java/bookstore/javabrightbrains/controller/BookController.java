@@ -5,7 +5,9 @@ import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.service.BookService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +25,27 @@ public class BookController {
             "sortDirect/{sortDirect}/categoryId/{categoryId}/minPrice/{minPrice}/" +
             "maxPrice/{maxPrice}/isDiscount/{isDiscount}")
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
-            @PathVariable @DefaultValue("0") int pageNum,
-            @PathVariable @DefaultValue("5") int pageSize,
+            @PathVariable
+            @Min(0)
+            @Parameter(description = "Page number")
+            Integer pageNum,
+            @PathVariable Integer pageSize,
             @Nullable
+            @RequestParam(value = "categoryId", required = false)
             @PathVariable Long categoryId,
             @Nullable
+            @RequestParam(value = "minPrice", required = false)
             @PathVariable Integer minPrice,
             @Nullable
+            @RequestParam(value = "maxPrice", required = false)
             @PathVariable Integer maxPrice,
+            @RequestParam(value = "isDiscount", required = false)
             @PathVariable @DefaultValue("false") boolean isDiscount,
+            @RequestParam(value = "sortBy", required = false)
             @PathVariable @DefaultValue("title") String sortBy,
-            @PathVariable @DefaultValue("asc") String sortDirect
+            @RequestParam(value = "sortDirect", required = false)
+            @PathVariable  String sortDirect
     ) {
-
         PageResponseDto<BookShortResponseDto> books = bookService.findAll(
                 pageNum,
                 pageSize,
