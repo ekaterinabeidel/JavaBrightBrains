@@ -19,20 +19,20 @@ public class OrderStatusUpdater {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusUpdater.class);
     @Autowired
     private OrderRepository orderRepository;
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(initialDelay = 60000, fixedRate = 30000)
     @Transactional
     public void updateOrderStatuses() {
 
         List<Order> orders = orderRepository.findAll();
         for (Order order : orders) {
             switch (order.getStatus()) {
-                case PENDING_PAYMENT:
+                case PENDING:
                     order.setStatus(PAID);
                     break;
                 case PAID:
-                    order.setStatus(IN_TRANSIT);
+                    order.setStatus(SHIPPED);
                     break;
-                case IN_TRANSIT:
+                case SHIPPED:
                     order.setStatus(OrderStatus.DELIVERED);
                     break;
 

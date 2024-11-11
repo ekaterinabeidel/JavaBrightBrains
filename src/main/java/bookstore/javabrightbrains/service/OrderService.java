@@ -8,14 +8,17 @@ import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.*;
 import bookstore.javabrightbrains.repository.*;
+import bookstore.javabrightbrains.utils.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+@Validated
 @Service
 public class OrderService {
     @Autowired
@@ -81,7 +84,7 @@ public class OrderService {
             throw new OrderCancellationNotAllowedException(MessagesException.ORDER_CANNOT_BE_CANCELLED_INVALID_STATUS);
         }
 
-        order.setStatus("Cancelled");
+        order.setStatus(OrderStatus.CANCELED);
         orderRepository.save(order);
 
         return mapToOrderShortResponseDto(order);
