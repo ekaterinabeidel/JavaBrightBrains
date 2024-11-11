@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PageResponseDto<T>{
     private List<T> content;
-    private int page;
+    private int pageNumber;
+    private int pageSize;
     private Long total;
 }

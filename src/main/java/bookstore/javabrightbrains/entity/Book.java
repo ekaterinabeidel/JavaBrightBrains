@@ -1,6 +1,5 @@
 package bookstore.javabrightbrains.entity;
 
-import bookstore.javabrightbrains.utils.Utils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +22,6 @@ public class Book {
     private String title;
     private String author;
     private String description;
-
-    public void setPriceDiscount() {
-        addPriceWithDiscount();
-    }
-
     private BigDecimal price;
     private BigDecimal priceDiscount;
     private int discount;
@@ -51,14 +45,6 @@ public class Book {
     protected void onUpdate() {
         updatedAt = Timestamp.from(Instant.now());
 
-    }
-
-    protected void addPriceWithDiscount() {
-        if(discount > 0) {
-            priceDiscount = Utils.getPriceWithDiscount(price, discount);
-        } else {
-            priceDiscount = price;
-        }
     }
 
     @Override

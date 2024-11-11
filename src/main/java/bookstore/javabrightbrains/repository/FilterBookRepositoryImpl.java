@@ -48,7 +48,7 @@ public class FilterBookRepositoryImpl implements FilterBookRepository {
         }
 
         if (filter.getMinPrice() != null && filter.getMaxPrice() != null) {
-            predicates.add(cb.between(book.get("price"),
+            predicates.add(cb.between(book.get("priceDiscount"),
                     BigDecimal.valueOf(filter.getMinPrice()),
                     BigDecimal.valueOf(filter.getMaxPrice())));
         }

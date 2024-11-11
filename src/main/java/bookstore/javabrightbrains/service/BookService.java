@@ -93,7 +93,8 @@ public class BookService {
         PageResponseDto<BookShortResponseDto> bookPageResponseDto = new PageResponseDto<>();
         bookPageResponseDto.setContent(books.getContent().stream().map(Utils::convertToBookShortResponseDto).collect(Collectors.toList()));
         bookPageResponseDto.setTotal(books.getTotalElements());
-        bookPageResponseDto.setPage(pageable.getPageNumber() + 1);
+        bookPageResponseDto.setPageNumber(pageable.getPageNumber() + 1);
+        bookPageResponseDto.setPageSize(pageable.getPageSize());
 
         return bookPageResponseDto;
     }
