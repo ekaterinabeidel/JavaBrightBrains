@@ -76,7 +76,8 @@ CREATE TABLE IF NOT EXISTS orders (
                                       delivery_address VARCHAR(500),
                                       contact_phone VARCHAR(128),
                                       delivery_method VARCHAR(128),
-                                      status ENUM('pending', 'shipped', 'delivered', 'canceled'),
+                                      status VARCHAR(128),
+                                     -- status ENUM('pending', 'shipped', 'delivered', 'canceled'),
                                       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
