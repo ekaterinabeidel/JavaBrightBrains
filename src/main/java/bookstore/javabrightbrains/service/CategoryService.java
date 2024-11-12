@@ -1,6 +1,7 @@
 package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.category.CategoryDto;
+import bookstore.javabrightbrains.dto.category.CategoryRequestDto;
 import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
@@ -17,12 +18,12 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public CategoryDto save(CategoryDto categoryDto) {
-        if (categoryRepository.existsByName(categoryDto.getName())) {
+    public CategoryDto save(CategoryRequestDto categoryRequestDto) {
+        if (categoryRepository.existsByName(categoryRequestDto.getName())) {
             throw new DuplicateException(MessagesException.CATEGORY_DUPLICATED);
         }
         Category category = new Category();
-        category.setName(categoryDto.getName());
+        category.setName(categoryRequestDto.getName());
         Category savedCategory = categoryRepository.save(category);
         return convertToDto(savedCategory);
     }
@@ -32,9 +33,9 @@ public class CategoryService {
         return categories.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryDto update(Long id, CategoryRequestDto categoryRequestDto) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.CATEGORY_NOT_FOUND));
-        category.setName(categoryDto.getName());
+        category.setName(categoryRequestDto.getName());
         Category updatedCategory = categoryRepository.save(category);
         return convertToDto(updatedCategory);
     }

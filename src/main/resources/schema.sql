@@ -1,6 +1,6 @@
 USE bookstore;
 
--- Удаление таблиц в нужном порядке
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS orders;
@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- Таблица users
 CREATE TABLE IF NOT EXISTS users (
