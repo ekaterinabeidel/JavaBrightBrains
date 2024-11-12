@@ -82,7 +82,11 @@ public class BookService {
                 maxPrice,
                 isDiscount
         );
+        List<String> fields = Arrays.stream(Book.class.getDeclaredFields()).map(Field::getName).toList();
 
+        if(sortBy != null && !fields.contains(sortBy)) {
+            throw new IllegalArgumentException("There is no such field to sort by.");
+        }
         Sort sort = null;
         String sortByNew = sortBy != null ? sortBy : "title";
 

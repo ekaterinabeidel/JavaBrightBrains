@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +39,9 @@ public class BookController {
             @RequestParam(value = "maxPrice", required = false)
             @PathVariable Integer maxPrice,
             @RequestParam(value = "isDiscount", required = false)
-            @PathVariable @DefaultValue("false") boolean isDiscount,
+            @PathVariable  boolean isDiscount,
             @RequestParam(value = "sortBy", required = false)
-            @PathVariable @DefaultValue("title") String sortBy,
+            @PathVariable String sortBy,
             @RequestParam(value = "sortDirect", required = false)
             @PathVariable  String sortDirect
     ) {
