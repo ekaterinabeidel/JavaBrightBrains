@@ -29,7 +29,7 @@ public class Book {
     private BigDecimal price;
     private int discount;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<Favorite> favorites;
 
     @ManyToOne
