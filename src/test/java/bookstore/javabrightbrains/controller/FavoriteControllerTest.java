@@ -67,11 +67,11 @@ class FavoriteControllerTest {
 
         String jsonResult = result.getResponse().getContentAsString();
 
-        IdNotFoundException responce;
-        responce = objectMapper.readValue(jsonResult, IdNotFoundException.class);
+        IdNotFoundException response;
+        response = objectMapper.readValue(jsonResult, IdNotFoundException.class);
 
         Assertions.assertEquals(404, result.getResponse().getStatus());
-        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, responce.getMessage());
+        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, response.getMessage());
     }
 
     @Test
@@ -88,11 +88,11 @@ class FavoriteControllerTest {
 
         String jsonResult = result.getResponse().getContentAsString();
 
-        IdNotFoundException responce;
-        responce = objectMapper.readValue(jsonResult, IdNotFoundException.class);
+        IdNotFoundException response;
+        response = objectMapper.readValue(jsonResult, IdNotFoundException.class);
 
         Assertions.assertEquals(404, result.getResponse().getStatus());
-        Assertions.assertEquals(MessagesException.BOOK_NOT_FOUND, responce.getMessage());
+        Assertions.assertEquals(MessagesException.BOOK_NOT_FOUND, response.getMessage());
     }
 
     @Test
@@ -107,11 +107,11 @@ class FavoriteControllerTest {
 
         String jsonResult = result.getResponse().getContentAsString();
 
-        List<BookShortResponseDto> responce;
-        responce = objectMapper.readValue(jsonResult, List.class);
+        List<BookShortResponseDto> response;
+        response = objectMapper.readValue(jsonResult, List.class);
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
-        Assertions.assertEquals(2, responce.size());
+        Assertions.assertEquals(2, response.size());
     }
 
     @Test
@@ -126,11 +126,11 @@ class FavoriteControllerTest {
 
         String jsonResult = result.getResponse().getContentAsString();
 
-        IdNotFoundException responce;
-        responce = objectMapper.readValue(jsonResult, IdNotFoundException.class);
+        IdNotFoundException response;
+        response = objectMapper.readValue(jsonResult, IdNotFoundException.class);
 
         Assertions.assertEquals(404, result.getResponse().getStatus());
-        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, responce.getMessage());
+        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, response.getMessage());
     }
 
     @Test
@@ -170,10 +170,10 @@ class FavoriteControllerTest {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        IdNotFoundException responce;
-        responce = objectMapper.readValue(jsonResult, IdNotFoundException.class);
+        IdNotFoundException response;
+        response = objectMapper.readValue(jsonResult, IdNotFoundException.class);
         Assertions.assertEquals(404, result.getResponse().getStatus());
-        Assertions.assertEquals(MessagesException.BOOK_NOT_FOUND, responce.getMessage());
+        Assertions.assertEquals(MessagesException.BOOK_NOT_FOUND, response.getMessage());
     }
 
     @Test
@@ -192,9 +192,9 @@ class FavoriteControllerTest {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        IdNotFoundException responce;
-        responce = objectMapper.readValue(jsonResult, IdNotFoundException.class);
+        IdNotFoundException response;
+        response = objectMapper.readValue(jsonResult, IdNotFoundException.class);
         Assertions.assertEquals(404, result.getResponse().getStatus());
-        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, responce.getMessage());
+        Assertions.assertEquals(MessagesException.USER_NOT_FOUND, response.getMessage());
     }
 }
