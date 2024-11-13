@@ -51,6 +51,10 @@ public class FilterBookRepositoryImpl implements FilterBookRepository {
             predicates.add(cb.between(book.get("priceDiscount"),
                     BigDecimal.valueOf(filter.getMinPrice()),
                     BigDecimal.valueOf(filter.getMaxPrice())));
+        } else if (filter.getMinPrice() != null) {
+            predicates.add(cb.ge(book.get("priceDiscount"), BigDecimal.valueOf(filter.getMinPrice())));
+        } else if (filter.getMaxPrice() != null) {
+            predicates.add(cb.le(book.get("priceDiscount"), BigDecimal.valueOf(filter.getMaxPrice())));
         }
 
         criteria.orderBy(QueryUtils.toOrders(pageable.getSort(), book, cb));
