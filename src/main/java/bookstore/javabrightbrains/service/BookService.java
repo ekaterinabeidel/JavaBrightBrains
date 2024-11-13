@@ -98,7 +98,7 @@ public class BookService {
         }
 
 
-        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         Page<Book> books = bookRepository.findByFilter(filter, pageable);
 
         PageResponseDto<BookShortResponseDto> bookPageResponseDto = new PageResponseDto<>();

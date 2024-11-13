@@ -28,8 +28,8 @@ public class BookController {
     @Operation(summary = "Get books with filter, sort and pagination", description = "Retrieve a list of books")
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
             @PathVariable
-            @Min(0)
-            @Parameter(description = "Page number")
+            @Min(1)
+            @Parameter(description = "Page number from 1")
             Integer pageNum,
             @PathVariable Integer pageSize,
             @Nullable
