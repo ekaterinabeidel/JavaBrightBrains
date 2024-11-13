@@ -35,15 +35,16 @@ CREATE TABLE IF NOT EXISTS books (
                                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                      title VARCHAR(128),
-    author VARCHAR(128),
-    description TEXT,
-    price DOUBLE,
-    discount INT,
-    category_id BIGINT,
-    total_stock INT,
-    image_link VARCHAR(128),
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-    );
+                                     author VARCHAR(128),
+                                     description TEXT,
+                                     price DOUBLE,
+                                     price_discount DOUBLE,
+                                     discount INT,
+                                     category_id BIGINT,
+                                     total_stock INT,
+                                     image_link VARCHAR(128),
+                                     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
 
 -- Таблица favorites
 CREATE TABLE IF NOT EXISTS favorites (

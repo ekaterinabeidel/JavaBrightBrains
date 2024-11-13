@@ -19,6 +19,13 @@ public class Utils {
         book.setDescription(bookRequestDto.getDescription());
         book.setPrice(bookRequestDto.getPrice());
         book.setDiscount(bookRequestDto.getDiscount());
+
+        if (bookRequestDto.getDiscount() == 0) {
+            book.setPriceDiscount(bookRequestDto.getPrice());
+        } else {
+            book.setPriceDiscount(Utils.getPriceWithDiscount(bookRequestDto.getPrice(), bookRequestDto.getDiscount()));
+        }
+
         book.setTotalStock(bookRequestDto.getTotalStock());
         book.setImageLink(bookRequestDto.getImageLink());
 
@@ -28,6 +35,13 @@ public class Utils {
             book.setCategory(category);
         }
         return book;
+    }
+
+    public static BigDecimal getPriceWithDiscount(BigDecimal price, int discount) {
+        BigDecimal discountAmount = price
+                .multiply(BigDecimal.valueOf(discount))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+        return price.subtract(discountAmount);
     }
 
     public static BookResponseDto convertToBookResponseDto(Book book) {
@@ -40,17 +54,13 @@ public class Utils {
         bookDto.setDiscount(book.getDiscount());
         bookDto.setTotalStock(book.getTotalStock());
         bookDto.setImageLink(book.getImageLink());
+        bookDto.setPriceDiscount(book.getPriceDiscount());
 
         Category category = book.getCategory();
+
         if (category != null) {
             bookDto.setCategoryId(category.getId());
         }
-
-        BigDecimal discountAmount = book.getPrice()
-                .multiply(BigDecimal.valueOf(book.getDiscount()))
-                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-        BigDecimal priceDiscount = book.getPrice().subtract(discountAmount);
-        bookDto.setPriceDiscount(priceDiscount);
 
         return bookDto;
     }
@@ -64,6 +74,7 @@ public class Utils {
         bookDto.setDiscount(book.getDiscount());
         bookDto.setTotalStock(book.getTotalStock());
         bookDto.setImageLink(book.getImageLink());
+        bookDto.setPriceDiscount(book.getPriceDiscount());
 
         Category category = book.getCategory();
         if (category != null) {
@@ -79,6 +90,11 @@ public class Utils {
         if (bookDto.getDescription() != null) book.setDescription(bookDto.getDescription());
         if (bookDto.getPrice() != null) book.setPrice(bookDto.getPrice());
         if (bookDto.getDiscount() != 0) book.setDiscount(bookDto.getDiscount());
+        if (bookDto.getDiscount() > 0) {
+            book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
+        } else if (bookDto.getDiscount() == 0) {
+            book.setPriceDiscount(bookDto.getPrice());
+        }
         if (bookDto.getTotalStock() != 0) book.setTotalStock(bookDto.getTotalStock());
         if (bookDto.getImageLink() != null) book.setImageLink(bookDto.getImageLink());
 

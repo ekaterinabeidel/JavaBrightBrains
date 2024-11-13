@@ -1,6 +1,7 @@
 USE bookstore;
 
 SET FOREIGN_KEY_CHECKS = 0;
+-- Удаление таблиц в нужном порядке
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS orders;
@@ -10,7 +11,6 @@ DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
-
 -- Таблица users
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -40,11 +40,22 @@ CREATE TABLE IF NOT EXISTS books (
                                      author VARCHAR(128),
                                      description TEXT,
                                      price DOUBLE,
+                                     price_discount DOUBLE,
                                      discount INT,
                                      category_id BIGINT,
                                      total_stock INT,
                                      image_link VARCHAR(128),
                                      FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- Таблица favorites
+CREATE TABLE IF NOT EXISTS favorites (
+                                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                         user_id BIGINT,
+                                         book_id BIGINT,
+                                         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                                         FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 -- Таблица carts

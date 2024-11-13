@@ -27,6 +27,7 @@ public class Book {
     private String author;
     private String description;
     private BigDecimal price;
+    private BigDecimal priceDiscount;
     private int discount;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
@@ -41,11 +42,13 @@ public class Book {
     @PrePersist
     protected void onCreate() {
         createdAt = Timestamp.from(Instant.now());
+
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = Timestamp.from(Instant.now());
+
     }
 
     @Override
