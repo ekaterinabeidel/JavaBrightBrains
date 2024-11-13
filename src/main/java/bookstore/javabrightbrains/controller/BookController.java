@@ -42,11 +42,11 @@ public class BookController {
             @RequestParam(value = "maxPrice", required = false)
             @PathVariable Integer maxPrice,
             @RequestParam(value = "isDiscount", required = false)
-            @PathVariable  boolean isDiscount,
+            @PathVariable boolean isDiscount,
             @RequestParam(value = "sortBy", required = false)
             @PathVariable String sortBy,
             @RequestParam(value = "sortDirect", required = false)
-            @PathVariable  String sortDirect
+            @PathVariable String sortDirect
     ) {
         PageResponseDto<BookShortResponseDto> books = bookService.findAll(
                 pageNum,
@@ -66,4 +66,12 @@ public class BookController {
         BookResponseDto bookDto = bookService.findById(bookId);
         return ResponseEntity.ok(bookDto);
     }
+
+    @GetMapping("/daily-product")
+    @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. If multiple products have the same discount, a random one is selected.")
+    public ResponseEntity<BookResponseDto> getDailyProduct() {
+        BookResponseDto dailyProduct = bookService.getDailyProduct();
+        return ResponseEntity.ok(dailyProduct);
+    }
+
 }

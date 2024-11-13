@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 @Service
 public class BookService {
@@ -113,6 +114,15 @@ public class BookService {
     public BookResponseDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
         return Utils.convertToBookResponseDto(book);
+    }
+
+    public BookResponseDto getDailyProduct() {
+            List<Book> booksWithMaxDiscount = bookRepository.findBooksWithMaxDiscount();
+            if (booksWithMaxDiscount.isEmpty()) {
+                throw new IdNotFoundException(MessagesException.BOOK_NOT_FOUND);
+            }
+            Book selectedBook = booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
+            return Utils.convertToBookResponseDto(selectedBook);
     }
 
 }
