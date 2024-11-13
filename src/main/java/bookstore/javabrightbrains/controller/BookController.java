@@ -1,10 +1,11 @@
 package bookstore.javabrightbrains.controller;
 
-
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
@@ -16,6 +17,7 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Book Controller", description = "APIs for managing books")
 public class BookController {
     @Autowired
     private BookService bookService;
@@ -23,6 +25,7 @@ public class BookController {
     @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}/sortBy/{sortBy}/" +
             "sortDirect/{sortDirect}/categoryId/{categoryId}/minPrice/{minPrice}/" +
             "maxPrice/{maxPrice}/isDiscount/{isDiscount}")
+    @Operation(summary = "Get books with filter, sort and pagination", description = "Retrieve a list of books")
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
             @PathVariable
             @Min(0)
@@ -58,6 +61,7 @@ public class BookController {
     }
 
     @GetMapping(USER_BASE_URL + "/books/{bookId}")
+    @Operation(summary = "Get book details", description = "Retrieve details of a specific book by its ID")
     public ResponseEntity<BookResponseDto> getBookDetail(@PathVariable Long bookId) {
         BookResponseDto bookDto = bookService.findById(bookId);
         return ResponseEntity.ok(bookDto);

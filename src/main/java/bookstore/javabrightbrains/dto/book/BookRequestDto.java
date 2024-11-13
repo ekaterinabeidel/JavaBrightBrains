@@ -1,12 +1,17 @@
 package bookstore.javabrightbrains.dto.book;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BookRequestDto {
 
@@ -34,4 +39,5 @@ public class BookRequestDto {
     private int totalStock;
 
     private String imageLink;
+
 }

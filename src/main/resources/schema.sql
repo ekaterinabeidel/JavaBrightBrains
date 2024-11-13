@@ -6,9 +6,8 @@ DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS carts;
-
-DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -89,7 +88,8 @@ CREATE TABLE IF NOT EXISTS orders (
                                       delivery_address VARCHAR(500),
                                       contact_phone VARCHAR(128),
                                       delivery_method VARCHAR(128),
-                                      status ENUM('pending', 'shipped', 'delivered', 'canceled'),
+                                      status VARCHAR(128),
+                                     -- status ENUM('pending', 'shipped', 'delivered', 'canceled'),
                                       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -106,4 +106,12 @@ CREATE TABLE IF NOT EXISTS order_items (
                                            FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
-
+-- Таблица favorites
+CREATE TABLE IF NOT EXISTS favorites (
+                                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                         user_id BIGINT,
+                                         book_id BIGINT,
+                                         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                                         FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
