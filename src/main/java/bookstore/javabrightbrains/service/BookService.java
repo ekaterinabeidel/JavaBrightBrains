@@ -85,7 +85,7 @@ public class BookService {
         );
         List<String> fields = Arrays.stream(Book.class.getDeclaredFields()).map(Field::getName).toList();
 
-        if(sortBy != null && !fields.contains(sortBy)) {
+        if (sortBy != null && !fields.contains(sortBy)) {
             throw new IllegalArgumentException("There is no such field to sort by.");
         }
         Sort sort = null;
@@ -117,12 +117,16 @@ public class BookService {
     }
 
     public BookResponseDto getDailyProduct() {
-            List<Book> booksWithMaxDiscount = bookRepository.findBooksWithMaxDiscount();
-            if (booksWithMaxDiscount.isEmpty()) {
-                throw new IdNotFoundException(MessagesException.BOOK_NOT_FOUND);
-            }
-            Book selectedBook = booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
-            return Utils.convertToBookResponseDto(selectedBook);
-    }
+        List<Book> booksWithMaxDiscount = bookRepository.findFirstByOrderByDiscountDesc();
 
+        if (booksWithMaxDiscount.isEmpty()) {
+            return null;
+        }
+
+        Book selectedBook = booksWithMaxDiscount.size() == 1
+                ? booksWithMaxDiscount.get(0)
+                : booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
+
+        return Utils.convertToBookResponseDto(selectedBook);
+    }
 }
