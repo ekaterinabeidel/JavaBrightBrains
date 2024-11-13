@@ -52,10 +52,17 @@ public class CartService {
         Book book = bookRepository.findById(cartItemRequestDto.getBookId())
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
 
+        int requestedQuantity = cartItemRequestDto.getQuantity();
+        int availableStock = book.getTotalStock();
+        if (requestedQuantity > availableStock) {
+            throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
+        }
+
         CartItem cartItem = mappingUtils.toCartItem(cartItemRequestDto, cart, book);
 
         cartItemRepository.save(cartItem);
     }
+
     @Transactional
     public CartResponseDto getCart(Long userId) {
         userRepository.findById(userId)
@@ -68,28 +75,28 @@ public class CartService {
     }
 
     @Transactional
-    public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
+        public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
+            CartItem cartItem = cartItemRepository.findById(cartItemId)
+                    .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
 
-        if (!cartItem.getCart().getUser().getId().equals(userId)) {
-            throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
-        }
+            if (!cartItem.getCart().getUser().getId().equals(userId)) {
+                throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
+            }
 
-        Book book = cartItem.getBook();
-        int availableQuantity = book.getTotalStock();
+            Book book = cartItem.getBook();
+            int availableQuantity = book.getTotalStock();
 
-        int newQuantity = cartItemUpdateRequestDto.getQuantity();
-        if (newQuantity <= 0) {
-            throw new InvalidQuantityException(MessagesException.QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE);
-        }
+            int newQuantity = cartItemUpdateRequestDto.getQuantity();
+            if (newQuantity <= 0) {
+                throw new InvalidQuantityException(MessagesException.QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE);
+            }
 
-        if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
-            throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
-        }
+            if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
+                throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
+            }
 
-        cartItem.setQuantity(cartItemUpdateRequestDto.getQuantity());
-        cartItemRepository.save(cartItem);
+            cartItem.setQuantity(cartItemUpdateRequestDto.getQuantity());
+            cartItemRepository.save(cartItem);
     }
 
     @Transactional
