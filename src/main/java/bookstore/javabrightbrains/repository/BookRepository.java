@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long>, FilterBookRepository {
     List<Book> findFirstByOrderByDiscountDesc();
+
+    List<Book> findByDiscount(int discount);
 }

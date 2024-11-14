@@ -117,7 +117,14 @@ public class BookService {
     }
 
     public BookResponseDto getDailyProduct() {
-        List<Book> booksWithMaxDiscount = bookRepository.findFirstByOrderByDiscountDesc();
+        List<Book> topDiscountBooks = bookRepository.findFirstByOrderByDiscountDesc();
+
+        if (topDiscountBooks.isEmpty()) {
+            return null;
+        }
+
+        int maxDiscount = topDiscountBooks.get(0).getDiscount();
+        List<Book> booksWithMaxDiscount = bookRepository.findByDiscount(maxDiscount);
 
         if (booksWithMaxDiscount.isEmpty()) {
             return null;
