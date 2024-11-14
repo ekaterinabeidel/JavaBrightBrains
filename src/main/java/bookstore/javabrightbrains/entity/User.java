@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.entity;
 
-import bookstore.javabrightbrains.enums.ROLES;
+import bookstore.javabrightbrains.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +27,8 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private String phone;
-    private ROLES role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public boolean equals(Object o) {

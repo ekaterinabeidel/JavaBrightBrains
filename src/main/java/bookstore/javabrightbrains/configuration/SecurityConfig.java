@@ -1,7 +1,7 @@
 package bookstore.javabrightbrains.configuration;
 
 
-import bookstore.javabrightbrains.enums.ROLES;
+import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.service.AppUserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -61,8 +61,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html")
                         .permitAll()
-                        .requestMatchers("/api/admin/**").hasAuthority(ROLES.ADMIN.name())
-                        .requestMatchers("/api/user/**").hasAuthority(ROLES.USER.name())
+                        .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/user/**").hasAuthority(Role.USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

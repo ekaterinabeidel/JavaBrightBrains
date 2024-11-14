@@ -3,7 +3,7 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.enums.ROLES;
+import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesExceptions;
 import bookstore.javabrightbrains.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class AuthService {
         appUser.setSurname(registerRequestDto.getSurname());
         appUser.setCreatedAt(Timestamp.from(Instant.now()));
         appUser.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
-        appUser.setRole(ROLES.USER);
+        appUser.setRole(Role.USER);
 
         return appUserRepository.save(appUser);
     }
