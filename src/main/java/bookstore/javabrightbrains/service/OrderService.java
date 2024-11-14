@@ -77,7 +77,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.ORDER_NOT_FOUND));
         if (!"Pending".equalsIgnoreCase(order.getStatus()) && !"Created".equalsIgnoreCase(order.getStatus())) {
-            throw new OrderCancellationNotAllowedException(MessagesException.ORDER_CANNOT_BE_CANCELLED_INVALID_STATUS);
+            throw new OrderCancellationNotAllowedException(MessagesException.ORDER_CANNOT_BE_CANCELED_INVALID_STATUS);
         }
 
         order.setStatus(OrderStatus.CANCELED);
