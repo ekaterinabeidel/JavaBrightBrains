@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JavaBrightBrainsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JavaBrightBrainsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JavaBrightBrainsApplication.class, args);
+    }
 
 }

@@ -1,13 +1,19 @@
 package bookstore.javabrightbrains.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "books")
@@ -21,7 +27,11 @@ public class Book {
     private String author;
     private String description;
     private BigDecimal price;
+    private BigDecimal priceDiscount;
     private int discount;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    private List<Favorite> favorites;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -29,6 +39,17 @@ public class Book {
     private int totalStock;
     private String imageLink;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Timestamp.from(Instant.now());
+
+    }
 
     @Override
     public boolean equals(Object o) {
