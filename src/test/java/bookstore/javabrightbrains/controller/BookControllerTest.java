@@ -5,7 +5,6 @@ import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.repository.BookRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -34,8 +33,6 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private BookRepository bookRepository;
 
     @Test
     void getAllPaginatingBooks() throws Exception {
@@ -52,7 +49,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, PageResponseDto.class);
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
 
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -75,8 +72,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -126,8 +122,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -156,8 +151,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -185,8 +179,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -213,8 +206,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
@@ -241,8 +233,7 @@ class BookControllerTest {
 
 
         String jsonResult = result.getResponse().getContentAsString();
-        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<PageResponseDto<BookShortResponseDto>>() {
-        });
+        PageResponseDto<BookShortResponseDto> dto = objectMapper.readValue(jsonResult, new TypeReference<>() {});
         List<BookShortResponseDto> content = dto.getContent();
 
         Assertions.assertEquals(200, result.getResponse().getStatus());
