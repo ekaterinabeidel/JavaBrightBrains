@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 @Service
 public class BookService {
@@ -86,7 +87,7 @@ public class BookService {
         );
         List<String> fields = Arrays.stream(Book.class.getDeclaredFields()).map(Field::getName).toList();
 
-        if(sortBy != null && !fields.contains(sortBy)) {
+        if (sortBy != null && !fields.contains(sortBy)) {
             throw new IllegalArgumentException("There is no such field to sort by.");
         }
         Sort sort = null;
@@ -117,4 +118,24 @@ public class BookService {
         return Utils.convertToBookResponseDto(book);
     }
 
+    public BookResponseDto getDailyProduct() {
+        List<Book> topDiscountBooks = bookRepository.findFirstByOrderByDiscountDesc();
+
+        if (topDiscountBooks.isEmpty()) {
+            return null;
+        }
+
+        int maxDiscount = topDiscountBooks.get(0).getDiscount();
+        List<Book> booksWithMaxDiscount = bookRepository.findByDiscount(maxDiscount);
+
+        if (booksWithMaxDiscount.isEmpty()) {
+            return null;
+        }
+
+        Book selectedBook = booksWithMaxDiscount.size() == 1
+                ? booksWithMaxDiscount.get(0)
+                : booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
+
+        return Utils.convertToBookResponseDto(selectedBook);
+    }
 }
