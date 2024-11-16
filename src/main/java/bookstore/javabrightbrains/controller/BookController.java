@@ -51,7 +51,6 @@ public class BookController {
             @PathVariable boolean isDiscount
 
 
-
     ) {
 
         Long categoryIdLong = null;
@@ -83,6 +82,9 @@ public class BookController {
     @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. If multiple products have the same discount, a random one is selected.")
     public ResponseEntity<BookResponseDto> getDailyProduct() {
         BookResponseDto dailyProduct = bookService.getDailyProduct();
+        if (dailyProduct == null) {
+            return ResponseEntity.status(204).build();
+        }
         return ResponseEntity.ok(dailyProduct);
     }
 
