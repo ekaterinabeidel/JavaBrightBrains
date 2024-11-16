@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(
                                 "/api/auth/**",
+                                "/api/public/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html")
@@ -67,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/api/user/**").hasAuthority(Role.USER.name())
                         .anyRequest().authenticated()
+
                 )
                 .sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
