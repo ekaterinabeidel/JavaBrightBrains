@@ -5,97 +5,67 @@ import bookstore.javabrightbrains.entity.User;
 
 
 import bookstore.javabrightbrains.exception.EmailDuplicateException;
+import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesExceptions;
-import bookstore.javabrightbrains.repository.AppUserRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class AppUserService {
-    @Autowired
-    private AppUserRepository appUserRepository;
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private JwtSecurityService jwtSecurityService;
+    private MappingUtils mappingUtils;
 
 
     public UserDetailsService getDetailsService() {
-        UserDetailsService detailsService = new UserDetailsService() {
+
+        return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return appUserRepository.findByEmail(username)
+            public UserDetails loadUserByUsername(String username) {
+                return userRepository.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.USER_NOT_FOUND));
             }
         };
-
-        return detailsService;
     }
 
-    public ResponseEntity<UserDto> updateUser(Long id, UserDto userDto) throws UsernameNotFoundException {
-        User user = userRepository.updateUser(id, userDto);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public UserDto updateUser(Long userId, UserDto userDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
         if (!userDto.getEmail().equals(user.getEmail())) {
-            User duplicateUser = userRepository.getUserByEmail(userDto.getEmail()).orElseGet(null);
+            User duplicateUser = userRepository.findByEmail(userDto.getEmail()).orElse(null);
             if (duplicateUser != null) {
                 throw new EmailDuplicateException(MessagesExceptions.DUPLICATED_EMAIL);
             }
         }
 
-        UserDto newUserDto = new UserDto();
+        mappingUtils.updateUserEntityFromUserDto(userDto, user);
+        User updatedUser = userRepository.save(user);
 
-        newUserDto.setEmail(user.getEmail());
-        newUserDto.setSurname(user.getSurname());
-        newUserDto.setName(user.getName());
-        newUserDto.setPhone(user.getPhone());
-
-        return ResponseEntity.ok(newUserDto);
-
+        return mappingUtils.mapToUserDto(updatedUser);
     }
 
-    public ResponseEntity<UserDto> getUserInfo(Long id) {
-        User user = userRepository.getUser(id);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        UserDto newUserDto = new UserDto();
-
-        newUserDto.setEmail(user.getEmail());
-        newUserDto.setSurname(user.getSurname());
-        newUserDto.setName(user.getName());
-        newUserDto.setPhone(user.getPhone());
-
-        return ResponseEntity.ok(newUserDto);
+    public UserDto getUserInfo(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+        return mappingUtils.mapToUserDto(user);
     }
 
-    public ResponseEntity<String> deleteUser(Long id) {
-        User user = userRepository.getUser(id);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (userRepository.deleteUser(id)) {
-            return ResponseEntity.ok("Success");
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+        userRepository.delete(user);
     }
-
 }

@@ -5,7 +5,7 @@ import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesExceptions;
-import bookstore.javabrightbrains.repository.AppUserRepository;
+import bookstore.javabrightbrains.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JwtSecurityService jwtSecurityService;
@@ -35,7 +35,7 @@ public class AuthService {
         appUser.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
         appUser.setRole(Role.USER);
 
-        return appUserRepository.save(appUser);
+        return userRepository.save(appUser);
     }
 
 
@@ -46,7 +46,7 @@ public class AuthService {
                         loginRequestDto.getEmail(),
                         loginRequestDto.getPassword()));
 
-        User user = appUserRepository
+        User user = userRepository
                 .findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
@@ -64,7 +64,7 @@ public class AuthService {
     public RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
         String jwt = refreshTokenRequestDto.getRefreshToken();
         String email = jwtSecurityService.extractUsername(jwt);
-        User user = appUserRepository
+        User user = userRepository
                 .findByEmail(email)
                 .orElseThrow();
 

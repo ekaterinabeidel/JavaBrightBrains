@@ -6,13 +6,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
+
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping(USER_BASE_URL)
 @RequiredArgsConstructor
 @Tag(
         name = "User Controller",
@@ -22,6 +25,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private AppUserService appUserService;
+
+    @GetMapping("users/{id}")
+    @Operation(
+            summary = "Retrieve user details",
+            description = "Fetches the details of a user identified by their ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User details successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+        UserDto userDto = appUserService.getUserInfo(id);
+        return ResponseEntity.ok(userDto);
+    }
 
     @PutMapping("/update/{id}")
     @Operation(
@@ -34,28 +51,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<UserDto> updateUser(
-            @RequestBody UserDto user,
-            @PathVariable String id) {
+            @Valid @PathVariable Long id,
+            @Valid @RequestBody UserDto userDto) {
 
-        Long userId = Long.valueOf(id);
-        return appUserService.updateUser(userId, user);
+        UserDto updatedUser = appUserService.updateUser(id, userDto);
+        return ResponseEntity.ok(updatedUser);
     }
 
-    @GetMapping("users/{id}")
-    @Operation(
-            summary = "Retrieve user details",
-            description = "Fetches the details of a user identified by their ID."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User details successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "User not found")
-    })
-    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
-        Long userId = Long.valueOf(id);
-        return appUserService.getUserInfo(userId);
-    }
-
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("delete/{id}")
     @Operation(
             summary = "Delete a user",
             description = "Deletes a user identified by their ID from the system."
@@ -64,8 +67,8 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "User successfully deleted"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
-        Long userId = Long.valueOf(id);
-        return appUserService.deleteUser(userId);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        appUserService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -8,10 +8,9 @@ import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.repository.AppUserRepository;
+import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
-import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,13 +28,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private AppUserRepository appUserRepository;
 
     public List<BookShortResponseDto> getFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(userId);
 
-        appUserRepository.findById(userId).orElseThrow(
+        userRepository.findById(userId).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
         return favorites.stream().map(favorite -> {
@@ -49,7 +46,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
         );
-        User user = appUserRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
+        User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
 
@@ -72,7 +69,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                 () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
         );
 
-        User user = appUserRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
+        User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
 
