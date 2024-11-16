@@ -23,12 +23,13 @@ VALUES (1, CURRENT_TIMESTAMP, 'Science Fiction'),
        (6, CURRENT_TIMESTAMP, 'Biography');
 
 -- Вставка книг
-INSERT INTO books (id, created_at, updated_at, title, author, description, price, discount, category_id, total_stock, image_link)
-VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'The Hitchhiker''s Guide to the Galaxy', 'Douglas Adams', 'A comedic science fiction series.', 10.99, 0, 1, 100, 'hitchhikers_guide.jpg'),
-       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1984', 'George Orwell', 'A dystopian social science fiction novel and cautionary tale.', 8.99, 10, 2, 50, '1984.jpg'),
-       (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Fahrenheit 451', 'Ray Bradbury', 'A novel about a future society where books are outlawed.', 12.50, 5, 3, 30, 'fahrenheit_451.jpg'),
-       (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Brave New World', 'Aldous Huxley', 'A novel about a technologically advanced dystopian society.', 9.99, 15, 2, 70, 'brave_new_world.jpg'),
-       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20, 1, 25, 'dune.jpg');
+INSERT INTO books (id, created_at, updated_at, title, author, description, price, discount, price_discount, category_id, total_stock, image_link)
+VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'The Hitchhiker''s Guide to the Galaxy', 'Douglas Adams', 'A comedic science fiction series.', 10.99, 0, 10.99, 1, 100, 'hitchhikers_guide.jpg'),
+       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1984', 'George Orwell', 'A dystopian social science fiction novel and cautionary tale.', 8.99, 10, 8.09, 2, 50, '1984.jpg'),
+       (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Fahrenheit 451', 'Ray Bradbury', 'A novel about a future society where books are outlawed.', 12.50, 5, 11.87, 3, 30, 'fahrenheit_451.jpg'),
+       (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Brave New World', 'Aldous Huxley', 'A novel about a technologically advanced dystopian society.', 9.99, 15, 8.5, 2, 70, 'brave_new_world.jpg'),
+       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20, 12, 1, 25, 'dune.jpg'),
+       (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Galaxy', 'Douglas Adams', 'A comedic science fiction series.', 12.99, 0, 12.99, 1, 100, 'hitchhikers_guide.jpg');
 
 -- Вставка корзин
 INSERT INTO carts (id, created_at, updated_at, user_id) VALUES
