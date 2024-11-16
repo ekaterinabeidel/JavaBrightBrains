@@ -69,4 +69,16 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<AppError> handleUserNotFoundException(UserNotFoundException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.NOT_FOUND, e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(OrdersNotFoundException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<AppError> handleOrdersNotFoundException(OrdersNotFoundException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.NO_CONTENT, e.getMessage()), HttpStatus.NO_CONTENT);
+    }
+
 }

@@ -1,9 +1,6 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.order.OrderItemDto;
-import bookstore.javabrightbrains.dto.order.OrderRequestDto;
-import bookstore.javabrightbrains.dto.order.OrderResponseDto;
-import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
+import bookstore.javabrightbrains.dto.order.*;
 import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.*;
 import bookstore.javabrightbrains.repository.*;
@@ -16,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Validated
 @Service
@@ -30,6 +28,8 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private MappingUtils mappingUtils;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
@@ -106,5 +106,29 @@ public class OrderService {
         order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return orderRepository.save(order);
+    }
+
+    public List<PurchaseHistoryDto> getPurchaseHistory(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(MessagesException.USER_NOT_FOUND);
+        }
+
+        List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        if (orders.isEmpty()) {
+            throw new OrdersNotFoundException(MessagesException.ORDER_NOT_FOUND);
+        }
+
+        return orders.stream().flatMap(order -> {
+            List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+            return orderItems.stream().map(orderItem -> {
+                PurchaseHistoryDto dto = new PurchaseHistoryDto();
+                dto.setTitle(orderItem.getBook().getTitle());
+                dto.setCreatedAt(order.getCreatedAt());
+                dto.setImageLink(orderItem.getBook().getImageLink());
+                dto.setPrice(orderItem.getPriceAtPurchase());
+                dto.setOrderId(order.getId());
+                return dto;
+            });
+        }).collect(Collectors.toList());
     }
 }
