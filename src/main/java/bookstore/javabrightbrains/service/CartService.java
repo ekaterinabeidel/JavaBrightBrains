@@ -15,6 +15,7 @@ import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.repository.AppUserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import java.util.List;
 public class CartService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private CartRepository cartRepository;
@@ -44,7 +47,7 @@ public class CartService {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
-                    User user = userRepository.findById(userId)
+                    User user = appUserRepository.findById(userId)
                             .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
                     newCart.setUser(user);
                     return cartRepository.save(newCart);
@@ -65,7 +68,7 @@ public class CartService {
 
     @Transactional
     public CartResponseDto getCart(Long userId) {
-        userRepository.findById(userId)
+        appUserRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());

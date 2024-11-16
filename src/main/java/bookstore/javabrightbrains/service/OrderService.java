@@ -29,6 +29,8 @@ public class OrderService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AppUserRepository appUserRepository;
+    @Autowired
     private MappingUtils mappingUtils;
 
 
@@ -64,7 +66,7 @@ public class OrderService {
 
     public List<OrderShortResponseDto> getOrdersByUserId(Long userId) {
 
-        if (!userRepository.existsById(userId)) {
+        if (!appUserRepository.existsById(userId)) {
             throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
 

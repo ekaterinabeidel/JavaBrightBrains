@@ -7,6 +7,7 @@ import bookstore.javabrightbrains.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @RestController
 @RequestMapping( USER_BASE_URL + "/{userId}/cart")
 @RequiredArgsConstructor
+@Tag(name = "Cart Controller", description = "APIs for managing manages the user's shopping cart")
 public class CartController {
 
     private final CartService cartService;
