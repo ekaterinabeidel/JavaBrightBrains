@@ -8,6 +8,7 @@ import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderItemDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
+import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
 import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
@@ -152,4 +153,16 @@ public class MappingUtils {
                 .map(item -> BigDecimal.valueOf(item.getPriceAtPurchase()).multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public PurchaseHistoryDto toPurchaseHistoryDto(OrderItem orderItem) {
+        PurchaseHistoryDto dto = new PurchaseHistoryDto();
+        dto.setTitle(orderItem.getBook().getTitle());
+        dto.setCreatedAt(orderItem.getOrder().getCreatedAt());
+        dto.setImageLink(orderItem.getBook().getImageLink());
+        dto.setPrice(orderItem.getPriceAtPurchase());
+        dto.setOrderId(orderItem.getOrder().getId());
+        return dto;
+    }
+
 }
+

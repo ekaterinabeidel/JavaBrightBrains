@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
-import bookstore.javabrightbrains.exception.UserNotFoundException;
-import bookstore.javabrightbrains.exception.OrdersNotFoundException;
 
 import java.util.List;
 
@@ -54,28 +52,21 @@ public class OrderController {
         return ResponseEntity.status(200).body(order);
     }
 
+    @GetMapping("/history")
     @Operation(summary = "Get purchase history by user ID", description = "Get the purchase history for a specific user by their ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Purchase history retrieved successfully"),
             @ApiResponse(responseCode = "204", description = "No purchase history found for the user"),
-            @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
-    @GetMapping("/history")
     public ResponseEntity<List<PurchaseHistoryDto>> getPurchaseHistory(
             @Parameter(description = "User ID to fetch purchase history for", required = true) @RequestParam Long userId) {
-        List<PurchaseHistoryDto> purchaseHistory;
-        try {
-            purchaseHistory = orderService.getPurchaseHistory(userId);
-            if (purchaseHistory.isEmpty()) {
-                return ResponseEntity.status(204).build();
-            } else {
-                return ResponseEntity.status(200).body(purchaseHistory);
-            }
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(404).build();
-        } catch (OrdersNotFoundException e) {
+        List<PurchaseHistoryDto> purchaseHistory = orderService.getPurchaseHistory(userId);
+        if (purchaseHistory.isEmpty()) {
             return ResponseEntity.status(204).build();
+        } else {
+            return ResponseEntity.status(200).body(purchaseHistory);
         }
     }
 }

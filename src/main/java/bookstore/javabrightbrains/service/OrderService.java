@@ -12,8 +12,8 @@ import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Validated
 @Service
@@ -110,25 +110,23 @@ public class OrderService {
 
     public List<PurchaseHistoryDto> getPurchaseHistory(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(MessagesException.USER_NOT_FOUND);
+            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
 
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if (orders.isEmpty()) {
-            throw new OrdersNotFoundException(MessagesException.ORDER_NOT_FOUND);
+            throw new IdNotFoundException(MessagesException.ORDER_NOT_FOUND);
         }
 
-        return orders.stream().flatMap(order -> {
+        List<PurchaseHistoryDto> purchaseHistory = new ArrayList<>();
+        for (Order order : orders) {
             List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
-            return orderItems.stream().map(orderItem -> {
-                PurchaseHistoryDto dto = new PurchaseHistoryDto();
-                dto.setTitle(orderItem.getBook().getTitle());
-                dto.setCreatedAt(order.getCreatedAt());
-                dto.setImageLink(orderItem.getBook().getImageLink());
-                dto.setPrice(orderItem.getPriceAtPurchase());
-                dto.setOrderId(order.getId());
-                return dto;
-            });
-        }).collect(Collectors.toList());
+            for (OrderItem orderItem : orderItems) {
+                purchaseHistory.add(mappingUtils.toPurchaseHistoryDto(orderItem));
+            }
+        }
+
+        return purchaseHistory;
     }
+
 }
