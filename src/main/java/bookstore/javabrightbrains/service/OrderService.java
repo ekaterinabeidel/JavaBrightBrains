@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Validated
@@ -118,15 +117,13 @@ public class OrderService {
             throw new IdNotFoundException(MessagesException.ORDER_NOT_FOUND);
         }
 
-        List<PurchaseHistoryDto> purchaseHistory = new ArrayList<>();
-        for (Order order : orders) {
-            List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
-            for (OrderItem orderItem : orderItems) {
-                purchaseHistory.add(mappingUtils.toPurchaseHistoryDto(orderItem));
-            }
-        }
+        List<OrderItem> allOrderItems = orders.stream()
+                .flatMap(order -> orderItemRepository.findByOrderId(order.getId()).stream())
+                .toList();
 
-        return purchaseHistory;
+        return allOrderItems.stream()
+                .map(mappingUtils::toPurchaseHistoryDto)
+                .toList();
     }
 
 }
