@@ -51,7 +51,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<UserDto> updateUser(
-            @Valid @PathVariable Long id,
+            @PathVariable Long id,
             @Valid @RequestBody UserDto userDto) {
 
         UserDto updatedUser = appUserService.updateUser(id, userDto);
