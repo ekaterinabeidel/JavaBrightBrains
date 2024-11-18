@@ -28,7 +28,21 @@ VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'The Hitchhiker''s Guide to the
        (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1984', 'George Orwell', 'A dystopian social science fiction novel and cautionary tale.', 8.99, 10, 8.09, 2, 50, '1984.jpg'),
        (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Fahrenheit 451', 'Ray Bradbury', 'A novel about a future society where books are outlawed.', 12.50, 5, 11.87 , 3, 30, 'fahrenheit_451.jpg'),
        (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Brave New World', 'Aldous Huxley', 'A novel about a technologically advanced dystopian society.', 9.99, 15, 8.5 , 2, 70, 'brave_new_world.jpg'),
-       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg');
+       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune1', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune2', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune3', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune4', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune5', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune6', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune7', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune8', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (14, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune9', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (16, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune10', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (17, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune11', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (18, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune12', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (19, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune13', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (20, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune14', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg');
 
 -- Вставка корзин
 INSERT INTO carts (id, created_at, updated_at, user_id) VALUES
@@ -58,8 +72,8 @@ INSERT INTO favorites (id, created_at, user_id, book_id) VALUES
 
 -- Вставка заказов
 INSERT INTO orders (id, created_at, updated_at, user_id, delivery_address, contact_phone, delivery_method, status) VALUES
-                                                                                                                       (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 'Unter den Linden 1, 10117 Berlin', '030-1234567', 'Standard', 'Pending'),
-                                                                                                                       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 'Marienplatz 1, 80331 München', '089-1234567', 'Express', 'Shipped'),
+                                                                                                                       (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 'Unter den Linden 1, 10117 Berlin', '030-1234567', 'Standard', 'Delivered'),
+                                                                                                                       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 'Marienplatz 1, 80331 München', '089-1234567', 'Express', 'Delivered'),
                                                                                                                        (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 'Königsallee 1, 40212 Düsseldorf', '0211-1234567', 'Standard', 'Delivered'),
                                                                                                                        (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4, 'Münsterstraße 1, 48151 Münster', '0251-1234567', 'Pickup', 'Canceled'),
                                                                                                                        (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5, 'Schildergasse 1, 50667 Köln', '0221-1234567', 'Standard', 'Pending');
@@ -71,4 +85,6 @@ INSERT INTO order_items (id, created_at, updated_at, order_id, book_id, quantity
                                                                                                          (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 3, 3, 12.50),  -- 3 копии книги 3 в заказе 2 по цене 12.50
                                                                                                          (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 4, 1, 9.99),   -- 1 копия книги 4 в заказе 2 по цене 9.99
                                                                                                          (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 5, 5, 15.00),  -- 5 копий книги 5 в заказе 3 по цене 15.00
-                                                                                                         (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 1, 1, 10.99);  -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 1, 1, 10.99), -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5, 1, 1, 10.99), -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4, 1, 1, 10.99);  -- 1 копия книги 1 в заказе 4 по цене 10.99
