@@ -6,8 +6,8 @@ import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static bookstore.javabrightbrains.utils.Constants.PUBLIC_BASE_URL;
 
+
 @RestController
 @RequestMapping(PUBLIC_BASE_URL)
 @Tag(name = "Book Controller", description = "APIs for managing books")
@@ -23,10 +24,11 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}/sortBy/{sortBy}/" +
-            "sortDirect/{sortDirect}/categoryId/{categoryId}/minPrice/{minPrice}/" +
-            "maxPrice/{maxPrice}/isDiscount/{isDiscount}")
-    @Operation(summary = "Get books with filter, sort and pagination", description = "Retrieve a list of books")
+    @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}")
+    @Operation(
+            summary = "Get books with filter, sort and pagination",
+            description = "Retrieve a list of books"
+    )
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
             @PathVariable
             @Min(1)
@@ -34,8 +36,15 @@ public class BookController {
             Integer pageNum,
             @PathVariable Integer pageSize,
             @Nullable
+            @RequestParam(value = "sortBy", required = false)
+            @PathVariable String sortBy,
+            @Nullable
+            @Parameter(description = " 'asc' or 'desc' ")
+            @RequestParam(value = "sortDirect", required = false)
+            @PathVariable String sortDirect,
+            @Nullable
             @RequestParam(value = "categoryId", required = false)
-            @PathVariable Long categoryId,
+            @PathVariable Integer categoryId,
             @Nullable
             @RequestParam(value = "minPrice", required = false)
             @PathVariable Integer minPrice,
@@ -43,21 +52,26 @@ public class BookController {
             @RequestParam(value = "maxPrice", required = false)
             @PathVariable Integer maxPrice,
             @RequestParam(value = "isDiscount", required = false)
-            @PathVariable  boolean isDiscount,
-            @RequestParam(value = "sortBy", required = false)
-            @PathVariable String sortBy,
-            @RequestParam(value = "sortDirect", required = false)
-            @PathVariable  String sortDirect
+            @PathVariable boolean isDiscount
+
+
     ) {
+
+        Long categoryIdLong = null;
+        if (categoryId != null) {
+            categoryIdLong = Long.valueOf(categoryId);
+        }
+
         PageResponseDto<BookShortResponseDto> books = bookService.findAll(
                 pageNum,
                 pageSize,
-                categoryId,
+                categoryIdLong,
                 minPrice,
                 maxPrice,
                 isDiscount,
                 sortBy,
                 sortDirect);
+
         return ResponseEntity.ok(books);
     }
 
@@ -67,4 +81,15 @@ public class BookController {
         BookResponseDto bookDto = bookService.findById(bookId);
         return ResponseEntity.ok(bookDto);
     }
+
+    @GetMapping("/daily-product")
+    @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. If multiple products have the same discount, a random one is selected.")
+    public ResponseEntity<BookResponseDto> getDailyProduct() {
+        BookResponseDto dailyProduct = bookService.getDailyProduct();
+        if (dailyProduct == null) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.ok(dailyProduct);
+    }
+
 }
