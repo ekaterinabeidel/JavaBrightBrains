@@ -1,6 +1,7 @@
 package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.book.BookNotPaidDto;
+import bookstore.javabrightbrains.dto.book.ProfitDto;
 import bookstore.javabrightbrains.dto.book.TopBookDto;
 import bookstore.javabrightbrains.repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class ReportServiceImpl implements ReportService {
     public List<BookNotPaidDto> getPendingBooksOlderThan(int days) {
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(days);
         return orderItemRepository.findPendingBooksOlderThan(cutoffDate);
+    }
+
+    @Override
+    public List<ProfitDto> getProfit(LocalDateTime startDate, LocalDateTime endDate, String groupBy) {
+        return orderItemRepository.findProfitGroupedBy(startDate, endDate, groupBy);
     }
 
 

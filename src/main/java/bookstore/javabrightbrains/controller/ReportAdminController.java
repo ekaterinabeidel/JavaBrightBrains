@@ -1,6 +1,7 @@
 package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.book.BookNotPaidDto;
+import bookstore.javabrightbrains.dto.book.ProfitDto;
 import bookstore.javabrightbrains.dto.book.TopBookDto;
 import bookstore.javabrightbrains.service.ReportService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static bookstore.javabrightbrains.utils.Constants.ADMIN_BASE_URL;
@@ -35,6 +37,15 @@ public class ReportAdminController {
     @GetMapping("/pending-payment-products/{days}")
     public ResponseEntity<List<BookNotPaidDto>> getPendingBooksOlderThan(@PathVariable int days) {
         return ResponseEntity.ok(reportService.getPendingBooksOlderThan(days))  ;
+    }
+
+    @GetMapping("/revenue/{startDate}/{endDate}/{groupBy}")
+    public ResponseEntity<List<ProfitDto>> getProfit(
+            @PathVariable LocalDateTime startDate,
+            @PathVariable LocalDateTime endDate,
+            @PathVariable String groupBy
+    ) {
+        return ResponseEntity.ok(reportService.getProfit(startDate, endDate, groupBy));
     }
 
 }
