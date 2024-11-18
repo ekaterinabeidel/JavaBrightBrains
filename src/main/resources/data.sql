@@ -28,7 +28,10 @@ VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'The Hitchhiker''s Guide to the
        (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '1984', 'George Orwell', 'A dystopian social science fiction novel and cautionary tale.', 8.99, 10, 8.09, 2, 50, '1984.jpg'),
        (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Fahrenheit 451', 'Ray Bradbury', 'A novel about a future society where books are outlawed.', 12.50, 5, 11.87 , 3, 30, 'fahrenheit_451.jpg'),
        (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Brave New World', 'Aldous Huxley', 'A novel about a technologically advanced dystopian society.', 9.99, 15, 8.5 , 2, 70, 'brave_new_world.jpg'),
-       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg');
+       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Dune', 'Frank Herbert', 'A science fiction novel set in a distant future amidst a huge interstellar empire.', 15.00, 20,12, 1, 25, 'dune.jpg'),
+       (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Book With Max Discount 1', 'Author A', 'Description 1', 20.00, 0, 16.00, 1, 100, 'book1.jpg'),
+       (7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Book With Max Discount 2', 'Author B', 'Description 2', 25.00, 20, 20.00, 1, 100, 'book2.jpg');
+
 
 -- Вставка корзин
 INSERT INTO carts (id, created_at, updated_at, user_id) VALUES
