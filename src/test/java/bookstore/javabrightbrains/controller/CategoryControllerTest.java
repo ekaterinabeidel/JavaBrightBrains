@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,11 +20,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static bookstore.javabrightbrains.utils.Constants.ADMIN_BASE_URL;
+import static bookstore.javabrightbrains.utils.Constants.PUBLIC_BASE_URL;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
+@WithMockUser(value = "Admin", password = "password123", authorities = "ADMIN")
 class CategoryControllerTest {
 
     @Autowired
@@ -34,7 +37,7 @@ class CategoryControllerTest {
 
     @Test
     void getAllCategoriesSuccess() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/categories")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/categories")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
                                      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                      name VARCHAR(128),
     surname VARCHAR(128),
-    password VARCHAR(128),
+    password VARCHAR(255),
     email VARCHAR(128) UNIQUE,
     phone VARCHAR(128),
     role VARCHAR(64)

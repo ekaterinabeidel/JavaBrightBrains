@@ -1,17 +1,14 @@
 -- Вставка пользователей
+-- Пароль: password123
 INSERT INTO users (id, created_at, updated_at, name, surname, password, email, phone, role)
-VALUES (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Yuri', 'Gagarin', 'password123', 'user1@example.com', '1234567890',
-        'USER'),
-       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Neil', 'Armstrong', 'password123', 'user2@example.com', '2345678901',
-        'USER'),
-       (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Valentina', 'Tereshkova', 'password123', 'user3@example.com',
-        '3456789012', 'USER'),
-       (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Buzz', 'Aldrin', 'password123', 'user4@example.com', '4567890123',
-        'USER'),
-       (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Alexei', 'Leonov', 'password123', 'user5@example.com', '5678901234',
-        'USER'),
-       (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Chris', 'Hadfield', 'password123', 'admin@example.com', '6789012345',
-        'ADMIN');
+VALUES
+    (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Yuri', 'Gagarin', '$2b$12$cV.JacX0VnZA.wi7K1wGrurAJm6phv26rN3aacOG5fbB72Z1SBrFW', 'user1@example.com', '1234567890', 'USER'),
+    (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Neil', 'Armstrong', '$2b$12$Dk2fsAk5h2ENDTua5LYbxeG3/VWOpPNLhJP51rEm9BHBlPDPCyrBK', 'user2@example.com', '2345678901', 'USER'),
+    (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Valentina', 'Tereshkova', '$2b$12$Tdi61lowp7abwnibry1VXupUzGjyAYzl1iTJZxiQ8cwFzmIH/WLo6', 'user3@example.com', '3456789012', 'USER'),
+    (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Buzz', 'Aldrin', '$2b$12$HRtsqlRLwnp54nvsNk8LKOVM9rkAHfa3FHlIVOx0Bihq8jaj5jiDG', 'user4@example.com', '4567890123', 'USER'),
+    (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Alexei', 'Leonov', '$2b$12$P3OcUKXsOcfhsawnic2Fue/eALAnBtCLXzMxVQqlcDcb9SvuyDhSS', 'user5@example.com', '5678901234', 'USER'),
+    (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Chris', 'Hadfield', '$2b$12$Y65OCemHtYUVuC.f/6nbTusl43nVs6oLVwQatCDQJDOvek/9ybRgO', 'admin@example.com', '6789012345', 'ADMIN');
+
 
 -- Вставка категорий
 INSERT INTO categories (id, created_at, name)

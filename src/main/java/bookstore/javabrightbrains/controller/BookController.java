@@ -4,6 +4,7 @@ import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.service.BookService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static bookstore.javabrightbrains.utils.Constants.PUBLIC_BASE_URL;
+
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping(PUBLIC_BASE_URL)
 @Tag(name = "Book Controller", description = "APIs for managing books")
 public class BookController {
     @Autowired
