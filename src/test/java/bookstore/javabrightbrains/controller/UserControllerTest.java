@@ -1,16 +1,12 @@
 package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.user.UserDto;
-import bookstore.javabrightbrains.exception.DuplicateException;
-import bookstore.javabrightbrains.exception.EmailDuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.service.AppUserService;
 import bookstore.javabrightbrains.service.JwtSecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +19,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
