@@ -7,10 +7,7 @@ import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.exception.IdNotFoundException;
-import bookstore.javabrightbrains.exception.InvalidQuantityException;
-import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
+import bookstore.javabrightbrains.exception.*;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
@@ -38,6 +35,9 @@ public class CartService {
 
     @Autowired
     private MappingUtils mappingUtils;
+
+    @Autowired
+    JwtSecurityService jwtSecurityService;
 
     @Transactional
     public void addToCart(Long userId, CartItemRequestDto cartItemRequestDto) {

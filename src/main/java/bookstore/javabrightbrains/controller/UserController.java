@@ -2,6 +2,7 @@ package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.service.AppUserService;
+import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,31 +20,34 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @RequiredArgsConstructor
 @Tag(
         name = "User Controller",
-        description = "APIs for managing user-related operations, such as updating user details, retrieving user information, " +
-                "and deleting users"
+        description = "APIs for managing user-related operations, " +
+                "such as updating user details, retrieving user information, and deleting users"
 )
 public class UserController {
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private JwtSecurityService jwtSecurityService;
 
-    @GetMapping("users/{id}")
+    @GetMapping("users/{userId}")
     @Operation(
             summary = "Retrieve user details",
-            description = "Fetches the details of a user identified by their ID."
+            description = "Fetches the details of a user identified by their ID"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User details successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        UserDto userDto = appUserService.getUserInfo(id);
+    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+        jwtSecurityService.validateUserAccess(userId);
+        UserDto userDto = appUserService.getUserInfo(userId);
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{userId}")
     @Operation(
             summary = "Update user details",
-            description = "Updates the details of a user identified by their ID. The updated user information is provided in the request body."
+            description = "Updates the details of a user identified by their ID"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User successfully updated"),
@@ -51,24 +55,25 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<UserDto> updateUser(
-            @PathVariable Long id,
+            @PathVariable Long userId,
             @Valid @RequestBody UserDto userDto) {
-
-        UserDto updatedUser = appUserService.updateUser(id, userDto);
+        jwtSecurityService.validateUserAccess(userId);
+        UserDto updatedUser = appUserService.updateUser(userId, userDto);
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{userId}")
     @Operation(
             summary = "Delete a user",
-            description = "Deletes a user identified by their ID from the system."
+            description = "Deletes a user identified by their ID from the system"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User successfully deleted"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        appUserService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        jwtSecurityService.validateUserAccess(userId);
+        appUserService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 }

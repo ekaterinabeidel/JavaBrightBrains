@@ -1,10 +1,15 @@
 package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.entity.User;
+import bookstore.javabrightbrains.exception.AccessDeniedException;
+import bookstore.javabrightbrains.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,9 @@ import java.util.function.Function;
 @Service
 public class JwtSecurityService {
     private static final String SECRET_KEY = "6yU3AaLTrj/YSKQtYF6yU3/YSKAaLTIv9aRtGxOcU39h7T/aRtGxO+syA=";
+
+    @Autowired
+    private UserRepository userRepository;
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -79,5 +87,32 @@ public class JwtSecurityService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())
                 && !isTokenExpired(token));
+    }
+
+    public void validateUserAccess(Long userId) {
+        // Получение текущей аутентификации из SecurityContext
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = getEmail(authentication);
+
+        // Проверяем, что userId и email связаны
+        boolean userExists = userRepository.existsByIdAndEmail(userId, email);
+        if (!userExists) {
+            throw new AccessDeniedException("Access denied: User ID does not match the authenticated user");
+        }
+    }
+
+    private static String getEmail(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("Access denied: User is not authenticated");
+        }
+
+        // Получение email пользователя из Principal
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            throw new AccessDeniedException("Access denied: Authentication principal is invalid");
+        }
+
+        return ((UserDetails) principal).getUsername();
     }
 }

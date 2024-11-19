@@ -7,6 +7,7 @@ import bookstore.javabrightbrains.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Authentication Controller", description = "APIs for handling authentication and authorization processes")
 public class AuthController {
-    private final AuthService authService;
+    @Autowired
+    private  AuthService authService;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user",

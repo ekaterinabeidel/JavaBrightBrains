@@ -69,4 +69,10 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<AppError> handleAccessDeniedException (AccessDeniedException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN, e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
 }
