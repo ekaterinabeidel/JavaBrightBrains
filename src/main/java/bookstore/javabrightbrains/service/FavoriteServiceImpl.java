@@ -8,9 +8,9 @@ import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
+import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
-import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     private BookRepository bookRepository;
 
     @Autowired
-
     private UserRepository userRepository;
+
 
     public List<BookShortResponseDto> getFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(userId);

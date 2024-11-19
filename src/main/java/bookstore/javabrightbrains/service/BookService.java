@@ -77,8 +77,6 @@ public class BookService {
         }
 
 
-
-
         BookFilterDto filter = new BookFilterDto(
                 category,
                 minPrice,
@@ -128,7 +126,7 @@ public class BookService {
         int maxDiscount = topDiscountBooks.get(0).getDiscount();
         List<Book> booksWithMaxDiscount = bookRepository.findByDiscount(maxDiscount);
 
-        if (booksWithMaxDiscount.isEmpty()) {
+        if (booksWithMaxDiscount.isEmpty() || maxDiscount <= 0) {
             return null;
         }
 

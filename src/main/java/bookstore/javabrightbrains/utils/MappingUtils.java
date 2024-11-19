@@ -8,6 +8,7 @@ import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderItemDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
+import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
 import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.MessagesException;
@@ -30,6 +31,33 @@ public class MappingUtils {
     private BookRepository bookRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+
+    public UserDto mapToUserDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getEmail());
+        userDto.setSurname(user.getSurname());
+        userDto.setName(user.getName());
+        userDto.setPhone(user.getPhone());
+        return userDto;
+    }
+
+    public void updateUserEntityFromUserDto(UserDto userDto, User user) {
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
+        }
+        if (userDto.getSurname() != null) {
+            user.setSurname(userDto.getSurname());
+        }
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        if (userDto.getPhone() != null) {
+            user.setPhone(userDto.getPhone());
+        }
+
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+    }
 
     public CartItem toCartItem(CartItemRequestDto cartItemRequestDto, Cart cart, Book book) {
         CartItem cartItem = new CartItem();
