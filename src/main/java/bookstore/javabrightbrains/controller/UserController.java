@@ -11,12 +11,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 
 @RestController
 @RequestMapping(USER_BASE_URL)
+@Validated
 @RequiredArgsConstructor
 @Tag(
         name = "User Controller",
