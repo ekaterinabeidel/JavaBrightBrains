@@ -13,6 +13,7 @@ public class MessagesException {
     public static String NOT_ENOUGH_BOOKS_IN_STOCK = "Not enough books available in stock";
     public static  String QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE = "Quantity cannot be zero or negative";
     public static  String ORDER_CANNOT_BE_CANCELED_INVALID_STATUS = "Order cannot be canceled unless it is in 'Pending' or 'Created' status";
+    public static String DUPLICATED_EMAIL = "The email is already exist";
 
 
 }

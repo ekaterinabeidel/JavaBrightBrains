@@ -75,4 +75,11 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN, e.getMessage()), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(EmailDuplicateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<AppError> handleEmailDuplicatedException (EmailDuplicateException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.CONFLICT, e.getMessage()), HttpStatus.CONFLICT);
+    }
+
+
 }
