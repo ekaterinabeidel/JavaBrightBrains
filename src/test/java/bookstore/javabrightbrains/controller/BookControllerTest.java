@@ -27,6 +27,8 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 
+import static bookstore.javabrightbrains.utils.Constants.PUBLIC_BASE_URL;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
@@ -47,7 +49,7 @@ class BookControllerTest {
         int pageSize = 2;
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNum}/pageSize/{pageSize}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNum}/pageSize/{pageSize}",
                                 pageNum,
                                 pageSize)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +75,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNum}/pageSize/{pageSize}?categoryId={categoryId}", pageNum, pageSize, categoryId)
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNum}/pageSize/{pageSize}?categoryId={categoryId}", pageNum, pageSize, categoryId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andReturn();
@@ -99,7 +101,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNum}/pageSize/{pageSize}?categoryId={categoryId}", pageNum, pageSize, categoryId)
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNum}/pageSize/{pageSize}?categoryId={categoryId}", pageNum, pageSize, categoryId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andReturn();
@@ -123,7 +125,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNumber}/pageSize/{pageSize}?minPrice={minPrice}&maxPrice={maxPrice}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNumber}/pageSize/{pageSize}?minPrice={minPrice}&maxPrice={maxPrice}",
                                 pageNumber, pageSize, minPrice, maxPrice)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -153,7 +155,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNumber}/pageSize/{pageSize}?maxPrice={maxPrice}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNumber}/pageSize/{pageSize}?maxPrice={maxPrice}",
                                 pageNumber, pageSize, maxPrice)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -182,7 +184,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNumber}/pageSize/{pageSize}?isDiscount={maxPrice}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNumber}/pageSize/{pageSize}?isDiscount={maxPrice}",
                                 pageNumber, pageSize, isDiscount)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -210,7 +212,7 @@ class BookControllerTest {
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNumber}/pageSize/{pageSize}?minPrice={minPrice}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNumber}/pageSize/{pageSize}?minPrice={minPrice}",
                                 pageNumber, pageSize, minPrice)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -238,7 +240,7 @@ class BookControllerTest {
         String sortBy = "price";
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/books/pageNumber/{pageNumber}/pageSize/{pageSize}?sortBy={sortBy}&sortDirect={sortDirect}",
+                                PUBLIC_BASE_URL + "/books/pageNumber/{pageNumber}/pageSize/{pageSize}?sortBy={sortBy}&sortDirect={sortDirect}",
                                 pageNumber, pageSize, sortBy, sortDirect)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -264,7 +266,7 @@ class BookControllerTest {
         Long bookId = 1L;
 
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/books/{bookId}", bookId)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/books/{bookId}", bookId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andReturn();
@@ -281,7 +283,7 @@ class BookControllerTest {
         Long bookId = 10000L;
 
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/books/{bookId}", bookId)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/books/{bookId}", bookId)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andReturn();
@@ -294,7 +296,7 @@ class BookControllerTest {
 
     @Test
     void getDailyProductSuccess() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/daily-product")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/daily-product")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
@@ -310,7 +312,7 @@ class BookControllerTest {
     void getDailyProductNoDiscounts() throws Exception {
         bookRepository.deleteAll();
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/daily-product")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/daily-product")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
@@ -320,7 +322,7 @@ class BookControllerTest {
     @Test
     void getDailyProductMultipleWithSameDiscount() throws Exception {
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/daily-product")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/daily-product")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
@@ -362,7 +364,7 @@ class BookControllerTest {
 
         bookRepository.save(invalidBook);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/daily-product")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(PUBLIC_BASE_URL + "/daily-product")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 

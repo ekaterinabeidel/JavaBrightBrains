@@ -59,8 +59,8 @@ INSERT INTO favorites (id, created_at, user_id, book_id) VALUES
 
 -- Вставка заказов
 INSERT INTO orders (id, created_at, updated_at, user_id, delivery_address, contact_phone, delivery_method, status) VALUES
-                                                                                                                       (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 'Unter den Linden 1, 10117 Berlin', '030-1234567', 'Standard', 'Pending'),
-                                                                                                                       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 'Marienplatz 1, 80331 München', '089-1234567', 'Express', 'Shipped'),
+                                                                                                                       (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 'Unter den Linden 1, 10117 Berlin', '030-1234567', 'Standard', 'Delivered'),
+                                                                                                                       (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 'Marienplatz 1, 80331 München', '089-1234567', 'Express', 'Delivered'),
                                                                                                                        (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 'Königsallee 1, 40212 Düsseldorf', '0211-1234567', 'Standard', 'Delivered'),
                                                                                                                        (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4, 'Münsterstraße 1, 48151 Münster', '0251-1234567', 'Pickup', 'Canceled'),
                                                                                                                        (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5, 'Schildergasse 1, 50667 Köln', '0221-1234567', 'Standard', 'Pending');
@@ -72,4 +72,6 @@ INSERT INTO order_items (id, created_at, updated_at, order_id, book_id, quantity
                                                                                                          (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 3, 3, 12.50),  -- 3 копии книги 3 в заказе 2 по цене 12.50
                                                                                                          (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, 4, 1, 9.99),   -- 1 копия книги 4 в заказе 2 по цене 9.99
                                                                                                          (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 5, 5, 15.00),  -- 5 копий книги 5 в заказе 3 по цене 15.00
-                                                                                                         (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 1, 1, 10.99);  -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, 1, 1, 10.99), -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 5, 1, 1, 10.99), -- 1 копия книги 1 в заказе 3 по цене 10.99
+                                                                                                         (8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 4, 1, 1, 10.99);  -- 1 копия книги 1 в заказе 4 по цене 10.99

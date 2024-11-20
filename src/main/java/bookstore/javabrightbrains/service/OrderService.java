@@ -1,9 +1,6 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.order.OrderItemDto;
-import bookstore.javabrightbrains.dto.order.OrderRequestDto;
-import bookstore.javabrightbrains.dto.order.OrderResponseDto;
-import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
+import bookstore.javabrightbrains.dto.order.*;
 import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.*;
 import bookstore.javabrightbrains.repository.*;
@@ -30,6 +27,8 @@ public class OrderService {
     private UserRepository userRepository;
     @Autowired
     private MappingUtils mappingUtils;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
@@ -107,4 +106,24 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
+
+    public List<PurchaseHistoryDto> getPurchaseHistory(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
+        }
+
+        List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        if (orders.isEmpty()) {
+            throw new IdNotFoundException(MessagesException.ORDER_NOT_FOUND);
+        }
+
+        List<OrderItem> allOrderItems = orders.stream()
+                .flatMap(order -> order.getOrderItems().stream())
+                .toList();
+
+        return allOrderItems.stream()
+                .map(mappingUtils::toPurchaseHistoryDto)
+                .toList();
+    }
+
 }

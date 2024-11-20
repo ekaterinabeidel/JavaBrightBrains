@@ -11,9 +11,11 @@ public class MessagesException {
     public static String CATEGORY_DUPLICATED = "Such category already exists";
     public static String FAVORITE_DUPLICATED = "This book is already in favorite";
     public static String NOT_ENOUGH_BOOKS_IN_STOCK = "Not enough books available in stock";
-    public static  String QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE = "Quantity cannot be zero or negative";
-    public static  String ORDER_CANNOT_BE_CANCELED_INVALID_STATUS = "Order cannot be canceled unless it is in 'Pending' or 'Created' status";
+    public static String QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE = "Quantity cannot be zero or negative";
+    public static String ORDER_CANNOT_BE_CANCELED_INVALID_STATUS = "Order cannot be canceled unless it is in 'Pending' or 'Created' status";
     public static String DUPLICATED_EMAIL = "The email is already exist";
-
+    public static String START_DATE_CANNOT_BE_AFTER_NOW = "The start date cannot be later the current time";
+    public static String START_DATE_CANNOT_BE_AFTER_END_DATE = "The start date cannot be later the end time";
+    public static String GROUP_BY_INVALID = "The groupBy can be only hour, day, week, month or year";
 
 }

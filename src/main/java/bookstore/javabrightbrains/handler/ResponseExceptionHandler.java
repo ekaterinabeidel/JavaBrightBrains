@@ -69,6 +69,17 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TimeInvalidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<AppError> handleTimeInvalidException(TimeInvalidException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(GroupByInvalidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<AppError> handleGroupByInvalidException(GroupByInvalidException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<AppError> handleAccessDeniedException (AccessDeniedException e) {
