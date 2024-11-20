@@ -54,7 +54,8 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User successfully updated"),
             @ApiResponse(responseCode = "400", description = "Invalid user data provided"),
-            @ApiResponse(responseCode = "404", description = "User not found")
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "409", description = "Email already exists")
     })
     public ResponseEntity<UserDto> updateUser(
             @PathVariable Long userId,
