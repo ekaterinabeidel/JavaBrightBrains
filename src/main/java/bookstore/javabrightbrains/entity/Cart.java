@@ -17,6 +17,7 @@ public class Cart {
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
