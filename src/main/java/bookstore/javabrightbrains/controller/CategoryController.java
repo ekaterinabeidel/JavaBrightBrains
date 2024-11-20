@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import static bookstore.javabrightbrains.utils.Constants.ADMIN_BASE_URL;
+import static bookstore.javabrightbrains.utils.Constants.PUBLIC_BASE_URL;
 
 @RestController
 @RequestMapping
@@ -21,7 +22,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/categories")
+    @GetMapping(PUBLIC_BASE_URL + "/categories")
     @Operation(summary = "Get all categories", description = "Retrieve a list of all categories")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categories = categoryService.findAll();
