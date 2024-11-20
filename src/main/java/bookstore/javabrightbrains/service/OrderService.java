@@ -118,7 +118,7 @@ public class OrderService {
         }
 
         List<OrderItem> allOrderItems = orders.stream()
-                .flatMap(order -> orderItemRepository.findByOrderId(order.getId()).stream())
+                .flatMap(order -> order.getOrderItems().stream())
                 .toList();
 
         return allOrderItems.stream()

@@ -17,10 +17,10 @@ public class OrderItem {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
     private int quantity;
     private double priceAtPurchase;
