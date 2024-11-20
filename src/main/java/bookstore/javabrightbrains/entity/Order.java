@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +24,8 @@ public class Order {
     private String contactPhone;
     private String deliveryMethod;
     private String status;
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
 
     @Override
     public boolean equals(Object o) {
