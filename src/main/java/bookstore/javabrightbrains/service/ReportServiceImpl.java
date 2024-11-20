@@ -3,7 +3,11 @@ package bookstore.javabrightbrains.service;
 import bookstore.javabrightbrains.dto.book.BookNotPaidDto;
 import bookstore.javabrightbrains.dto.book.ProfitDto;
 import bookstore.javabrightbrains.dto.book.TopBookDto;
+import bookstore.javabrightbrains.exception.GroupByInvalidException;
+import bookstore.javabrightbrains.exception.MessagesException;
+import bookstore.javabrightbrains.exception.TimeInvalidException;
 import bookstore.javabrightbrains.repository.OrderItemRepository;
+import bookstore.javabrightbrains.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +42,17 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<ProfitDto> getProfit(LocalDateTime startDate, LocalDateTime endDate, String groupBy) {
+        if (startDate.isAfter(LocalDateTime.now())) {
+            throw new TimeInvalidException(MessagesException.START_DATE_CANNOT_BE_AFTER_NOW);
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new TimeInvalidException(MessagesException.START_DATE_CANNOT_BE_AFTER_END_DATE);
+        }
+
+        if (Constants.getGroupByProfit().stream().noneMatch(g -> g.equals(groupBy))) {
+            throw new GroupByInvalidException(MessagesException.GROUP_BY_INVALID);
+        }
         return orderItemRepository.findProfitGroupedBy(startDate, endDate, groupBy);
     }
 

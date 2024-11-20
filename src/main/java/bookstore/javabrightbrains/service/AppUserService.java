@@ -6,7 +6,7 @@ import bookstore.javabrightbrains.entity.User;
 
 import bookstore.javabrightbrains.exception.EmailDuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
-import bookstore.javabrightbrains.exception.MessagesExceptions;
+import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
@@ -35,19 +35,19 @@ public class AppUserService {
             @Override
             public UserDetails loadUserByUsername(String username) {
                 return userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+                        .orElseThrow(() -> new UsernameNotFoundException(MessagesException.USER_NOT_FOUND));
             }
         };
     }
 
     public UserDto updateUser(Long userId, UserDto userDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
 
         if (!userDto.getEmail().equals(user.getEmail())) {
             User duplicateUser = userRepository.findByEmail(userDto.getEmail()).orElse(null);
             if (duplicateUser != null) {
-                throw new EmailDuplicateException(MessagesExceptions.DUPLICATED_EMAIL);
+                throw new EmailDuplicateException(MessagesException.DUPLICATED_EMAIL);
             }
         }
 
@@ -59,13 +59,13 @@ public class AppUserService {
 
     public UserDto getUserInfo(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
         return mappingUtils.mapToUserDto(user);
     }
 
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundException(MessagesExceptions.USER_NOT_FOUND));
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
         userRepository.delete(user);
     }
 }
