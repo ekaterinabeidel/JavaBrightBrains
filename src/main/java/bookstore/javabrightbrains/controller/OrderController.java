@@ -90,7 +90,7 @@ public class OrderController {
         return ResponseEntity.status(200).body(order);
     }
 
-    @GetMapping("/history")
+    @GetMapping("/history/{userId}")
     @Operation(summary = "Get purchase history by user ID", description = "Get the purchase history for a specific user by their ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Purchase history retrieved successfully"),
@@ -99,7 +99,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<List<PurchaseHistoryDto>> getPurchaseHistory(
-            @Parameter(description = "User ID to fetch purchase history for", required = true) @RequestParam Long userId) {
+            @Parameter(description = "User ID to fetch purchase history for", required = true) @PathVariable Long userId) {
         List<PurchaseHistoryDto> purchaseHistory = orderService.getPurchaseHistory(userId);
         if (purchaseHistory.isEmpty()) {
             return ResponseEntity.status(204).build();
