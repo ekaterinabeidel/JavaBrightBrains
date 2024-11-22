@@ -61,7 +61,7 @@ public class CartController {
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/items/{cartItemId}")
@@ -74,7 +74,7 @@ public class CartController {
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(userId, cartItemId);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.noContent().build();
     }
 
 }
