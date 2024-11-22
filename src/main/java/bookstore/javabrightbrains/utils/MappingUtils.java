@@ -14,7 +14,6 @@ import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +28,6 @@ public class MappingUtils {
 
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
 
     public UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
@@ -70,11 +66,11 @@ public class MappingUtils {
     }
 
     public CartResponseDto toCartResponseDto(Cart cart, List<CartItem> cartItems) {
-        List<CartItemResponseDto> cartItemDtos = cartItems.stream()
+        List<CartItemResponseDto> cartItemsDto = cartItems.stream()
                 .map(this::toCartItemResponseDto)
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getId(), cartItemDtos);
+        return new CartResponseDto(cart.getId(), cartItemsDto);
     }
 
     public CartItemResponseDto toCartItemResponseDto(CartItem cartItem) {
@@ -143,7 +139,7 @@ public class MappingUtils {
     }
 
     public OrderResponseDto mapToOrderResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);
@@ -161,7 +157,7 @@ public class MappingUtils {
     }
 
     public OrderShortResponseDto mapToOrderShortResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);
