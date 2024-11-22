@@ -19,13 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+
 import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
-@WithMockUser(value = "User", password = "password123", authorities = "USER")
+@WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
 class CartControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -64,6 +65,7 @@ class CartControllerTest {
         Assertions.assertEquals(MessagesException.USER_NOT_FOUND, response.getMessage());
     }
 
+
     @Test
     void addToCartSuccess() throws Exception {
         Long userId = 1L;
@@ -99,7 +101,7 @@ class CartControllerTest {
     }
 
     @Test
-    void addToCartNotFoundUserException() throws Exception {
+    void addToCartNotFoundUserExceptionWithSecurity() throws Exception {
         Long userId = 1000L;
         CartItemRequestDto requestDto = new CartItemRequestDto(1L, 10);
         String json = objectMapper.writeValueAsString(requestDto);

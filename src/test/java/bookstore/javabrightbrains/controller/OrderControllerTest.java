@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
-@WithMockUser(value = "User", password = "password123", authorities = "USER")
+@WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
 class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
