@@ -56,7 +56,7 @@ public class OrderController {
     @GetMapping("/get/{id}")
     public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id) {
         OrderResponseDto order = orderService.getOrderById(id);
-        return ResponseEntity.status(200).body(order);
+        return ResponseEntity.ok().body(order);
     }
 
     @Operation(
@@ -75,7 +75,7 @@ public class OrderController {
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();
         } else {
-            return ResponseEntity.status(200).body(orders);
+            return ResponseEntity.ok().body(orders);
         }
     }
 
@@ -91,7 +91,7 @@ public class OrderController {
     @PutMapping("/update/{orderId}")
     public ResponseEntity<OrderShortResponseDto> cancelOrder(@PathVariable Long orderId) {
         OrderShortResponseDto order = orderService.cancelOrder(orderId);
-        return ResponseEntity.status(200).body(order);
+        return ResponseEntity.ok().body(order);
     }
 
     @GetMapping("/history/{userId}")
@@ -106,9 +106,9 @@ public class OrderController {
             @Parameter(description = "User ID to fetch purchase history for", required = true) @PathVariable Long userId) {
         List<PurchaseHistoryDto> purchaseHistory = orderService.getPurchaseHistory(userId);
         if (purchaseHistory.isEmpty()) {
-            return ResponseEntity.status(204).build();
+            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(200).body(purchaseHistory);
+            return ResponseEntity.ok().body(purchaseHistory);
         }
     }
 }
