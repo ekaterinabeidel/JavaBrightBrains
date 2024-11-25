@@ -68,7 +68,7 @@ public class CartController {
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
         jwtSecurityService.validateUserAccess(userId);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/items/{cartItemId}")
@@ -80,9 +80,9 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Item does not belong to the user")
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
-        jwtSecurityService.validateUserAccess(userId);
         cartService.deleteCartItem(userId, cartItemId);
-        return ResponseEntity.status(204).build();
+        jwtSecurityService.validateUserAccess(userId);
+        return ResponseEntity.noContent().build();
     }
 
 }

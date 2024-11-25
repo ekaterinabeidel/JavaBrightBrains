@@ -109,14 +109,14 @@ public class ResponseExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<AppError> handleExpiredJwtException(ExpiredJwtException e) {
+    public ResponseEntity<AppError> handleExpiredJwtException() {
         String message = "JWT token has expired";
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED, message), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Map<String,String>> handleUsernameNotFoundException (UsernameNotFoundException e) {
+    public ResponseEntity<Map<String,String>> handleUsernameNotFoundException () {
         Map<String, String> response = new HashMap<>();
         response.put("message", MessagesException.USER_NOT_FOUND);
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
@@ -124,7 +124,7 @@ public class ResponseExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Invalid username or password");
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
