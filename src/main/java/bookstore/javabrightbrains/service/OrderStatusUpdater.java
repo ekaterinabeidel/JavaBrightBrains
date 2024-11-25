@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static bookstore.javabrightbrains.utils.OrderStatus.*;
-
 @Service
 public class OrderStatusUpdater {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusUpdater.class);
