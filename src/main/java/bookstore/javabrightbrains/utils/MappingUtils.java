@@ -7,6 +7,7 @@ import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
+import bookstore.javabrightbrains.dto.category.CategoryDto;
 import bookstore.javabrightbrains.dto.order.OrderItemDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
@@ -77,6 +78,12 @@ public class MappingUtils {
         }
 
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+    }
+    public CategoryDto convertCategoryEntityToCategoryDto(Category category) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setId(category.getId());
+        categoryDto.setName(category.getName());
+        return categoryDto;
     }
 
     public CartItem toCartItem(CartItemRequestDto cartItemRequestDto, Cart cart, Book book) {
