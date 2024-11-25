@@ -133,7 +133,7 @@ class OrderControllerTest {
 
     @Test
     void cancelOrderSuccess() throws Exception {
-        Long orderId = 1L;
+        Long orderId = 5L;
 
         mockMvc.perform(MockMvcRequestBuilders.put(USER_BASE_URL + "/orders/update/{orderId}", orderId)
                         .contentType(MediaType.APPLICATION_JSON))

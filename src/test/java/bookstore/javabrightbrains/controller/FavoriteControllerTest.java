@@ -159,7 +159,7 @@ class FavoriteControllerTest {
     @Test
     void deleteFavoritesNotFoundBookException() throws Exception {
         FavoriteRequestDto requestDto = new FavoriteRequestDto(
-                1L, 10L
+                1L, 1000L
         );
 
         String json = objectMapper.writeValueAsString(requestDto);

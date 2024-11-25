@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static bookstore.javabrightbrains.utils.OrderStatus.*;
@@ -25,19 +26,21 @@ public class OrderStatusUpdater {
 
         List<Order> orders = orderRepository.findAll();
         for (Order order : orders) {
-            switch (order.getStatus()) {
-                case PENDING:
-                    order.setStatus(PAID);
-                    break;
-                case PAID:
-                    order.setStatus(SHIPPED);
-                    break;
-                case SHIPPED:
-                    order.setStatus(OrderStatus.DELIVERED);
-                    break;
-
-                default:
-                    break;
+            if(order.getCreatedAt().toLocalDateTime().isAfter(LocalDateTime.now().minusDays(1))) {
+                logger.info("Updating order " + order.getId());
+                switch (order.getStatus()) {
+                    case PENDING:
+                        order.setStatus(PAID);
+                        break;
+                    case PAID:
+                        order.setStatus(SHIPPED);
+                        break;
+                    case SHIPPED:
+                        order.setStatus(OrderStatus.DELIVERED);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         orderRepository.saveAll(orders);
