@@ -22,14 +22,9 @@ public class OrderService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private MappingUtils mappingUtils;
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
 
@@ -89,7 +84,7 @@ public class OrderService {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
 
-        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
+        List<CartItem> cartItems = cart.getCartItems();
         if (cartItems.isEmpty()) {
             throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND);
         }

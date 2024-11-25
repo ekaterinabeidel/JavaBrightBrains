@@ -3,14 +3,12 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.EmailDuplicateException;
 import bookstore.javabrightbrains.exception.EmptyJwtTokenException;
 import bookstore.javabrightbrains.exception.InvalidJwtTokenException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashMap;
 
 @Service

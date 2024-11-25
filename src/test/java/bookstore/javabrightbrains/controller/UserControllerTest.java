@@ -37,9 +37,6 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
-    private JwtSecurityService jwtSecurityService;
-
     @Test
     void getUserSuccess() throws Exception {
         Long userId = 1L;
