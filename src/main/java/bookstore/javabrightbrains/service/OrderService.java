@@ -5,7 +5,7 @@ import bookstore.javabrightbrains.entity.*;
 import bookstore.javabrightbrains.exception.*;
 import bookstore.javabrightbrains.repository.*;
 import bookstore.javabrightbrains.utils.MappingUtils;
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;

@@ -3,7 +3,7 @@ package bookstore.javabrightbrains.controller;
 import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

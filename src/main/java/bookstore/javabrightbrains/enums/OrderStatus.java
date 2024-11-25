@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.utils;
+package bookstore.javabrightbrains.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
