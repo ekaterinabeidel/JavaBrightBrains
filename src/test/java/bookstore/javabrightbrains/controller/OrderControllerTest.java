@@ -174,11 +174,12 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithMockUser(value = "user7@example.com", password = "password123", authorities = "USER")
     void getPurchaseHistoryOrderNotFoundException() throws Exception {
-        Long userIdWithoutOrders = 4L;
+        Long userIdWithoutOrders = 7L;
 
         mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", userIdWithoutOrders)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 }

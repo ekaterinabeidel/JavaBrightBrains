@@ -28,7 +28,7 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
-@WithMockUser(value = "User", password = "password123", authorities = "USER")
+@WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
 class UserControllerTest {
 
     @Autowired
