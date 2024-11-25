@@ -70,8 +70,8 @@ public class OrderController {
     })
     @GetMapping("/get-orders/{userId}")
     public ResponseEntity<List<OrderShortResponseDto>> getOrdersByUserId(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<OrderShortResponseDto> orders = orderService.getOrdersByUserId(userId);
+        jwtSecurityService.validateUserAccess(userId);
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();
         } else {
@@ -105,6 +105,7 @@ public class OrderController {
     public ResponseEntity<List<PurchaseHistoryDto>> getPurchaseHistory(
             @Parameter(description = "User ID to fetch purchase history for", required = true) @PathVariable Long userId) {
         List<PurchaseHistoryDto> purchaseHistory = orderService.getPurchaseHistory(userId);
+        jwtSecurityService.validateUserAccess(userId);
         if (purchaseHistory.isEmpty()) {
             return ResponseEntity.status(204).build();
         } else {

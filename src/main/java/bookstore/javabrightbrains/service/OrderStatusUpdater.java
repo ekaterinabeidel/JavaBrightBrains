@@ -28,22 +28,23 @@ public class OrderStatusUpdater {
         for (Order order : orders) {
             if(order.getCreatedAt().toLocalDateTime().isAfter(LocalDateTime.now().minusDays(1))) {
                 logger.info("Updating order " + order.getId());
-                switch (order.getStatus()) {
-                    case PENDING:
-                        order.setStatus(PAID);
-                        break;
-                    case PAID:
-                        order.setStatus(SHIPPED);
-                        break;
-                    case SHIPPED:
-                        order.setStatus(OrderStatus.DELIVERED);
-                        break;
-                    default:
-                        break;
+                OrderStatus currentStatus = order.getStatus();
+                OrderStatus nextStatus = getNextStatus(currentStatus);
+
+                if (nextStatus != null) {
+                    order.setStatus(nextStatus);
                 }
             }
         }
         orderRepository.saveAll(orders);
         logger.info("Updated orders saved.");
+    }
+    private OrderStatus getNextStatus(OrderStatus currentStatus) {
+        return switch (currentStatus) {
+            case PENDING -> OrderStatus.PAID;
+            case PAID -> OrderStatus.SHIPPED;
+            case SHIPPED -> OrderStatus.DELIVERED;
+            default -> null;
+        };
     }
 }

@@ -41,8 +41,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         UserDto userDto = appUserService.getUserInfo(userId);
+        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(userDto);
     }
 
@@ -60,8 +60,8 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UserDto userDto) {
-        jwtSecurityService.validateUserAccess(userId);
         UserDto updatedUser = appUserService.updateUser(userId, userDto);
+        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -75,8 +75,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         appUserService.deleteUser(userId);
+        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.noContent().build();
     }
 }
