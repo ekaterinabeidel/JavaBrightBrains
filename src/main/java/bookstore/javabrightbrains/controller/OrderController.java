@@ -4,7 +4,6 @@ import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,7 +67,6 @@ public class OrderController {
     @GetMapping("/get-orders/{userId}")
     public ResponseEntity<List<OrderShortResponseDto>> getOrdersByUserId(@PathVariable Long userId) {
         List<OrderShortResponseDto> orders = orderService.getOrdersByUserId(userId);
-        jwtSecurityService.validateUserAccess(userId);
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();
         } else {
@@ -102,7 +100,6 @@ public class OrderController {
     public ResponseEntity<List<PurchaseHistoryDto>> getPurchaseHistory(
             @Parameter(description = "User ID to fetch purchase history for", required = true) @PathVariable Long userId) {
         List<PurchaseHistoryDto> purchaseHistory = orderService.getPurchaseHistory(userId);
-        jwtSecurityService.validateUserAccess(userId);
         if (purchaseHistory.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {

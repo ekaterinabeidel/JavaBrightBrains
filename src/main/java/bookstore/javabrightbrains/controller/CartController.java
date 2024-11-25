@@ -4,7 +4,6 @@ import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.service.CartService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -35,7 +34,6 @@ public class CartController {
     })
     public ResponseEntity<CartResponseDto> getCart(@PathVariable Long userId) {
         CartResponseDto cartResponseDto = cartService.getCart(userId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(cartResponseDto);
     }
 
@@ -49,7 +47,6 @@ public class CartController {
     })
     public ResponseEntity<String> addToCart(@PathVariable Long userId, @Valid @RequestBody CartItemRequestDto cartItemRequestDto) {
         cartService.addToCart(userId, cartItemRequestDto);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.status(201).build();
     }
 
@@ -65,7 +62,6 @@ public class CartController {
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.noContent().build();
     }
 
@@ -79,7 +75,6 @@ public class CartController {
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(userId, cartItemId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.noContent().build();
     }
 

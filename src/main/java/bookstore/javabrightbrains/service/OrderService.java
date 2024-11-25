@@ -22,8 +22,6 @@ public class OrderService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private MappingUtils mappingUtils;
