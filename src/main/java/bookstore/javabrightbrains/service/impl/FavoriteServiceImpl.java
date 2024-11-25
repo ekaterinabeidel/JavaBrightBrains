@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.favorite.FavoriteRequestDto;
@@ -11,6 +11,7 @@ import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
+import bookstore.javabrightbrains.service.FavoriteService;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

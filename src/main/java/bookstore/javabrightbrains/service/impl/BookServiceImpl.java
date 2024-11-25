@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.dto.book.*;
 import bookstore.javabrightbrains.entity.Book;
@@ -6,6 +6,7 @@ import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
+import bookstore.javabrightbrains.service.BookService;
 import bookstore.javabrightbrains.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,7 +1,8 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.entity.Order;
 import bookstore.javabrightbrains.repository.OrderRepository;
+import bookstore.javabrightbrains.service.OrderStatusUpdater;
 import bookstore.javabrightbrains.utils.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;

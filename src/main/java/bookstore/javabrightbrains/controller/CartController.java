@@ -4,7 +4,7 @@ import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.service.CartService;
-import bookstore.javabrightbrains.service.JwtSecurityServiceImpl;
+import bookstore.javabrightbrains.service.impl.JwtSecurityServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
@@ -12,6 +12,7 @@ import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.service.CartService;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

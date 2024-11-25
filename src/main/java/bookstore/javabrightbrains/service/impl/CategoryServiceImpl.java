@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.dto.category.CategoryDto;
 import bookstore.javabrightbrains.dto.category.CategoryRequestDto;
@@ -7,6 +7,7 @@ import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.CategoryRepository;
+import bookstore.javabrightbrains.service.CategoryService;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

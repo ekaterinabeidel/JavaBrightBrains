@@ -1,4 +1,4 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 
 import bookstore.javabrightbrains.dto.auth.*;
@@ -8,6 +8,7 @@ import bookstore.javabrightbrains.exception.EmptyJwtTokenException;
 import bookstore.javabrightbrains.exception.InvalidJwtTokenException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.service.AuthService;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

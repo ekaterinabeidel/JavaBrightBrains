@@ -1,8 +1,9 @@
-package bookstore.javabrightbrains.service;
+package bookstore.javabrightbrains.service.impl;
 
 import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.AccessDeniedException;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
