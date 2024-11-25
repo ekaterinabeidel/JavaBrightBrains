@@ -70,8 +70,8 @@ public class OrderController {
     })
     @GetMapping("/get-orders/{userId}")
     public ResponseEntity<List<OrderShortResponseDto>> getOrdersByUserId(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<OrderShortResponseDto> orders = orderService.getOrdersByUserId(userId);
+        jwtSecurityService.validateUserAccess(userId);
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();
         } else {

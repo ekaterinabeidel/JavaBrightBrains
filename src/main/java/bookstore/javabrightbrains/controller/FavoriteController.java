@@ -27,8 +27,8 @@ public class FavoriteController {
     @Operation(summary = "Get list of books that are in favorites")
     @GetMapping("/favorites/{userId}")
     public ResponseEntity<List<BookShortResponseDto>> getAllBooks(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<BookShortResponseDto> favorites = favoriteServiceImpl.getFavorites(userId);
+        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(favorites);
     }
 
