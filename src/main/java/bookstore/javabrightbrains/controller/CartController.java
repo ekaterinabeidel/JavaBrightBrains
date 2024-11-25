@@ -4,7 +4,7 @@ import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.service.CartService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
+import bookstore.javabrightbrains.service.JwtSecurityServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,9 +24,9 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @Tag(name = "Cart Controller", description = "APIs for managing manages the user's shopping cart")
 public class CartController {
     @Autowired
-    private  CartService cartService;
+    private CartService cartService;
     @Autowired
-    private JwtSecurityService jwtSecurityService;
+    private JwtSecurityServiceImpl jwtSecurityService;
 
     @GetMapping
     @Operation(summary = "Get the user's cart")
