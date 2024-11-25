@@ -2,7 +2,6 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.user.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
 
 public interface AppUserService {

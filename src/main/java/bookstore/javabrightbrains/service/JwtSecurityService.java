@@ -15,8 +15,6 @@ public interface JwtSecurityService {
 
     Date extractExpiration(String token);
 
-    Date extractIssuedAt(String token);
-
     boolean isTokenExpired(String token);
 
     boolean validateToken(String token, UserDetails userDetails);
