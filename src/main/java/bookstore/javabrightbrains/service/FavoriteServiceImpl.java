@@ -28,6 +28,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtSecurityService jwtSecurityService;
+
 
     public List<BookShortResponseDto> getFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(userId);
@@ -35,6 +38,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         userRepository.findById(userId).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
+        jwtSecurityService.validateUserAccess(userId);
         return favorites.stream().map(favorite -> {
             Book book = favorite.getBook();
             return Utils.convertToBookShortResponseDto(book);
@@ -49,6 +53,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
+
+        jwtSecurityService.validateUserAccess(favoriteRequestDto.getUserId());
 
         Favorite favoriteDuplicate = favoriteRepository.findByUserAndBook(user, book);
 
@@ -72,6 +78,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
                 () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
         );
+
+        jwtSecurityService.validateUserAccess(favoriteRequestDto.getUserId());
 
         Favorite favorite = favoriteRepository.findByUserAndBook(user, book);
 

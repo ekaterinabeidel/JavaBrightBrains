@@ -37,7 +37,6 @@ public class CartController {
     })
     public ResponseEntity<CartResponseDto> getCart(@PathVariable Long userId) {
         CartResponseDto cartResponseDto = cartService.getCart(userId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(cartResponseDto);
     }
 
@@ -51,7 +50,6 @@ public class CartController {
     })
     public ResponseEntity<String> addToCart(@PathVariable Long userId, @Valid @RequestBody CartItemRequestDto cartItemRequestDto) {
         cartService.addToCart(userId, cartItemRequestDto);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.status(201).build();
     }
 
@@ -67,7 +65,6 @@ public class CartController {
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.status(204).build();
     }
 
@@ -81,7 +78,6 @@ public class CartController {
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(userId, cartItemId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.status(204).build();
     }
 

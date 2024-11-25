@@ -42,7 +42,6 @@ public class UserController {
     })
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         UserDto userDto = appUserService.getUserInfo(userId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(userDto);
     }
 
@@ -61,7 +60,6 @@ public class UserController {
             @PathVariable Long userId,
             @Valid @RequestBody UserDto userDto) {
         UserDto updatedUser = appUserService.updateUser(userId, userDto);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -76,7 +74,6 @@ public class UserController {
     })
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         appUserService.deleteUser(userId);
-        jwtSecurityService.validateUserAccess(userId);
         return ResponseEntity.noContent().build();
     }
 }
