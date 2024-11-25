@@ -83,7 +83,8 @@ public class BookController {
     }
 
     @GetMapping("/daily-product")
-    @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. If multiple products have the same discount, a random one is selected.")
+    @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. " +
+            "If multiple products have the same discount, a random one is selected.")
     public ResponseEntity<BookResponseDto> getDailyProduct() {
         BookResponseDto dailyProduct = bookService.getDailyProduct();
         if (dailyProduct == null) {

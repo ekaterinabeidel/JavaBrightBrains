@@ -5,7 +5,6 @@ import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
-
     @PostMapping
     @CreateOrder
     public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
@@ -43,7 +39,6 @@ public class OrderController {
     @GetMapping("/get-orders/{userId}")
     @GetOrdersByUserId
     public ResponseEntity<List<OrderShortResponseDto>> getOrdersByUserId(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<OrderShortResponseDto> orders = orderService.getOrdersByUserId(userId);
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();

@@ -26,6 +26,10 @@ public class OrderService {
     @Autowired
     private MappingUtils mappingUtils;
 
+    @Autowired
+    private JwtSecurityService jwtSecurityService;
+
+
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
 
         List<CartItem> cartItems = getValidatedCartItems(orderRequestDto.getCartId());
@@ -61,7 +65,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
-
+        jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         return orders.stream().map(order -> mappingUtils.mapToOrderShortResponseDto(order)).toList();
@@ -70,7 +74,8 @@ public class OrderService {
     public OrderShortResponseDto cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.ORDER_NOT_FOUND));
-        if (!"Pending".equalsIgnoreCase(order.getStatus()) && !"Created".equalsIgnoreCase(order.getStatus())) {
+        if (!"Pending".equalsIgnoreCase(order.getStatus().getStatus()) &&
+                !"Created".equalsIgnoreCase(order.getStatus().getStatus())) {
             throw new OrderCancellationNotAllowedException(MessagesException.ORDER_CANNOT_BE_CANCELED_INVALID_STATUS);
         }
 
@@ -96,7 +101,7 @@ public class OrderService {
         order.setDeliveryAddress(orderRequestDto.getDeliveryAddress());
         order.setContactPhone(orderRequestDto.getContactPhone());
         order.setDeliveryMethod(orderRequestDto.getDeliveryMethod());
-        order.setStatus("Processing");
+        order.setStatus(OrderStatus.PROCESSING);
         order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return orderRepository.save(order);
@@ -106,7 +111,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
-
+        jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if (orders.isEmpty()) {
             throw new IdNotFoundException(MessagesException.ORDER_NOT_FOUND);

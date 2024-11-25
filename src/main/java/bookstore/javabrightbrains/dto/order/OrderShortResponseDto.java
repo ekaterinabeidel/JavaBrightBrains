@@ -1,5 +1,6 @@
 package bookstore.javabrightbrains.dto.order;
 
+import bookstore.javabrightbrains.utils.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class OrderShortResponseDto {
     private Long id;
     private List<OrderItemDto> items;
     private Timestamp createdAt;
-    private String status;
+    private OrderStatus status;
     private BigDecimal totalPrice;
 }
