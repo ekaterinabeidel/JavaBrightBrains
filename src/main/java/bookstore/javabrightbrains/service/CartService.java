@@ -47,6 +47,7 @@ public class CartService {
                     User user = userRepository.findById(userId)
                             .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
                     newCart.setUser(user);
+                    jwtSecurityService.validateUserAccess(userId);
                     return cartRepository.save(newCart);
                 });
         Book book = bookRepository.findById(cartItemRequestDto.getBookId())
@@ -67,6 +68,7 @@ public class CartService {
     public CartResponseDto getCart(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+        jwtSecurityService.validateUserAccess(userId);
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());
 
@@ -75,28 +77,29 @@ public class CartService {
     }
 
     @Transactional
-        public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
-            CartItem cartItem = cartItemRepository.findById(cartItemId)
-                    .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
+    public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
 
-            if (!cartItem.getCart().getUser().getId().equals(userId)) {
-                throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
-            }
+        if (!cartItem.getCart().getUser().getId().equals(userId)) {
+            throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
+        }
+        jwtSecurityService.validateUserAccess(userId);
 
-            Book book = cartItem.getBook();
-            int availableQuantity = book.getTotalStock();
+        Book book = cartItem.getBook();
+        int availableQuantity = book.getTotalStock();
 
-            int newQuantity = cartItemUpdateRequestDto.getQuantity();
-            if (newQuantity <= 0) {
-                throw new InvalidQuantityException(MessagesException.QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE);
-            }
+        int newQuantity = cartItemUpdateRequestDto.getQuantity();
+        if (newQuantity <= 0) {
+            throw new InvalidQuantityException(MessagesException.QUANTITY_CANNOT_BE_ZERO_OR_NEGATIVE);
+        }
 
-            if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
-                throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
-            }
+        if (cartItemUpdateRequestDto.getQuantity() > availableQuantity) {
+            throw new NotEnoughBooksInStockException(MessagesException.NOT_ENOUGH_BOOKS_IN_STOCK);
+        }
 
-            cartItem.setQuantity(cartItemUpdateRequestDto.getQuantity());
-            cartItemRepository.save(cartItem);
+        cartItem.setQuantity(cartItemUpdateRequestDto.getQuantity());
+        cartItemRepository.save(cartItem);
     }
 
     @Transactional
@@ -107,7 +110,7 @@ public class CartService {
         if (!cartItem.getCart().getUser().getId().equals(userId)) {
             throw new IdNotFoundException(MessagesException.CART_ITEM_NOT_BELONG_TO_USER);
         }
-
+        jwtSecurityService.validateUserAccess(userId);
         cartItemRepository.delete(cartItem);
     }
 

@@ -28,8 +28,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class UserController {
     @Autowired
     private AppUserService appUserService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
 
     @GetMapping("users/{userId}")
     @Operation(

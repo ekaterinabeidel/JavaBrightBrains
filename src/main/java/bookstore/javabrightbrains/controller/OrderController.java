@@ -27,9 +27,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
-
     @Operation(
             summary = "Create a new order",
             description = "Creates a new order based on the provided order details in the request body. Requires a valid cart ID, delivery information, and other order details."

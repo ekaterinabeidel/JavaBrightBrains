@@ -22,9 +22,15 @@ public class OrderService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired
+    private CartItemRepository cartItemRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private MappingUtils mappingUtils;
+
+    @Autowired
+    private JwtSecurityService jwtSecurityService;
+
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
 
@@ -61,7 +67,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
-
+        jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         return orders.stream().map(order -> mappingUtils.mapToOrderShortResponseDto(order)).toList();
@@ -107,7 +113,7 @@ public class OrderService {
         if (!userRepository.existsById(userId)) {
             throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
         }
-
+        jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if (orders.isEmpty()) {
             throw new IdNotFoundException(MessagesException.ORDER_NOT_FOUND);
