@@ -2,6 +2,7 @@ package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.service.AuthService;
+import bookstore.javabrightbrains.service.AuthServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication Controller", description = "APIs for handling authentication and authorization processes")
 public class AuthController {
     @Autowired
-    private  AuthService authService;
+    private AuthService authService;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user",
