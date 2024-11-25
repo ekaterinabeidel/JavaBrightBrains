@@ -27,7 +27,7 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
 @WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
-class CartControllerTagTest {
+class CartControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
