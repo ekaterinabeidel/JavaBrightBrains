@@ -3,7 +3,6 @@ package bookstore.javabrightbrains.controller;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.favorite.FavoriteRequestDto;
 import bookstore.javabrightbrains.service.FavoriteService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

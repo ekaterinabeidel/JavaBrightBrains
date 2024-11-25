@@ -25,8 +25,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class CartController {
     @Autowired
     private  CartService cartService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
 
     @GetMapping
     @Operation(summary = "Get the user's cart")
