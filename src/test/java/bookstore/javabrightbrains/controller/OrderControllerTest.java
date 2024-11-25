@@ -26,32 +26,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
-@WithMockUser(value = "User", password = "password123", authorities = "USER")
+@WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
 class OrderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Test
-    void createOrderSuccess()  throws Exception  {
+    void createOrderSuccess() throws Exception {
 
-            OrderRequestDto requestDto = new OrderRequestDto(
-                    1L, "123 Main St", "+1234567890", "Standard");
-            String json = objectMapper.writeValueAsString(requestDto);
+        OrderRequestDto requestDto = new OrderRequestDto(
+                1L, "123 Main St", "+1234567890", "Standard");
+        String json = objectMapper.writeValueAsString(requestDto);
 
-            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(USER_BASE_URL + "/orders")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(json))
-                    .andExpect(status().isCreated())
-                    .andReturn();
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(USER_BASE_URL + "/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isCreated())
+                .andReturn();
 
-            String jsonResult = result.getResponse().getContentAsString();
-            OrderResponseDto orderResponse = objectMapper.readValue(jsonResult, OrderResponseDto.class);
+        String jsonResult = result.getResponse().getContentAsString();
+        OrderResponseDto orderResponse = objectMapper.readValue(jsonResult, OrderResponseDto.class);
 
-            Assertions.assertNotNull(orderResponse.getId());
-            Assertions.assertEquals(requestDto.getDeliveryAddress(), orderResponse.getDeliveryAddress());
-            Assertions.assertEquals(requestDto.getContactPhone(), orderResponse.getContactPhone());
+        Assertions.assertNotNull(orderResponse.getId());
+        Assertions.assertEquals(requestDto.getDeliveryAddress(), orderResponse.getDeliveryAddress());
+        Assertions.assertEquals(requestDto.getContactPhone(), orderResponse.getContactPhone());
     }
 
     @Test
@@ -132,7 +133,7 @@ class OrderControllerTest {
 
     @Test
     void cancelOrderSuccess() throws Exception {
-        Long orderId = 1L;
+        Long orderId = 5L;
 
         mockMvc.perform(MockMvcRequestBuilders.put(USER_BASE_URL + "/orders/update/{orderId}", orderId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -152,4 +153,32 @@ class OrderControllerTest {
                         .value(MessagesException.ORDER_CANNOT_BE_CANCELED_INVALID_STATUS));
     }
 
+    @Test
+    void getPurchaseHistory_Success() throws Exception {
+        Long userId = 1L;
+
+        mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").isNotEmpty());
+    }
+
+    @Test
+    void getPurchaseHistory_UserNotFoundException() throws Exception {
+        Long nonExistentUserId = 999L;
+
+        mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", nonExistentUserId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(MessagesException.USER_NOT_FOUND));
+    }
+
+    @Test
+    void getPurchaseHistory_OrderNotFoundException() throws Exception {
+        Long userIdWithoutOrders = 4L;
+
+        mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", userIdWithoutOrders)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 }

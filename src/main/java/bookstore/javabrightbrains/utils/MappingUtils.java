@@ -1,5 +1,7 @@
 package bookstore.javabrightbrains.utils;
 
+import bookstore.javabrightbrains.dto.auth.RegisterRequestDto;
+import bookstore.javabrightbrains.dto.auth.RegisterResponseDto;
 import bookstore.javabrightbrains.dto.book.BookOrderShortResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemResponseDto;
@@ -11,6 +13,7 @@ import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
 import bookstore.javabrightbrains.entity.*;
+import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
@@ -28,6 +31,27 @@ public class MappingUtils {
 
     @Autowired
     private BookRepository bookRepository;
+
+    public static User convertRegisterRequestDtoToEntity(RegisterRequestDto registerRequestDto) {
+        User user = new User();
+        user.setName(registerRequestDto.getName());
+        user.setSurname(registerRequestDto.getSurname());
+        user.setEmail(registerRequestDto.getEmail());
+        user.setPassword(registerRequestDto.getPassword());
+        user.setRole(Role.USER);
+        return user;
+    }
+
+    public static RegisterResponseDto convertEntityUserToRegisterResponseDto(User user) {
+        return new RegisterResponseDto(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getRole()
+        );
+    }
 
     public UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
