@@ -72,7 +72,7 @@ public class CartService {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());
 
-        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+        List<CartItem> cartItems = cart.getCartItems();
         return mappingUtils.toCartResponseDto(cart, cartItems);
     }
 

@@ -1,12 +1,9 @@
 package bookstore.javabrightbrains.dto.auth;
 
 import bookstore.javabrightbrains.enums.Role;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor

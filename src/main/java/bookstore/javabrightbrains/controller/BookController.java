@@ -88,7 +88,7 @@ public class BookController {
     public ResponseEntity<BookResponseDto> getDailyProduct() {
         BookResponseDto dailyProduct = bookService.getDailyProduct();
         if (dailyProduct == null) {
-            return ResponseEntity.status(204).build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(dailyProduct);
     }

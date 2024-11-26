@@ -3,6 +3,8 @@ package bookstore.javabrightbrains.utils;
 import bookstore.javabrightbrains.dto.auth.RegisterRequestDto;
 import bookstore.javabrightbrains.dto.auth.RegisterResponseDto;
 import bookstore.javabrightbrains.dto.book.BookOrderShortResponseDto;
+import bookstore.javabrightbrains.dto.book.BookRequestDto;
+import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemResponseDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
@@ -17,11 +19,12 @@ import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.repository.OrderItemRepository;
+import bookstore.javabrightbrains.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ public class MappingUtils {
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private CategoryService categoryService;
 
     public static User convertRegisterRequestDtoToEntity(RegisterRequestDto registerRequestDto) {
         User user = new User();
@@ -93,11 +96,11 @@ public class MappingUtils {
     }
 
     public CartResponseDto toCartResponseDto(Cart cart, List<CartItem> cartItems) {
-        List<CartItemResponseDto> cartItemDtos = cartItems.stream()
+        List<CartItemResponseDto> cartItemsDto = cartItems.stream()
                 .map(this::toCartItemResponseDto)
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getId(), cartItemDtos);
+        return new CartResponseDto(cart.getId(), cartItemsDto);
     }
 
     public CartItemResponseDto toCartItemResponseDto(CartItem cartItem) {
@@ -166,7 +169,7 @@ public class MappingUtils {
     }
 
     public OrderResponseDto mapToOrderResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);
@@ -184,7 +187,7 @@ public class MappingUtils {
     }
 
     public OrderShortResponseDto mapToOrderShortResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);
@@ -215,5 +218,17 @@ public class MappingUtils {
         return dto;
     }
 
-}
+    public Book convertToBookEntity(BookRequestDto bookRequestDto) {
+        Book book = new Book();
+        book.setTitle(bookRequestDto.getTitle());
+        book.setAuthor(bookRequestDto.getAuthor());
+        book.setDescription(bookRequestDto.getDescription());
+        book.setPrice(bookRequestDto.getPrice());
+        book.setDiscount(bookRequestDto.getDiscount());
+
+        if (bookRequestDto.getDiscount() == 0) {
+            book.setPriceDiscount(bookRequestDto.getPrice());
+        } else {
+            book.setPriceDiscount(getPriceWithDiscount(bookRequestDto.getPrice(), bookRequestDto.getDiscount()));
+        }
 
