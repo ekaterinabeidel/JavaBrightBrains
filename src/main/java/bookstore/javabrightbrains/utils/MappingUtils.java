@@ -276,7 +276,6 @@ public class MappingUtils {
         if (bookDto.getDescription() != null) book.setDescription(bookDto.getDescription());
         if (bookDto.getPrice() != null) book.setPrice(bookDto.getPrice());
 
-        // Устанавливаем значение скидки напрямую
         book.setDiscount(bookDto.getDiscount());
         if (bookDto.getDiscount() > 0) {
             book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
