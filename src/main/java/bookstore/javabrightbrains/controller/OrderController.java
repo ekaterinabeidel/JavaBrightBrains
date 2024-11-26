@@ -4,7 +4,6 @@ import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
