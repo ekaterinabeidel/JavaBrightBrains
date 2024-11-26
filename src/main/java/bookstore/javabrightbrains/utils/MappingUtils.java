@@ -275,12 +275,17 @@ public class MappingUtils {
         if (bookDto.getAuthor() != null) book.setAuthor(bookDto.getAuthor());
         if (bookDto.getDescription() != null) book.setDescription(bookDto.getDescription());
         if (bookDto.getPrice() != null) book.setPrice(bookDto.getPrice());
-        if (bookDto.getDiscount() != 0) book.setDiscount(bookDto.getDiscount());
-        if (bookDto.getDiscount() > 0) {
-            book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
-        } else if (bookDto.getDiscount() == 0) {
-            book.setPriceDiscount(bookDto.getPrice());
+
+        boolean hasDiscount = bookDto.getDiscount() != 0 || book.getDiscount() != 0;
+        if (hasDiscount) {
+            book.setDiscount(bookDto.getDiscount());
+            if (bookDto.getDiscount() > 0) {
+                book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
+            } else {
+                book.setPriceDiscount(bookDto.getPrice());
+            }
         }
+
         if (bookDto.getTotalStock() != 0) book.setTotalStock(bookDto.getTotalStock());
         if (bookDto.getImageLink() != null) book.setImageLink(bookDto.getImageLink());
 
@@ -291,7 +296,5 @@ public class MappingUtils {
         }
         return book;
     }
-
-
 }
 
