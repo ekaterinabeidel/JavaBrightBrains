@@ -10,7 +10,6 @@ VALUES
     (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Chris', 'Hadfield', '$2b$12$Y65OCemHtYUVuC.f/6nbTusl43nVs6oLVwQatCDQJDOvek/9ybRgO', 'admin@example.com', '6789012345', 'ADMIN');
 
 
-
 -- Вставка категорий
 INSERT INTO categories (id, created_at, name)
 VALUES (1, CURRENT_TIMESTAMP, 'Science Fiction'),

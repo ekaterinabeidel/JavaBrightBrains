@@ -11,7 +11,6 @@ import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,8 @@ public class AppUserService {
 
     @Autowired
     private MappingUtils mappingUtils;
+    @Autowired
+    JwtSecurityService jwtSecurityService;
 
 
     public UserDetailsService getDetailsService() {
@@ -37,7 +38,7 @@ public class AppUserService {
     public UserDto updateUser(Long userId, UserDto userDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
-
+        jwtSecurityService.validateUserAccess(userId);
         if (!userDto.getEmail().equals(user.getEmail())) {
             User duplicateUser = userRepository.findByEmail(userDto.getEmail()).orElse(null);
             if (duplicateUser != null) {
@@ -51,15 +52,17 @@ public class AppUserService {
         return mappingUtils.mapToUserDto(updatedUser);
     }
 
-    public UserDto getUserInfo(Long id) {
-        User user = userRepository.findById(id)
+    public UserDto getUserInfo(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+        jwtSecurityService.validateUserAccess(userId);
         return mappingUtils.mapToUserDto(user);
     }
 
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id)
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+        jwtSecurityService.validateUserAccess(userId);
         userRepository.delete(user);
     }
 }

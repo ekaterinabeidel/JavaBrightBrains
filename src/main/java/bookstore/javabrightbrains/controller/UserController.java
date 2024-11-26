@@ -28,8 +28,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class UserController {
     @Autowired
     private AppUserService appUserService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
 
     @GetMapping("users/{userId}")
     @Operation(
@@ -41,7 +39,6 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         UserDto userDto = appUserService.getUserInfo(userId);
         return ResponseEntity.ok(userDto);
     }
@@ -60,7 +57,6 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody UserDto userDto) {
-        jwtSecurityService.validateUserAccess(userId);
         UserDto updatedUser = appUserService.updateUser(userId, userDto);
         return ResponseEntity.ok(updatedUser);
     }
@@ -75,7 +71,6 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         appUserService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }

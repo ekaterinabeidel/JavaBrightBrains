@@ -3,7 +3,6 @@ package bookstore.javabrightbrains.controller;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.favorite.FavoriteRequestDto;
 import bookstore.javabrightbrains.service.FavoriteService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,10 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class FavoriteController {
     @Autowired
     private FavoriteService favoriteServiceImpl;
-    @Autowired
-    JwtSecurityService jwtSecurityService;
 
     @Operation(summary = "Get list of books that are in favorites")
     @GetMapping("/favorites/{userId}")
     public ResponseEntity<List<BookShortResponseDto>> getAllBooks(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<BookShortResponseDto> favorites = favoriteServiceImpl.getFavorites(userId);
         return ResponseEntity.ok(favorites);
     }
@@ -36,7 +32,6 @@ public class FavoriteController {
     @PostMapping("/favorites")
     public ResponseEntity<BookShortResponseDto> addFavorite(@RequestBody FavoriteRequestDto favorite) {
         BookShortResponseDto book = favoriteServiceImpl.saveFavorite(favorite);
-
         return ResponseEntity.ok(book);
     }
 

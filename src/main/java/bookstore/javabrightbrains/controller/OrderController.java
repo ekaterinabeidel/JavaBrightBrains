@@ -4,7 +4,6 @@ import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,9 +26,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
-
     @Operation(
             summary = "Create a new order",
             description = "Creates a new order based on the provided order details in the request body. Requires a valid cart ID, delivery information, and other order details."
@@ -70,7 +66,6 @@ public class OrderController {
     })
     @GetMapping("/get-orders/{userId}")
     public ResponseEntity<List<OrderShortResponseDto>> getOrdersByUserId(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         List<OrderShortResponseDto> orders = orderService.getOrdersByUserId(userId);
         if (orders.isEmpty()) {
             return ResponseEntity.status(204).build();

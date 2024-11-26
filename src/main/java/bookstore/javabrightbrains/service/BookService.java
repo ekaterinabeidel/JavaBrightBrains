@@ -54,7 +54,6 @@ public class BookService {
         return mappingUtils.convertToBookResponseDto(updatedBook);
     }
 
-
     public void delete(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
         bookRepository.delete(book);

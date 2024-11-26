@@ -4,7 +4,6 @@ import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.service.CartService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,8 +24,6 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 public class CartController {
     @Autowired
     private  CartService cartService;
-    @Autowired
-    private JwtSecurityService jwtSecurityService;
 
     @GetMapping
     @Operation(summary = "Get the user's cart")
@@ -36,7 +33,6 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Cart not found")
     })
     public ResponseEntity<CartResponseDto> getCart(@PathVariable Long userId) {
-        jwtSecurityService.validateUserAccess(userId);
         CartResponseDto cartResponseDto = cartService.getCart(userId);
         return ResponseEntity.ok(cartResponseDto);
     }
@@ -50,7 +46,6 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Book not found")
     })
     public ResponseEntity<String> addToCart(@PathVariable Long userId, @Valid @RequestBody CartItemRequestDto cartItemRequestDto) {
-        jwtSecurityService.validateUserAccess(userId);
         cartService.addToCart(userId, cartItemRequestDto);
         return ResponseEntity.status(201).build();
     }
@@ -66,7 +61,6 @@ public class CartController {
     })
     public ResponseEntity<String> updateCartItem(@PathVariable Long userId, @PathVariable Long cartItemId,
                                                  @Valid @RequestBody CartItemUpdateRequestDto cartItemUpdateRequestDto) {
-        jwtSecurityService.validateUserAccess(userId);
         cartService.updateCartItem(userId, cartItemId, cartItemUpdateRequestDto);
         return ResponseEntity.noContent().build();
     }
@@ -80,7 +74,6 @@ public class CartController {
             @ApiResponse(responseCode = "404", description = "Item does not belong to the user")
     })
     public ResponseEntity<String> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartItemId) {
-        jwtSecurityService.validateUserAccess(userId);
         cartService.deleteCartItem(userId, cartItemId);
         return ResponseEntity.noContent().build();
     }
