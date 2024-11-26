@@ -31,8 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public List<CategoryDto> findAll() {
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(category ->
-                MappingUtils.convertCategoryEntityToCategoryDto(category)).collect(Collectors.toList());
+        return categories.stream().map(MappingUtils::convertCategoryEntityToCategoryDto).collect(Collectors.toList());
     }
 
     public CategoryDto update(Long id, CategoryRequestDto categoryRequestDto) {

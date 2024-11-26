@@ -128,7 +128,7 @@ public class BookServiceImpl implements BookService {
             return null;
         }
 
-        int maxDiscount = topDiscountBooks.get(0).getDiscount();
+        int maxDiscount = topDiscountBooks.getFirst().getDiscount();
         List<Book> booksWithMaxDiscount = bookRepository.findByDiscount(maxDiscount);
 
         if (booksWithMaxDiscount.isEmpty() || maxDiscount <= 0) {
@@ -136,7 +136,7 @@ public class BookServiceImpl implements BookService {
         }
 
         Book selectedBook = booksWithMaxDiscount.size() == 1
-                ? booksWithMaxDiscount.get(0)
+                ? booksWithMaxDiscount.getFirst()
                 : booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
 
         return MappingUtils.convertToBookResponseDto(selectedBook);

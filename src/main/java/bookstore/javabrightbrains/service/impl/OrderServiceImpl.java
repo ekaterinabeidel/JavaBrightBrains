@@ -12,7 +12,6 @@ import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
 import bookstore.javabrightbrains.repository.OrderRepository;
 import bookstore.javabrightbrains.repository.UserRepository;
-import bookstore.javabrightbrains.service.BookService;
 import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.service.OrderService;
 import bookstore.javabrightbrains.utils.MappingUtils;
