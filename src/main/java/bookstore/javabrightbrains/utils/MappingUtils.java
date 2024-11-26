@@ -276,13 +276,12 @@ public class MappingUtils {
         if (bookDto.getDescription() != null) book.setDescription(bookDto.getDescription());
         if (bookDto.getPrice() != null) book.setPrice(bookDto.getPrice());
 
-        if (bookDto.getDiscount() >= 0) {
-            book.setDiscount(bookDto.getDiscount());
-            if (bookDto.getDiscount() > 0) {
-                book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
-            } else {
-                book.setPriceDiscount(bookDto.getPrice());
-            }
+        // Устанавливаем значение скидки напрямую
+        book.setDiscount(bookDto.getDiscount());
+        if (bookDto.getDiscount() > 0) {
+            book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
+        } else {
+            book.setPriceDiscount(bookDto.getPrice());
         }
 
         if (bookDto.getTotalStock() != 0) book.setTotalStock(bookDto.getTotalStock());
@@ -297,4 +296,3 @@ public class MappingUtils {
     }
 
 }
-
