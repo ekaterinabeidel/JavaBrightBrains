@@ -7,7 +7,8 @@ VALUES
     (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Valentina', 'Tereshkova', '$2b$12$Tdi61lowp7abwnibry1VXupUzGjyAYzl1iTJZxiQ8cwFzmIH/WLo6', 'user3@example.com', '3456789012', 'USER'),
     (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Buzz', 'Aldrin', '$2b$12$HRtsqlRLwnp54nvsNk8LKOVM9rkAHfa3FHlIVOx0Bihq8jaj5jiDG', 'user4@example.com', '4567890123', 'USER'),
     (5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Alexei', 'Leonov', '$2b$12$P3OcUKXsOcfhsawnic2Fue/eALAnBtCLXzMxVQqlcDcb9SvuyDhSS', 'user5@example.com', '5678901234', 'USER'),
-    (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Chris', 'Hadfield', '$2b$12$Y65OCemHtYUVuC.f/6nbTusl43nVs6oLVwQatCDQJDOvek/9ybRgO', 'admin@example.com', '6789012345', 'ADMIN');
+    (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Chris', 'Hadfield', '$2b$12$Y65OCemHtYUVuC.f/6nbTusl43nVs6oLVwQatCDQJDOvek/9ybRgO', 'admin@example.com', '6789012345', 'ADMIN'),
+    (7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Alex', 'Leo', '$2b$12$S5cyztohMDjtIzZJctSk0e9CpuirwHglr.dL45WYtmPaXhyED.oC6', 'user7@example.com', '5678901234', 'USER');
 
 
 

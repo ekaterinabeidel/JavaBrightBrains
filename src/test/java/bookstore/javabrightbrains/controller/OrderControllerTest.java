@@ -3,7 +3,7 @@ package bookstore.javabrightbrains.controller;
 import bookstore.javabrightbrains.dto.order.OrderRequestDto;
 import bookstore.javabrightbrains.dto.order.OrderResponseDto;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -138,7 +138,7 @@ class OrderControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.put(USER_BASE_URL + "/orders/update/{orderId}", orderId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value(OrderStatus.CANCELED));
+                .andExpect(jsonPath("$.status").value(OrderStatus.CANCELED.getStatus()));
     }
 
     @Test
@@ -154,7 +154,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void getPurchaseHistory_Success() throws Exception {
+    void getPurchaseHistorySuccess() throws Exception {
         Long userId = 1L;
 
         mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", userId)
@@ -164,7 +164,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void getPurchaseHistory_UserNotFoundException() throws Exception {
+    void getPurchaseHistoryUserNotFoundException() throws Exception {
         Long nonExistentUserId = 999L;
 
         mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", nonExistentUserId)
@@ -174,11 +174,12 @@ class OrderControllerTest {
     }
 
     @Test
-    void getPurchaseHistory_OrderNotFoundException() throws Exception {
-        Long userIdWithoutOrders = 4L;
+    @WithMockUser(value = "user7@example.com", password = "password123", authorities = "USER")
+    void getPurchaseHistoryOrderNotFoundException() throws Exception {
+        Long userIdWithoutOrders = 7L;
 
         mockMvc.perform(MockMvcRequestBuilders.get(USER_BASE_URL + "/orders/history/{userId}", userIdWithoutOrders)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 }

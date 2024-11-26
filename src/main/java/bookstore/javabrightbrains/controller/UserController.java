@@ -2,7 +2,6 @@ package bookstore.javabrightbrains.controller;
 
 import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.service.AppUserService;
-import bookstore.javabrightbrains.service.JwtSecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

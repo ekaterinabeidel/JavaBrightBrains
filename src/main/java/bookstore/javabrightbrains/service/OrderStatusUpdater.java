@@ -2,7 +2,7 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.entity.Order;
 import bookstore.javabrightbrains.repository.OrderRepository;
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static bookstore.javabrightbrains.utils.OrderStatus.*;
 
 @Service
 public class OrderStatusUpdater {
@@ -28,22 +26,23 @@ public class OrderStatusUpdater {
         for (Order order : orders) {
             if(order.getCreatedAt().toLocalDateTime().isAfter(LocalDateTime.now().minusDays(1))) {
                 logger.info("Updating order " + order.getId());
-                switch (order.getStatus()) {
-                    case PENDING:
-                        order.setStatus(PAID);
-                        break;
-                    case PAID:
-                        order.setStatus(SHIPPED);
-                        break;
-                    case SHIPPED:
-                        order.setStatus(OrderStatus.DELIVERED);
-                        break;
-                    default:
-                        break;
+                OrderStatus currentStatus = order.getStatus();
+                OrderStatus nextStatus = getNextStatus(currentStatus);
+
+                if (nextStatus != null) {
+                    order.setStatus(nextStatus);
                 }
             }
         }
         orderRepository.saveAll(orders);
         logger.info("Updated orders saved.");
+    }
+    private OrderStatus getNextStatus(OrderStatus currentStatus) {
+        return switch (currentStatus) {
+            case PENDING -> OrderStatus.PAID;
+            case PAID -> OrderStatus.SHIPPED;
+            case SHIPPED -> OrderStatus.DELIVERED;
+            default -> null;
+        };
     }
 }
