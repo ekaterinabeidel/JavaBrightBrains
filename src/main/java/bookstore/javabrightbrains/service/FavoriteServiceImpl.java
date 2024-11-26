@@ -8,8 +8,6 @@ import bookstore.javabrightbrains.entity.User;
 import bookstore.javabrightbrains.exception.DuplicateException;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
-import bookstore.javabrightbrains.repository.UserRepository;
-import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +21,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoriteRepository favoriteRepository;
 
     @Autowired
-    private BookRepository bookRepository;
+    AppUserService userService;
 
     @Autowired
-    private UserRepository userRepository;
+    BookService bookService;
 
     @Autowired
     private MappingUtils mappingUtils;
@@ -38,9 +36,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public List<BookShortResponseDto> getFavorites(Long userId) {
         List<Favorite> favorites = favoriteRepository.findAllByUserId(userId);
 
-        userRepository.findById(userId).orElseThrow(
-                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
-        );
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         return favorites.stream().map(favorite -> {
             Book book = favorite.getBook();
@@ -50,12 +46,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     public BookShortResponseDto saveFavorite(FavoriteRequestDto favoriteRequestDto) {
         Favorite favorite = new Favorite();
-        Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
-                () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
-        );
-        User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
-                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
-        );
+        Book book = bookService.getBookById(favoriteRequestDto.getBookId());
+        User user = userService.getUserById(favoriteRequestDto.getUserId());
 
         jwtSecurityService.validateUserAccess(favoriteRequestDto.getUserId());
 
@@ -74,13 +66,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     public void deleteFavorite(FavoriteRequestDto favoriteRequestDto) {
-        Book book = bookRepository.findById(favoriteRequestDto.getBookId()).orElseThrow(
-                () -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND)
-        );
-
-        User user = userRepository.findById(favoriteRequestDto.getUserId()).orElseThrow(
-                () -> new IdNotFoundException(MessagesException.USER_NOT_FOUND)
-        );
+        Book book = bookService.getBookById(favoriteRequestDto.getBookId());
+        User user = userService.getUserById(favoriteRequestDto.getUserId());
 
         jwtSecurityService.validateUserAccess(favoriteRequestDto.getUserId());
 

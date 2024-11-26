@@ -19,10 +19,13 @@ import java.util.List;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
-    private CartRepository cartRepository;
+    private CartService cartService;
+
     @Autowired
-    private UserRepository userRepository;
+    private AppUserService userService;
+
     @Autowired
     private MappingUtils mappingUtils;
 
@@ -39,7 +42,7 @@ public class OrderService {
 
         Order order = createAndSaveOrder(orderRequestDto);
 
-        cartRepository.deleteById(orderRequestDto.getCartId());
+        cartService.deleteCartById(orderRequestDto.getCartId());
 
         return new OrderResponseDto(
                 order.getId(),
@@ -61,10 +64,7 @@ public class OrderService {
     }
 
     public List<OrderShortResponseDto> getOrdersByUserId(Long userId) {
-
-        if (!userRepository.existsById(userId)) {
-            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
-        }
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
@@ -86,8 +86,7 @@ public class OrderService {
     }
 
     private List<CartItem> getValidatedCartItems(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
+        Cart cart = cartService.getCartById(cartId);
 
         List<CartItem> cartItems = cart.getCartItems();
         if (cartItems.isEmpty()) {
@@ -108,9 +107,7 @@ public class OrderService {
     }
 
     public List<PurchaseHistoryDto> getPurchaseHistory(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
-        }
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if (orders.isEmpty()) {
@@ -124,6 +121,14 @@ public class OrderService {
         return allOrderItems.stream()
                 .map(mappingUtils::toPurchaseHistoryDto)
                 .toList();
+    }
+
+    public List<Order> findAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public void saveAllOrders(List<Order> orders) {
+        orderRepository.saveAll(orders);
     }
 
 }

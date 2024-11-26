@@ -1,9 +1,7 @@
 package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.entity.Order;
-import bookstore.javabrightbrains.repository.OrderRepository;
 import bookstore.javabrightbrains.enums.OrderStatus;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +15,12 @@ import java.util.List;
 public class OrderStatusUpdater {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusUpdater.class);
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
+
     @Scheduled(initialDelay = 60000, fixedRate = 30000)
-    @Transactional
     public void updateOrderStatuses() {
 
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderService.findAllOrders();
         for (Order order : orders) {
             if(order.getCreatedAt().toLocalDateTime().isAfter(LocalDateTime.now().minusDays(1))) {
                 logger.info("Updating order " + order.getId());
@@ -34,7 +32,7 @@ public class OrderStatusUpdater {
                 }
             }
         }
-        orderRepository.saveAll(orders);
+        orderService.saveAllOrders(orders);
         logger.info("Updated orders saved.");
     }
     private OrderStatus getNextStatus(OrderStatus currentStatus) {

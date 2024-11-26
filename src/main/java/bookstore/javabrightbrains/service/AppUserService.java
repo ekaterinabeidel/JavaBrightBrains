@@ -25,6 +25,7 @@ public class AppUserService {
 
     @Autowired
     private MappingUtils mappingUtils;
+
     @Autowired
     JwtSecurityService jwtSecurityService;
 
@@ -58,6 +59,12 @@ public class AppUserService {
         jwtSecurityService.validateUserAccess(userId);
         return mappingUtils.mapToUserDto(user);
     }
+
+    public User getUserById(Long userId) {
+        return  userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+    }
+
 
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)

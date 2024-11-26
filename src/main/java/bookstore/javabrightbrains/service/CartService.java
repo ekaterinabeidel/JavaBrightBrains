@@ -1,19 +1,19 @@
 package bookstore.javabrightbrains.service;
 
-import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartItemRequestDto;
+import bookstore.javabrightbrains.dto.cart.CartItemUpdateRequestDto;
 import bookstore.javabrightbrains.dto.cart.CartResponseDto;
 import bookstore.javabrightbrains.entity.Book;
 import bookstore.javabrightbrains.entity.Cart;
 import bookstore.javabrightbrains.entity.CartItem;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.exception.*;
-import bookstore.javabrightbrains.repository.BookRepository;
+import bookstore.javabrightbrains.exception.IdNotFoundException;
+import bookstore.javabrightbrains.exception.InvalidQuantityException;
+import bookstore.javabrightbrains.exception.MessagesException;
+import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
-import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +22,16 @@ import java.util.List;
 @Service
 public class CartService {
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private CartRepository cartRepository;
 
     @Autowired
-    private BookRepository bookRepository;
+    private CartItemRepository cartItemRepository;
 
     @Autowired
-    private CartItemRepository cartItemRepository;
+    private AppUserService userService;
+
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private MappingUtils mappingUtils;
@@ -39,19 +39,16 @@ public class CartService {
     @Autowired
     JwtSecurityService jwtSecurityService;
 
-    @Transactional
     public void addToCart(Long userId, CartItemRequestDto cartItemRequestDto) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
-                    User user = userRepository.findById(userId)
-                            .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+                    User user = userService.getUserById(userId);
                     newCart.setUser(user);
                     jwtSecurityService.validateUserAccess(userId);
                     return cartRepository.save(newCart);
                 });
-        Book book = bookRepository.findById(cartItemRequestDto.getBookId())
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
+        Book book = bookService.getBookById(cartItemRequestDto.getBookId());
 
         int requestedQuantity = cartItemRequestDto.getQuantity();
         int availableStock = book.getTotalStock();
@@ -64,19 +61,22 @@ public class CartService {
         cartItemRepository.save(cartItem);
     }
 
-    @Transactional
     public CartResponseDto getCart(Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
+
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());
 
+
         List<CartItem> cartItems = cart.getCartItems();
+        if (cartItems == null) {
+            throw new IdNotFoundException(MessagesException.CART_NOT_FOUND);
+        }
         return mappingUtils.toCartResponseDto(cart, cartItems);
+
     }
 
-    @Transactional
     public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
@@ -102,7 +102,6 @@ public class CartService {
         cartItemRepository.save(cartItem);
     }
 
-    @Transactional
     public void deleteCartItem(Long userId, Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
@@ -114,4 +113,12 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
+    public void deleteCartById(Long id) {
+        cartRepository.deleteById(id);
+    }
+
+    public Cart getCartById(Long id) {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_NOT_FOUND));
+    }
 }

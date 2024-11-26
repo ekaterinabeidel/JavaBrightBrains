@@ -119,6 +119,10 @@ public class BookService {
         return mappingUtils.convertToBookResponseDto(book);
     }
 
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
+    }
+
     public BookResponseDto getDailyProduct() {
         List<Book> topDiscountBooks = bookRepository.findFirstByOrderByDiscountDesc();
 
