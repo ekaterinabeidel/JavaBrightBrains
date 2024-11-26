@@ -11,7 +11,7 @@ import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.FavoriteRepository;
-import bookstore.javabrightbrains.utils.Utils;
+import bookstore.javabrightbrains.utils.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     private UserRepository userRepository;
 
     @Autowired
+    private MappingUtils mappingUtils;
+
+    @Autowired
     private JwtSecurityService jwtSecurityService;
 
 
@@ -41,7 +44,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         jwtSecurityService.validateUserAccess(userId);
         return favorites.stream().map(favorite -> {
             Book book = favorite.getBook();
-            return Utils.convertToBookShortResponseDto(book);
+            return mappingUtils.convertToBookShortResponseDto(book);
         }).toList();
     }
 
@@ -67,7 +70,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         favoriteRepository.save(favorite);
 
-        return Utils.convertToBookShortResponseDto(book);
+        return mappingUtils.convertToBookShortResponseDto(book);
     }
 
     public void deleteFavorite(FavoriteRequestDto favoriteRequestDto) {

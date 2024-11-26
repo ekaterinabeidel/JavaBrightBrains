@@ -74,11 +74,6 @@ public class JwtSecurityService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // Когда выдан токен
-    public Date extractIssuedAt(String token) {
-        return extractClaim(token, Claims::getIssuedAt);
-    }
-
     // Метод проверки срока действия токена
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

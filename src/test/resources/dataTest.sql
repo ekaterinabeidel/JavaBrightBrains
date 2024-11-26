@@ -12,7 +12,6 @@ VALUES
 
 
 
-
 -- Вставка категорий
 INSERT INTO categories (id, created_at, name)
 VALUES (1, CURRENT_TIMESTAMP, 'Science Fiction'),
