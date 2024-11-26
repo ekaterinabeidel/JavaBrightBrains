@@ -19,7 +19,6 @@ import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.repository.OrderItemRepository;
 import bookstore.javabrightbrains.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
