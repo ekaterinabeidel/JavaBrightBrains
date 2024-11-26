@@ -1,5 +1,7 @@
 package bookstore.javabrightbrains.utils;
 
+import bookstore.javabrightbrains.dto.auth.RegisterRequestDto;
+import bookstore.javabrightbrains.dto.auth.RegisterResponseDto;
 import bookstore.javabrightbrains.dto.book.BookOrderShortResponseDto;
 import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
@@ -13,6 +15,7 @@ import bookstore.javabrightbrains.dto.order.OrderShortResponseDto;
 import bookstore.javabrightbrains.dto.user.UserDto;
 import bookstore.javabrightbrains.dto.order.PurchaseHistoryDto;
 import bookstore.javabrightbrains.entity.*;
+import bookstore.javabrightbrains.enums.Role;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.repository.BookRepository;
@@ -34,10 +37,28 @@ public class MappingUtils {
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private OrderItemRepository orderItemRepository;
-    @Autowired
     private CategoryService categoryService;
 
+    public static User convertRegisterRequestDtoToEntity(RegisterRequestDto registerRequestDto) {
+        User user = new User();
+        user.setName(registerRequestDto.getName());
+        user.setSurname(registerRequestDto.getSurname());
+        user.setEmail(registerRequestDto.getEmail());
+        user.setPassword(registerRequestDto.getPassword());
+        user.setRole(Role.USER);
+        return user;
+    }
+
+    public static RegisterResponseDto convertEntityUserToRegisterResponseDto(User user) {
+        return new RegisterResponseDto(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getRole()
+        );
+    }
 
     public UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
@@ -76,11 +97,11 @@ public class MappingUtils {
     }
 
     public CartResponseDto toCartResponseDto(Cart cart, List<CartItem> cartItems) {
-        List<CartItemResponseDto> cartItemDtos = cartItems.stream()
+        List<CartItemResponseDto> cartItemsDto = cartItems.stream()
                 .map(this::toCartItemResponseDto)
                 .collect(Collectors.toList());
 
-        return new CartResponseDto(cart.getId(), cartItemDtos);
+        return new CartResponseDto(cart.getId(), cartItemsDto);
     }
 
     public CartItemResponseDto toCartItemResponseDto(CartItem cartItem) {
@@ -149,7 +170,7 @@ public class MappingUtils {
     }
 
     public OrderResponseDto mapToOrderResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);
@@ -167,7 +188,7 @@ public class MappingUtils {
     }
 
     public OrderShortResponseDto mapToOrderShortResponseDto(Order order) {
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+        List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemDto> orderItemsDto = mapToOrderItemsDto(orderItems);
 
         BigDecimal totalPrice = calculateTotalPrice(orderItemsDto);

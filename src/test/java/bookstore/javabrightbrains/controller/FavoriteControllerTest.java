@@ -25,7 +25,7 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
 @AutoConfigureMockMvc
 @Sql("/schemaTest.sql")
 @Sql("/dataTest.sql")
-@WithMockUser(value = "User", password = "password123", authorities = "USER")
+@WithMockUser(value = "user1@example.com", password = "password123", authorities = "USER")
 class FavoriteControllerTest {
 
     @Autowired
@@ -159,7 +159,7 @@ class FavoriteControllerTest {
     @Test
     void deleteFavoritesNotFoundBookException() throws Exception {
         FavoriteRequestDto requestDto = new FavoriteRequestDto(
-                1L, 10L
+                1L, 1000L
         );
 
         String json = objectMapper.writeValueAsString(requestDto);

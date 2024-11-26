@@ -17,5 +17,10 @@ public class MessagesException {
     public static String START_DATE_CANNOT_BE_AFTER_NOW = "The start date cannot be later the current time";
     public static String START_DATE_CANNOT_BE_AFTER_END_DATE = "The start date cannot be later the end time";
     public static String GROUP_BY_INVALID = "The groupBy can be only hour, day, week, month or year";
+    public static String JWT_TOKEN_IS_MISSING_OR_EMPTY = "JWT token is missing or empty";
+    public static String JWT_TOKEN_FORMAT_INVALID = "Invalid JWT format";
+    public static String JWT_TOKEN_EXPIRED = "JWT token has expired";
+
+
 
 }

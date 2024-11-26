@@ -2,8 +2,11 @@ package bookstore.javabrightbrains.handler;
 
 import bookstore.javabrightbrains.exception.*;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -80,4 +83,50 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<AppError> handleAccessDeniedException (AccessDeniedException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.FORBIDDEN, e.getMessage()), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(EmailDuplicateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<AppError> handleEmailDuplicatedException (EmailDuplicateException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.CONFLICT, e.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EmptyJwtTokenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<AppError> handleEmptyJwtTokenException (EmptyJwtTokenException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST, e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<AppError> handleInvalidJwtTokenException (InvalidJwtTokenException e) {
+        return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED, e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<AppError> handleExpiredJwtException() {
+        String message = "JWT token has expired";
+        return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED, message), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Map<String,String>> handleUsernameNotFoundException () {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", MessagesException.USER_NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Invalid username or password");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
 }

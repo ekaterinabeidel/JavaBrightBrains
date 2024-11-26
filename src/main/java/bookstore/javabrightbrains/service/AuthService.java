@@ -3,41 +3,45 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.dto.auth.*;
 import bookstore.javabrightbrains.entity.User;
-import bookstore.javabrightbrains.enums.Role;
+import bookstore.javabrightbrains.exception.EmailDuplicateException;
+import bookstore.javabrightbrains.exception.EmptyJwtTokenException;
+import bookstore.javabrightbrains.exception.InvalidJwtTokenException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashMap;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtSecurityService jwtSecurityService;
+    @Autowired
+    private  AuthenticationManager authenticationManager;
 
-    private final JwtSecurityService jwtSecurityService;
-    private final AuthenticationManager authenticationManager;
-
-    public User register(RegisterRequestDto registerRequestDto) {
-        User appUser = new User();
-        appUser.setEmail(registerRequestDto.getEmail());
-        appUser.setName(registerRequestDto.getName());
-        appUser.setSurname(registerRequestDto.getSurname());
-        appUser.setCreatedAt(Timestamp.from(Instant.now()));
-        appUser.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
-        appUser.setRole(Role.USER);
-
-        return userRepository.save(appUser);
+    public RegisterResponseDto register(RegisterRequestDto registerRequestDto) {
+        if (userRepository.existsByEmail(registerRequestDto.getEmail())) {
+            throw new EmailDuplicateException(MessagesException.DUPLICATED_EMAIL);
+        }
+        User user = MappingUtils.convertRegisterRequestDtoToEntity(registerRequestDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User savedUser = userRepository.save(user);
+        return MappingUtils.convertEntityUserToRegisterResponseDto(savedUser);
     }
-
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
 
@@ -63,21 +67,25 @@ public class AuthService {
 
     public RefreshTokenResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
         String jwt = refreshTokenRequestDto.getRefreshToken();
+
+        if (jwt == null || jwt.isBlank()) {
+            throw new EmptyJwtTokenException(MessagesException.JWT_TOKEN_IS_MISSING_OR_EMPTY);
+        }
+
+        if (!jwt.contains(".") || jwt.split("\\.").length != 3) {
+            throw new InvalidJwtTokenException(MessagesException.JWT_TOKEN_FORMAT_INVALID);
+        }
+
         String email = jwtSecurityService.extractUsername(jwt);
         User user = userRepository
                 .findByEmail(email)
-                .orElseThrow();
+                .orElseThrow(() -> new UsernameNotFoundException(MessagesException.USER_NOT_FOUND));
 
         if (jwtSecurityService.validateToken(jwt, user)) {
             RefreshTokenResponseDto refreshTokenResponseDto = new RefreshTokenResponseDto();
 
-            refreshTokenResponseDto
-                    .setJwtToken(
-                            jwtSecurityService.generateToken(user));
-
-            refreshTokenResponseDto
-                    .setRefreshToken(
-                            jwtSecurityService.generateRefreshToken(new HashMap<>(), user));
+            refreshTokenResponseDto.setJwtToken(jwtSecurityService.generateToken(user));
+            refreshTokenResponseDto.setRefreshToken(jwtSecurityService.generateRefreshToken(new HashMap<>(), user));
 
             return refreshTokenResponseDto;
         }
