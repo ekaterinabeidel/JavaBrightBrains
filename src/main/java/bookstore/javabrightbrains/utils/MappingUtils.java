@@ -276,8 +276,7 @@ public class MappingUtils {
         if (bookDto.getDescription() != null) book.setDescription(bookDto.getDescription());
         if (bookDto.getPrice() != null) book.setPrice(bookDto.getPrice());
 
-        boolean hasDiscount = bookDto.getDiscount() != 0 || book.getDiscount() != 0;
-        if (hasDiscount) {
+        if (bookDto.getDiscount() >= 0) {
             book.setDiscount(bookDto.getDiscount());
             if (bookDto.getDiscount() > 0) {
                 book.setPriceDiscount(getPriceWithDiscount(bookDto.getPrice(), bookDto.getDiscount()));
@@ -296,5 +295,6 @@ public class MappingUtils {
         }
         return book;
     }
+
 }
 
