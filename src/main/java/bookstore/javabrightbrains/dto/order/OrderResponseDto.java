@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.dto.order;
 
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

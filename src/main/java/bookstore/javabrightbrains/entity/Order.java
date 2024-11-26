@@ -1,6 +1,6 @@
 package bookstore.javabrightbrains.entity;
 
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

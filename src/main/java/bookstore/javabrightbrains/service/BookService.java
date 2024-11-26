@@ -6,7 +6,7 @@ import bookstore.javabrightbrains.entity.Category;
 import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.utils.Utils;
+import bookstore.javabrightbrains.utils.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,15 +28,18 @@ public class BookService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private MappingUtils mappingUtils;
+
     public BookResponseDto save(BookRequestDto bookDto) {
         Category category = categoryService.findEntityById(bookDto.getCategoryId());
         if (category == null) {
             throw new IdNotFoundException(MessagesException.CATEGORY_NOT_FOUND);
         }
-        Book book = Utils.convertToBookEntity(bookDto, categoryService);
+        Book book = mappingUtils.convertToBookEntity(bookDto);
         book.setCategory(category);
         Book savedBook = bookRepository.save(book);
-        return Utils.convertToBookResponseDto(savedBook);
+        return mappingUtils.convertToBookResponseDto(savedBook);
     }
 
     public BookResponseDto update(Long id, BookRequestDto bookDto) {
@@ -45,10 +48,10 @@ public class BookService {
         if (category == null) {
             throw new IdNotFoundException(MessagesException.CATEGORY_NOT_FOUND);
         }
-        book = Utils.updateBookFromDto(book, bookDto, categoryService);
+        book = mappingUtils.updateBookFromDto(book, bookDto);
         book.setCategory(category);
         Book updatedBook = bookRepository.save(book);
-        return Utils.convertToBookResponseDto(updatedBook);
+        return mappingUtils.convertToBookResponseDto(updatedBook);
     }
 
     public void delete(Long id) {
@@ -103,7 +106,7 @@ public class BookService {
         Page<Book> books = bookRepository.findByFilter(filter, pageable);
 
         PageResponseDto<BookShortResponseDto> bookPageResponseDto = new PageResponseDto<>();
-        bookPageResponseDto.setContent(books.getContent().stream().map(Utils::convertToBookShortResponseDto).collect(Collectors.toList()));
+        bookPageResponseDto.setContent(books.getContent().stream().map(mappingUtils::convertToBookShortResponseDto).collect(Collectors.toList()));
         bookPageResponseDto.setTotal(books.getTotalElements());
         bookPageResponseDto.setPageNumber(pageable.getPageNumber() + 1);
         bookPageResponseDto.setPageSize(pageable.getPageSize());
@@ -113,7 +116,7 @@ public class BookService {
 
     public BookResponseDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
-        return Utils.convertToBookResponseDto(book);
+        return mappingUtils.convertToBookResponseDto(book);
     }
 
     public BookResponseDto getDailyProduct() {
@@ -134,6 +137,6 @@ public class BookService {
                 ? booksWithMaxDiscount.get(0)
                 : booksWithMaxDiscount.get(new Random().nextInt(booksWithMaxDiscount.size()));
 
-        return Utils.convertToBookResponseDto(selectedBook);
+        return mappingUtils.convertToBookResponseDto(selectedBook);
     }
 }

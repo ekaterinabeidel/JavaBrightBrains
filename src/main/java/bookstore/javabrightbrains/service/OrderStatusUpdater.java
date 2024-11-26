@@ -2,7 +2,7 @@ package bookstore.javabrightbrains.service;
 
 import bookstore.javabrightbrains.entity.Order;
 import bookstore.javabrightbrains.repository.OrderRepository;
-import bookstore.javabrightbrains.utils.OrderStatus;
+import bookstore.javabrightbrains.enums.OrderStatus;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

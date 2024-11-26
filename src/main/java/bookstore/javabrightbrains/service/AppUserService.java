@@ -11,7 +11,6 @@ import bookstore.javabrightbrains.repository.UserRepository;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,13 +31,8 @@ public class AppUserService {
 
     public UserDetailsService getDetailsService() {
 
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) {
-                return userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException(MessagesException.USER_NOT_FOUND));
-            }
-        };
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(MessagesException.USER_NOT_FOUND));
     }
 
     public UserDto updateUser(Long userId, UserDto userDto) {
