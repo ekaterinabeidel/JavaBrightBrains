@@ -216,6 +216,20 @@ public class MappingUtils {
         return book;
     }
 
+    public static BookRequestDto convertToBookRequestDto(Book book) {
+        return new BookRequestDto(
+                book.getTitle(),
+                book.getAuthor(),
+                book.getDescription(),
+                book.getPrice(),
+                book.getDiscount(),
+                book.getCategory().getId(),
+                book.getTotalStock(),
+                book.getImageLink()
+        );
+    }
+
+
     public static BigDecimal getPriceWithDiscount(BigDecimal price, int discount) {
         BigDecimal discountAmount = price
                 .multiply(BigDecimal.valueOf(discount))

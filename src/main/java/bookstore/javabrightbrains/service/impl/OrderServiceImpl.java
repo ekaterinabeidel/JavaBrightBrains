@@ -8,12 +8,8 @@ import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
 import bookstore.javabrightbrains.exception.OrderCancellationNotAllowedException;
-import bookstore.javabrightbrains.repository.BookRepository;
-import bookstore.javabrightbrains.repository.CartRepository;
 import bookstore.javabrightbrains.repository.OrderRepository;
-import bookstore.javabrightbrains.repository.UserRepository;
-import bookstore.javabrightbrains.service.JwtSecurityService;
-import bookstore.javabrightbrains.service.OrderService;
+import bookstore.javabrightbrains.service.*;
 import bookstore.javabrightbrains.utils.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +22,18 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
-    private CartRepository cartRepository;
+    private CartService cartService;
+
     @Autowired
-    private UserRepository userRepository;
+    private AppUserService userService;
+
     @Autowired
     private JwtSecurityService jwtSecurityService;
+
     @Autowired
-    private BookRepository bookRepository;
+    private BookService bookService;
 
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = createAndSaveOrder(orderRequestDto);
 
-        cartRepository.deleteById(orderRequestDto.getCartId());
+        cartService.deleteCartById(orderRequestDto.getCartId());
 
         return new OrderResponseDto(
                 order.getId(),
@@ -68,9 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
     public List<OrderShortResponseDto> getOrdersByUserId(Long userId) {
 
-        if (!userRepository.existsById(userId)) {
-            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
-        }
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
@@ -92,8 +90,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private List<CartItem> getValidatedCartItems(Long cartId) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
+        Cart cart = cartService.getCartById(cartId);
 
         List<CartItem> cartItems = cart.getCartItems();
         if (cartItems.isEmpty()) {
@@ -124,7 +121,8 @@ public class OrderServiceImpl implements OrderService {
             }
 
             book.setTotalStock(book.getTotalStock() - quantity);
-            bookRepository.save(book);
+            bookService.update(book.getId(), MappingUtils.convertToBookRequestDto(book));
+
 
             double priceAtPurchase = book.getPrice().doubleValue();
             orderItems.add(new OrderItemDto(
@@ -139,9 +137,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public List<PurchaseHistoryDto> getPurchaseHistory(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new IdNotFoundException(MessagesException.USER_NOT_FOUND);
-        }
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
         if (orders.isEmpty()) {
@@ -155,5 +151,13 @@ public class OrderServiceImpl implements OrderService {
         return allOrderItems.stream()
                 .map(MappingUtils::toPurchaseHistoryDto)
                 .toList();
+    }
+
+    public List<Order> findAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public void saveAllOrders(List<Order> orders) {
+        orderRepository.saveAll(orders);
     }
 }

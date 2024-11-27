@@ -24,10 +24,13 @@ import java.util.HashMap;
 public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private JwtSecurityService jwtSecurityService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 

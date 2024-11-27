@@ -11,14 +11,13 @@ import bookstore.javabrightbrains.exception.IdNotFoundException;
 import bookstore.javabrightbrains.exception.InvalidQuantityException;
 import bookstore.javabrightbrains.exception.MessagesException;
 import bookstore.javabrightbrains.exception.NotEnoughBooksInStockException;
-import bookstore.javabrightbrains.repository.BookRepository;
 import bookstore.javabrightbrains.repository.CartItemRepository;
 import bookstore.javabrightbrains.repository.CartRepository;
-import bookstore.javabrightbrains.repository.UserRepository;
+import bookstore.javabrightbrains.service.AppUserService;
+import bookstore.javabrightbrains.service.BookService;
 import bookstore.javabrightbrains.service.CartService;
 import bookstore.javabrightbrains.service.JwtSecurityService;
 import bookstore.javabrightbrains.utils.MappingUtils;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,33 +26,31 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService {
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private CartRepository cartRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
 
     @Autowired
     private CartItemRepository cartItemRepository;
 
     @Autowired
+    private AppUserService userService;
+
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
     JwtSecurityService jwtSecurityService;
 
-    @Transactional
     public void addToCart(Long userId, CartItemRequestDto cartItemRequestDto) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
-                    User user = userRepository.findById(userId)
-                            .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+                    User user = userService.getUserById(userId);
+
                     newCart.setUser(user);
                     jwtSecurityService.validateUserAccess(userId);
                     return cartRepository.save(newCart);
                 });
-        Book book = bookRepository.findById(cartItemRequestDto.getBookId())
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.BOOK_NOT_FOUND));
+        Book book = bookService.getBookById(cartItemRequestDto.getBookId());
 
         int requestedQuantity = cartItemRequestDto.getQuantity();
         int availableStock = book.getTotalStock();
@@ -66,19 +63,19 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.save(cartItem);
     }
 
-    @Transactional
     public CartResponseDto getCart(Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+        userService.getUserById(userId);
         jwtSecurityService.validateUserAccess(userId);
         Cart cart = cartRepository.findByUserId(userId)
                 .orElse(new Cart());
 
         List<CartItem> cartItems = cart.getCartItems();
+        if (cartItems == null) {
+            throw new IdNotFoundException(MessagesException.CART_NOT_FOUND);
+        }
         return MappingUtils.toCartResponseDto(cart, cartItems);
     }
 
-    @Transactional
     public void updateCartItem(Long userId, Long cartItemId, CartItemUpdateRequestDto cartItemUpdateRequestDto) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
@@ -104,7 +101,6 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.save(cartItem);
     }
 
-    @Transactional
     public void deleteCartItem(Long userId, Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_ITEM_NOT_FOUND));
@@ -114,5 +110,14 @@ public class CartServiceImpl implements CartService {
         }
         jwtSecurityService.validateUserAccess(userId);
         cartItemRepository.delete(cartItem);
+    }
+
+    public void deleteCartById(Long id) {
+        cartRepository.deleteById(id);
+    }
+
+    public Cart getCartById(Long id) {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.CART_NOT_FOUND));
     }
 }

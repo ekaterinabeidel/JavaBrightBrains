@@ -58,4 +58,9 @@ public class AppUserServiceImpl implements AppUserService {
         jwtSecurityService.validateUserAccess(userId);
         userRepository.delete(user);
     }
+
+    public User getUserById(Long userId) {
+        return  userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException(MessagesException.USER_NOT_FOUND));
+    }
 }
