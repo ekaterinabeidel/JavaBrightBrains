@@ -6,7 +6,7 @@ services: # Определение всех сервисов (контейнер
     image: mysql:8.0 # Используем официальный образ MySQL версии 8.0.
     container_name: mysql_db # Устанавливаем имя контейнера для MySQL, чтобы было удобно его идентифицировать.
     environment: # Переменные окружения для настройки MySQL.
-      MYSQL_ROOT_PASSWORD: 123123 # Пароль для пользователя root.
+      MYSQL_ROOT_PASSWORD: 123456 # Пароль для пользователя root.
       MYSQL_DATABASE: bookstore # Имя базы данных, которая создается при запуске.
     ports:
       - "4444:3306" # Пробрасываем порт 3306 контейнера (MySQL) на порт 4444 хоста.
@@ -21,13 +21,13 @@ services: # Определение всех сервисов (контейнер
 
   app: # Сервис для вашего приложения.
     build: . # Используем текущую директорию для сборки Docker-образа (указывая на Dockerfile).
-    container_name: bookstore_db # Устанавливаем имя контейнера для приложения.
+    container_name: bookstore_app # Устанавливаем имя контейнера для приложения.
     ports:
       - "8080:8080" # Пробрасываем порт 8080 контейнера (Spring Boot) на порт 8080 хоста.
     environment: # Переменные окружения для настройки Spring Boot.
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookstore # URL подключения к MySQL (используем имя сервиса `mysql`).
       SPRING_DATASOURCE_USERNAME: root # Имя пользователя для подключения к базе данных.
-      SPRING_DATASOURCE_PASSWORD: 123123 # Пароль для подключения к базе данных.
+      SPRING_DATASOURCE_PASSWORD: 123456 # Пароль для подключения к базе данных.
     depends_on: # Указываем, что запуск приложения зависит от MySQL.
       mysql: # Ссылаемся на сервис `mysql`.
         condition: service_healthy # Контейнер `app` будет ждать, пока MySQL не станет "здоровым".

@@ -13,6 +13,7 @@ FROM eclipse-temurin:22-jdk-alpine as build
    COPY src src
 
    # Выполняем сборку Maven, пропуская тесты (флаг -DskipTests).
+   RUN chmod +x ./mvnw
    RUN ./mvnw install -DskipTests
    # Создаем директорию target/dependency и извлекаем содержимое собранного JAR-файла в нее.
    RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
