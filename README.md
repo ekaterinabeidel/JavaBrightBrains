@@ -2,7 +2,7 @@
 
 ## Description
 
-The Online Book Store backend provides functionality for both customers and administrators. Customers can browse the book catalog, add items to the cart, place orders, and track their status. Administrators can manage the book catalog, orders, generate reports, and manage users.
+The Online Book Store backend provides functionality for both customers and administrators. Customers can browse the book catalog, add items to the cart, place orders, and track their status. Administrators can manage the book catalog, generate reports, and manage users.
 
 ### Database Diagram
 
@@ -12,7 +12,7 @@ The Online Book Store backend provides functionality for both customers and admi
 
 #### For Customers:
 - Registration and authentication.
-- Browse the book catalog with filtering and sorting options.
+- Browse the book catalog with filtering, sorting options, and pagination.
 - Add books to the cart and place orders.
 - View purchase history.
 - Manage favorite books.
@@ -22,7 +22,6 @@ The Online Book Store backend provides functionality for both customers and admi
 - Manage books in the catalog: add, edit, delete.
 - Manage book categories.
 - Create discounts.
-- Manage orders.
 - Generate reports:
   - Top 10 most purchased products.
   - Top 10 canceled products.
@@ -105,6 +104,17 @@ The Online Book Store backend provides functionality for both customers and admi
 | delivery_method | VARCHAR(128)  | Delivery method (e.g., courier, pickup)             |
 | status          | VARCHAR(128)  | Order status (e.g., pending payment, shipped, delivered, canceled) |
 
+#### `order_items` (Order Items Table)
+| Column Name        | Data Type     | Description                                         |
+|--------------------|---------------|-----------------------------------------------------|
+| id                 | BIGINT        | PRIMARY KEY, unique order item identifier (auto-increment) |
+| created_at         | TIMESTAMP     | Date and time the item was added                    |
+| updated_at         | TIMESTAMP     | Date and time the item was last updated             |
+| order_id           | BIGINT        | FOREIGN KEY, reference to the `orders` table       |
+| book_id            | BIGINT        | FOREIGN KEY, reference to the `books` table        |
+| quantity           | INT           | Quantity of the book in the order                   |
+| price_at_purchase  | DOUBLE        | Price of the book at the time of purchase           |
+
 ### Project Structure
 
 - `src/main/java/bookstore` — source code.
@@ -112,7 +122,7 @@ The Online Book Store backend provides functionality for both customers and admi
 
 ### Used Technologies
 
-- **Programming Language:** Java 17
+- **Programming Language:** Java 21
 - **Frameworks and Libraries:**
   - Spring Boot (Web, Data JPA, Security)
   - Hibernate
@@ -124,6 +134,6 @@ The Online Book Store backend provides functionality for both customers and admi
 ### Contacts
 
 If you have any questions or suggestions, feel free to contact us:
-- **Names:** Ekaterina Beidel, Svetlana Zhuravleva, Ivan Beidel.
-- **Emails:** ek.beidel@gmail.com, karpenten.xo@gmail.com, ivanbeidel@gmail.com
-- **GitHub:** https://github.com/ekaterinabeidel https://github.com/ZhuravlevaS https://github.com/ivanbeidel
+- Ekaterina Beidel, ek.beidel@gmail.com, [GitHub](https://github.com/ekaterinabeidel)
+- Svetlana Zhuravleva, karpenten.xo@gmail.com, [GitHub](https://github.com/ZhuravlevaS)
+- Ivan Beidel, ivanbeidel@gmail.com, [GitHub](https://github.com/ivanbeidel)
