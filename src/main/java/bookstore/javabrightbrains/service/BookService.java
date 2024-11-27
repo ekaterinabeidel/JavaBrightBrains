@@ -4,6 +4,7 @@ import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
+import bookstore.javabrightbrains.entity.Book;
 
 public interface BookService {
     BookResponseDto save(BookRequestDto bookDto);
@@ -21,4 +22,6 @@ public interface BookService {
     );
     BookResponseDto findById(Long id);
     BookResponseDto getDailyProduct();
+
+    Book getBookById(Long id);
 }
