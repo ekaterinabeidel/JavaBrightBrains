@@ -19,26 +19,26 @@ import static bookstore.javabrightbrains.utils.Constants.USER_BASE_URL;
         description = "APIs for managing a user's favorite books")
 public class FavoriteController {
     @Autowired
-    private FavoriteService favoriteServiceImpl;
+    private FavoriteService favoriteService;
 
     @Operation(summary = "Get list of books that are in favorites")
     @GetMapping("/favorites/{userId}")
     public ResponseEntity<List<BookShortResponseDto>> getAllBooks(@PathVariable Long userId) {
-        List<BookShortResponseDto> favorites = favoriteServiceImpl.getFavorites(userId);
+        List<BookShortResponseDto> favorites = favoriteService.getFavorites(userId);
         return ResponseEntity.ok(favorites);
     }
 
     @Operation(summary = "Add book in favorites")
     @PostMapping("/favorites")
     public ResponseEntity<BookShortResponseDto> addFavorite(@RequestBody FavoriteRequestDto favorite) {
-        BookShortResponseDto book = favoriteServiceImpl.saveFavorite(favorite);
+        BookShortResponseDto book = favoriteService.saveFavorite(favorite);
         return ResponseEntity.ok(book);
     }
 
     @Operation(summary = "Delete book from favorites")
     @DeleteMapping("/favorites")
     public ResponseEntity<Void> deleteFavorite(@RequestBody FavoriteRequestDto favorite) {
-        favoriteServiceImpl.deleteFavorite(favorite);
+        favoriteService.deleteFavorite(favorite);
         return ResponseEntity.ok().build();
     }
 }
