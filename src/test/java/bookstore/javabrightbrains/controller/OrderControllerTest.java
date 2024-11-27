@@ -89,7 +89,7 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(MessagesException.CART_ITEM_NOT_FOUND));
+                .andExpect(jsonPath("$.message").value(MessagesException.CART_NOT_FOUND));
     }
 
     @Test
