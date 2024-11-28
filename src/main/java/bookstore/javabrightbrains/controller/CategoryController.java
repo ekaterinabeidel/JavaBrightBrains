@@ -1,5 +1,9 @@
 package bookstore.javabrightbrains.controller;
 
+import bookstore.javabrightbrains.annotation.AddCategory;
+import bookstore.javabrightbrains.annotation.DeleteCategory;
+import bookstore.javabrightbrains.annotation.GetAllCategories;
+import bookstore.javabrightbrains.annotation.UpdateCategory;
 import bookstore.javabrightbrains.dto.category.CategoryDto;
 import bookstore.javabrightbrains.dto.category.CategoryRequestDto;
 import bookstore.javabrightbrains.service.CategoryService;
@@ -23,28 +27,28 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping(PUBLIC_BASE_URL + "/categories")
-    @Operation(summary = "Get all categories", description = "Retrieve a list of all categories")
+    @GetAllCategories
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> categories = categoryService.findAll();
         return ResponseEntity.ok(categories);
     }
 
     @PostMapping(ADMIN_BASE_URL + "/categories")
-    @Operation(summary = "Add a new category", description = "Create a new category with the provided details")
+    @AddCategory
     public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         CategoryDto createdCategoryDto = categoryService.save(categoryRequestDto);
         return ResponseEntity.status(201).body(createdCategoryDto);
     }
 
     @PutMapping(ADMIN_BASE_URL + "/categories/{categoryId}")
-    @Operation(summary = "Update a category", description = "Update the details of an existing category by its ID")
+    @UpdateCategory
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long categoryId, @Valid @RequestBody CategoryRequestDto categoryRequestDto) {
         CategoryDto updatedCategoryDto = categoryService.update(categoryId, categoryRequestDto);
         return ResponseEntity.ok(updatedCategoryDto);
     }
 
     @DeleteMapping(ADMIN_BASE_URL + "/categories/{categoryId}")
-    @Operation(summary = "Delete a category", description = "Delete a category by its ID")
+    @DeleteCategory
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         categoryService.delete(categoryId);
         return ResponseEntity.ok().build();

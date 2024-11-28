@@ -1,9 +1,11 @@
 package bookstore.javabrightbrains.controller;
 
+import bookstore.javabrightbrains.annotation.CreateBook;
+import bookstore.javabrightbrains.annotation.DeleteBook;
+import bookstore.javabrightbrains.annotation.UpdateBook;
 import bookstore.javabrightbrains.dto.book.BookRequestDto;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.service.BookService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +23,21 @@ public class BookAdminController {
     private BookService bookService;
 
     @PostMapping
-    @Operation(summary = "Add a new book", description = "Create a new book with the provided details")
+    @CreateBook
     public ResponseEntity<BookResponseDto> addBook(@Valid @RequestBody BookRequestDto bookDto) {
         BookResponseDto createdBookDto = bookService.save(bookDto);
         return ResponseEntity.status(201).body(createdBookDto);
     }
 
     @PutMapping("/{bookId}")
-    @Operation(summary = "Update a book", description = "Update the details of an existing book by its ID")
+    @UpdateBook
     public ResponseEntity<BookResponseDto> updateBook(@PathVariable Long bookId, @Valid @RequestBody BookRequestDto bookDto) {
         BookResponseDto updatedBookDto = bookService.update(bookId, bookDto);
         return ResponseEntity.ok(updatedBookDto);
     }
 
     @DeleteMapping("/{bookId}")
-    @Operation(summary = "Delete a book", description = "Delete a book by its ID")
+    @DeleteBook
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
         bookService.delete(bookId);
         return ResponseEntity.ok().build();
