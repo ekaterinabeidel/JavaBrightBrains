@@ -93,16 +93,16 @@ The Online Book Store backend provides functionality for both customers and admi
 | quantity       | INT           | Quantity of the book in the cart                    |
 
 #### `orders` (Orders Table)
-| Column Name     | Data Type     | Description                                         |
-|-----------------|---------------|-----------------------------------------------------|
-| id              | BIGINT        | PRIMARY KEY, unique order identifier (auto-increment) |
-| created_at      | TIMESTAMP     | Date and time the order was created                 |
-| updated_at      | TIMESTAMP     | Date and time the order was last updated            |
-| user_id         | BIGINT        | FOREIGN KEY, reference to the `users` table        |
-| delivery_address| VARCHAR(500)  | Delivery address                                    |
-| contact_phone   | VARCHAR(128)  | Contact phone number for delivery                   |
-| delivery_method | VARCHAR(128)  | Delivery method (e.g., courier, pickup)             |
-| status          | VARCHAR(128)  | Order status (e.g., pending payment, shipped, delivered, canceled) |
+| Column Name     | Data Type     | Description                                                                  |
+|-----------------|---------------|------------------------------------------------------------------------------|
+| id              | BIGINT        | PRIMARY KEY, unique order identifier (auto-increment)                        |
+| created_at      | TIMESTAMP     | Date and time the order was created                                          |
+| updated_at      | TIMESTAMP     | Date and time the order was last updated                                     |
+| user_id         | BIGINT        | FOREIGN KEY, reference to the `users` table                                  |
+| delivery_address| VARCHAR(500)  | Delivery address                                                             |
+| contact_phone   | VARCHAR(128)  | Contact phone number for delivery                                            |
+| delivery_method | VARCHAR(128)  | Delivery method (e.g., standard, express)                                    |Express)                                      |
+| status          | VARCHAR(128)  | Order status (e.g., pending, paid, shipped, delivered, canceled, processing) |
 
 #### `order_items` (Order Items Table)
 | Column Name        | Data Type     | Description                                         |
