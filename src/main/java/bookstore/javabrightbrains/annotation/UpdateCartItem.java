@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Update an item in the cart")
+@Operation(summary = "Update an item in the cart", description = "Update the quantity of book in the cart")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Item successfully updated"),
         @ApiResponse(responseCode = "400", description = "Invalid data in the request"),

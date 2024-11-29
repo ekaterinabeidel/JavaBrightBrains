@@ -1,5 +1,6 @@
 package bookstore.javabrightbrains.controller;
 
+import bookstore.javabrightbrains.annotation.GetRevenue;
 import bookstore.javabrightbrains.dto.book.BookNotPaidDto;
 import bookstore.javabrightbrains.dto.book.ProfitDto;
 import bookstore.javabrightbrains.dto.book.TopBookDto;
@@ -27,20 +28,16 @@ public class ReportAdminController {
     @Autowired
     private ReportService reportService;
 
-    @Operation(
-            summary = "Get report of top 10 purchased products"
-    )
+    @Operation(summary = "Top 10 purchased books", description = "Get report of top 10 purchased products")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Report created successfully"),
+            @ApiResponse(responseCode = "200", description = "Report created successfully")
     })
     @GetMapping("/top-purchased-products")
     public ResponseEntity<List<TopBookDto>> getTopPurchasedBooks() {
       return ResponseEntity.ok(reportService.getTopPurchasedBooks())  ;
     }
 
-    @Operation(
-            summary = "Get report of top 10 cancelled products"
-    )
+    @Operation(summary = "Top 10 canceled books", description = "Get report of top 10 cancelled products")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report created successfully"),
     })
@@ -49,9 +46,7 @@ public class ReportAdminController {
         return ResponseEntity.ok(reportService.getTopPCancelledBooks())  ;
     }
 
-    @Operation(
-            summary = "Get report of books, that are in status 'Pending' more then N days"
-    )
+    @Operation(summary = "Not paid books", description ="Get report of books, that are in status 'Pending' more then N days")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Report created successfully"),
     })
@@ -60,13 +55,7 @@ public class ReportAdminController {
         return ResponseEntity.ok(reportService.getPendingBooksOlderThan(days))  ;
     }
 
-    @Operation(
-            summary = "Get report of revenue for the period and grouping by hour, day, week, month, year"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Report created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid params provided")
-    })
+    @GetRevenue
     @GetMapping("/revenue/{startDate}/{endDate}/{groupBy}")
     public ResponseEntity<List<ProfitDto>> getProfit(
             @PathVariable LocalDateTime startDate,

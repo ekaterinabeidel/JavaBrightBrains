@@ -1,11 +1,12 @@
 package bookstore.javabrightbrains.controller;
 
+import bookstore.javabrightbrains.annotation.GetAllBooks;
+import bookstore.javabrightbrains.annotation.GetBookDetails;
+import bookstore.javabrightbrains.annotation.GetDailyProduct;
 import bookstore.javabrightbrains.dto.book.BookResponseDto;
 import bookstore.javabrightbrains.dto.book.BookShortResponseDto;
 import bookstore.javabrightbrains.dto.book.PageResponseDto;
 import bookstore.javabrightbrains.service.BookService;
-
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
@@ -25,10 +26,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/books/pageNumber/{pageNum}/pageSize/{pageSize}")
-    @Operation(
-            summary = "Get books with filter, sort and pagination",
-            description = "Retrieve a list of books"
-    )
+    @GetAllBooks
     public ResponseEntity<PageResponseDto<BookShortResponseDto>> getAllBooks(
             @PathVariable
             @Min(1)
@@ -76,15 +74,14 @@ public class BookController {
     }
 
     @GetMapping("/books/{bookId}")
-    @Operation(summary = "Get book details", description = "Retrieve details of a specific book by its ID")
+    @GetBookDetails
     public ResponseEntity<BookResponseDto> getBookDetail(@PathVariable Long bookId) {
         BookResponseDto bookDto = bookService.findById(bookId);
         return ResponseEntity.ok(bookDto);
     }
 
     @GetMapping("/daily-product")
-    @Operation(summary = "Get daily product", description = "Retrieve the product with the highest discount. " +
-            "If multiple products have the same discount, a random one is selected.")
+    @GetDailyProduct
     public ResponseEntity<BookResponseDto> getDailyProduct() {
         BookResponseDto dailyProduct = bookService.getDailyProduct();
         if (dailyProduct == null) {

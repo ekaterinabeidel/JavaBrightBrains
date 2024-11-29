@@ -11,14 +11,13 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Delete an item from the cart", description = "Delete the book from cart")
+
+@Operation(summary = "Delete book from favorites", description = "Delete book in favorites using Book id")
 @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Item successfully deleted from the cart"),
+        @ApiResponse(responseCode = "200", description = "Favorite is successfully deleted"),
         @ApiResponse(responseCode = "401", description = "Unauthorized: authentication is required"),
         @ApiResponse(responseCode = "403", description = "Forbidden: insufficient permissions"),
-        @ApiResponse(responseCode = "404", description = "User not found"),
-        @ApiResponse(responseCode = "404", description = "Item not found in the cart"),
-        @ApiResponse(responseCode = "404", description = "Item does not belong to the user")
+        @ApiResponse(responseCode = "404", description = "User, Book or Favorite or Book not found")
 })
-public @interface DeleteCartItem {
+public @interface DeleteFavorite {
 }

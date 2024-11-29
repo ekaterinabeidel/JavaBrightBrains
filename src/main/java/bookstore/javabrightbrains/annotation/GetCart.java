@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@Operation(summary = "Get the user's cart")
+@Operation(summary = "Get the user's cart", description = "Get the list of books added in cart")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Cart successfully retrieved"),
         @ApiResponse(responseCode = "401", description = "Unauthorized: authentication is required"),
