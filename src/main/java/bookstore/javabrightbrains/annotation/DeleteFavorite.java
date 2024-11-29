@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 
-@Operation(summary = "Delete book from favorites")
+@Operation(summary = "Delete book from favorites", description = "Delete book in favorites using Book id")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Favorite is successfully deleted"),
         @ApiResponse(responseCode = "401", description = "Unauthorized: authentication is required"),

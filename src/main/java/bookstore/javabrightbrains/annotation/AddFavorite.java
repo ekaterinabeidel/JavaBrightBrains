@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 
-@Operation(summary = "Add book in favorites")
+@Operation(summary = "Add book in favorites", description = "Add book in favorites using Book id and user id")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Favorite is successfully created"),
         @ApiResponse(responseCode = "400", description = "This book is already in favorites"),

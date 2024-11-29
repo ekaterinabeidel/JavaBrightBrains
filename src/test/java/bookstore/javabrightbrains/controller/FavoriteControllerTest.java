@@ -51,7 +51,7 @@ class FavoriteControllerTest {
         BookShortResponseDto book;
         book = objectMapper.readValue(jsonResult, BookShortResponseDto.class);
 
-        Assertions.assertEquals(200, result.getResponse().getStatus());
+        Assertions.assertEquals(201, result.getResponse().getStatus());
         Assertions.assertEquals(requestDto.getBookId(), book.getId());
     }
 
