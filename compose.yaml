@@ -1,37 +1,37 @@
-version: '3.8' # Версия формата Docker Compose. Используется для совместимости с определенными функциями Docker Compose.
+version: '3.8'
 
-services: # Определение всех сервисов (контейнеров), которые должны быть запущены.
+services:
 
-  mysql: # Сервис для базы данных MySQL.
-    image: mysql:8.0 # Используем официальный образ MySQL версии 8.0.
-    container_name: mysql_db # Устанавливаем имя контейнера для MySQL, чтобы было удобно его идентифицировать.
-    environment: # Переменные окружения для настройки MySQL.
-      MYSQL_ROOT_PASSWORD: 123456 # Пароль для пользователя root.
-      MYSQL_DATABASE: bookstore # Имя базы данных, которая создается при запуске.
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_USERNAME}
     ports:
-      - "4444:3306" # Пробрасываем порт 3306 контейнера (MySQL) на порт 4444 хоста.
+      - "4444:3306"
     volumes:
-      - mysql_data:/var/lib/mysql # Сохраняем данные MySQL на хосте в volume `mysql_data`, чтобы они не терялись при перезапуске контейнера.
-    healthcheck: # Настройка проверки состояния (healthcheck) для сервиса MySQL.
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123123" ] # Проверка доступности MySQL с использованием команды `mysqladmin ping`.
-      interval: 10s # Интервал между проверками состояния.
-      timeout: 5s # Таймаут для выполнения проверки.
-      retries: 5 # Количество попыток перед тем, как контейнер будет признан недоступным.
-      start_period: 40s # Время, которое дается MySQL для инициализации перед началом проверок.
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123123" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
-  app: # Сервис для вашего приложения.
-    build: . # Используем текущую директорию для сборки Docker-образа (указывая на Dockerfile).
-    container_name: bookstore_app # Устанавливаем имя контейнера для приложения.
+  app:
+    build: .
+    container_name: bookstore_app
     ports:
-      - "8080:8080" # Пробрасываем порт 8080 контейнера (Spring Boot) на порт 8080 хоста.
-    environment: # Переменные окружения для настройки Spring Boot.
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookstore # URL подключения к MySQL (используем имя сервиса `mysql`).
-      SPRING_DATASOURCE_USERNAME: root # Имя пользователя для подключения к базе данных.
-      SPRING_DATASOURCE_PASSWORD: 123456 # Пароль для подключения к базе данных.
-    depends_on: # Указываем, что запуск приложения зависит от MySQL.
-      mysql: # Ссылаемся на сервис `mysql`.
-        condition: service_healthy # Контейнер `app` будет ждать, пока MySQL не станет "здоровым".
-    restart: on-failure # Если приложение завершится с ошибкой, Docker автоматически перезапустит его.
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookstore
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
 
-volumes: # Определение volume для сохранения данных.
-  mysql_data: # Volume для хранения данных MySQL, чтобы они не терялись между перезапусками контейнера.
+volumes:
+  mysql_data:
