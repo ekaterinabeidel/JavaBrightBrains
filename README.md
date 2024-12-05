@@ -131,6 +131,14 @@ The Online Book Store backend provides functionality for both customers and admi
 - **Database:** MySQL
 - **Containerization:** Docker
 
+### Using Docker
+- Create file .env
+- add information for connecting database:
+
+  `DB_USERNAME="your_username"
+   DB_PASSWORD="your_password"`
+- run `docker compose up --build`
+
 ### Contacts
 
 If you have any questions or suggestions, feel free to contact us:
