@@ -7,13 +7,13 @@ services:
     container_name: mysql_db
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_USERNAME}
+      MYSQL_DATABASE: bookstore
     ports:
       - "4444:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123123" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "-p${DB_PASSWORD}" ]
       interval: 10s
       timeout: 5s
       retries: 5
