@@ -133,11 +133,11 @@ The Online Book Store backend provides functionality for both customers and admi
 
 ### Using Docker
 - Create file .env
-- add information for connecting database:
+- Add information for connecting database:
 
   `DB_USERNAME="your_username"
    DB_PASSWORD="your_password"`
-- run `docker compose up --build`
+- Run `docker-compose --env-file .env up -d`
 
 ### Contacts
 
