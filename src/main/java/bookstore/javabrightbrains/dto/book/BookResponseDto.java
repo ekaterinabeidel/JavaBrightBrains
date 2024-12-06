@@ -1,8 +1,12 @@
 package bookstore.javabrightbrains.dto.book;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.math.BigDecimal;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BookResponseDto {
     private Long id;

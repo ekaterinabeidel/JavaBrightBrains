@@ -1,10 +1,12 @@
 package bookstore.javabrightbrains.entity;
 
+import bookstore.javabrightbrains.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,13 +18,19 @@ public class Order {
     private Long id;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     private String deliveryAddress;
     private String contactPhone;
     private String deliveryMethod;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
 
     @Override
     public boolean equals(Object o) {

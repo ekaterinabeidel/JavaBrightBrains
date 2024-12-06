@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,11 +15,16 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 
     @Override
     public boolean equals(Object o) {
@@ -32,4 +38,5 @@ public class Cart {
     public int hashCode() {
         return getId().hashCode();
     }
+
 }
