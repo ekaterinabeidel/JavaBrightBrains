@@ -102,7 +102,7 @@ The Online Book Store backend provides functionality for both customers and admi
 | delivery_address| VARCHAR(500)  | Delivery address                                                             |
 | contact_phone   | VARCHAR(128)  | Contact phone number for delivery                                            |
 | delivery_method | VARCHAR(128)  | Delivery method (e.g., standard, express)                                    |                                      |
-| status          | VARCHAR(128)  | Order status (e.g., pending, paid, shipped, delivered, canceled, processing) |
+| status          | VARCHAR(128)  | Order status (e.g., pending, paid, shipped, delivered, canceled) |
 
 #### `order_items` (Order Items Table)
 | Column Name        | Data Type     | Description                                         |

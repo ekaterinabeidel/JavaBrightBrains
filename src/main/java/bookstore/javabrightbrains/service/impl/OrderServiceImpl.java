@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
         order.setDeliveryAddress(orderRequestDto.getDeliveryAddress());
         order.setContactPhone(orderRequestDto.getContactPhone());
         order.setDeliveryMethod(orderRequestDto.getDeliveryMethod());
-        order.setStatus(OrderStatus.PROCESSING);
+        order.setStatus(OrderStatus.PENDING);
         order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         return orderRepository.save(order);
